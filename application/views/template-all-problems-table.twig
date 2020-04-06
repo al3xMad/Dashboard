@@ -68,25 +68,38 @@
                             <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">ID</th>
-                                    <th>Nombre del problema</th>
-                                    <th class="text-center">AC / Envíos</th>
-                                    <th class="text-center">AC / Usuarios</th>
+                                    <th>Problema(ID)</th>
+                                    <th>Envíos/ Usuarios</th>
+                                    <th>AC únicos</th>
+                                    <th>Envíos</th>
+                                    <th>AC / Envíos totales</th>
+                                    <th>AC / Usuarios únicos</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for problem in problems %}
                                 <tr>
-                                    <td class="text-center">
-                                        <a title="{{ problem.name }}"
-                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">{{ problem.internalId }}</a>
-                                    </td>
                                     <td>
-                                        <div><a title="{{ problem.name }}"
-                                                    href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">{{ problem.name ?: 'Problema desconocido' }}</a></div>
+                                        <div>
+                                            <a title="{{ problem.name }}"
+                                               href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">{{ problem.name ?: 'Problema desconocido' }}({{ problem.internalId }})</a></div>
                                         <div class="small text-muted">
                                             Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
                                         </div>
+                                    </td>
+
+                                    <td><div class="progress progress-sm">
+                                            <div class="progress-bar bg-cyan-light" style="width: {{ problem.AC2 }}%">{{ problem.AC2 }}%</div>
+                                        </div>
+                                        <div class="text-center">{{ problem.totalSubs }} / {{ problem.totalDistinctUsers }}</div>
+                                    </td>
+
+                                    <td>
+                                        <div class="text-center">{{ problem.totalAC }}</div>
+                                    </td>
+
+                                    <td>
+                                        <div class="text-center">{{ problem.totalSubs }}</div>
                                     </td>
 
                                     <td>
@@ -105,9 +118,9 @@
                                                 href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-cyan-light"
-                                                        style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
+                                                        style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalDACU) * 100) | number_format(2, ',', '.') }}%</div>
                                             </div>
-                                            <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
+                                            <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalDACU }}</div>
                                         </a>
                                     </td>
                                 </tr>
