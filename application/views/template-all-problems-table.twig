@@ -1,0 +1,125 @@
+{% extends theme_path ~ "/template-base.twig" %}
+
+{% block head %}
+    <link href="{{ twg_func( "base_url") }}assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="{{ twg_func( "base_url") }}assets/plugins/charts-c3/plugin.js"></script>
+{% endblock %}
+
+{% block content %}
+    <main id="main" role="main" class="my-3 my-md-5">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">{{ pageTitle }}</h1>
+            </div>
+
+            <div class="row row-cards row-deck">
+                {% if not silentResume %}
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="card p-3">
+                            <div class="d-flex align-items-center">
+                                <span class="stamp stamp-md bg-green mr-3">
+                                  <i class="fe fe-thumbs-up"></i>
+                                </span>
+                                <div>
+                                    <h4 class="m-0"><a href="javascript:void(0)">{{ problems[0].totalAC }} <small>Aciertos</small></a></h4>
+                                    <small class="text-muted"><a title="{{ problem.name }}"
+                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problems[0].internalId }}">{{ problems[0].name }}</a></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="card p-3">
+                            <div class="d-flex align-items-center">
+                                <span class="stamp stamp-md bg-red mr-3">
+                                  <i class="fe fe-thumbs-down"></i>
+                                </span>
+                                <div>
+                                    <h4 class="m-0"><a href="javascript:void(0)">{{ worseProblem.totalAC }} <small>Aciertos</small></a></h4>
+                                    <small class="text-muted"><a title="{{ worseProblem.name }}"
+                                                href="{{ twg_func( 'base_url') }}problem/id/{{ worseProblem.internalId }}">{{ worseProblem.name }}</a></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Listado de problemas</h4>
+                            <div class="card-options">
+                                <form action="">
+                                    <div class="input-group">
+                                        <input class="form-control form-control-sm" placeholder="Buscar problema..."
+                                                name="s" type="text">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-sm btn-default" type="submit">
+                                              <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                            <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th>Nombre del problema</th>
+                                    <th class="text-center">AC / Envíos</th>
+                                    <th class="text-center">AC / Usuarios</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for problem in problems %}
+                                <tr>
+                                    <td class="text-center">
+                                        <a title="{{ problem.name }}"
+                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">{{ problem.internalId }}</a>
+                                    </td>
+                                    <td>
+                                        <div><a title="{{ problem.name }}"
+                                                    href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">{{ problem.name ?: 'Problema desconocido' }}</a></div>
+                                        <div class="small text-muted">
+                                            Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <a title="{{ problem.name }}"
+                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-cyan-light"
+                                                        style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                            </div>
+                                            <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalSubs }}</div>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <a title="{{ problem.name }}"
+                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-cyan-light"
+                                                        style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
+                                            </div>
+                                            <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}

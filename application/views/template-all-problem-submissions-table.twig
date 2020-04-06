@@ -1,0 +1,96 @@
+{% extends theme_path ~ "/template-base.twig" %}
+
+{% block head %}
+    <link href="{{ twg_func( "base_url") }}assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="{{ twg_func( "base_url") }}assets/plugins/charts-c3/plugin.js"></script>
+{% endblock %}
+
+{% block content %}
+    <main id="main" role="main" class="my-3 my-md-5">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">{{ pageTitle }}</h1>
+            </div>
+
+            <div class="row row-cards row-deck">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Listado de envíos por usuario</h3>
+                            <div class="card-options">
+                                <form action="">
+                                    <div class="input-group">
+                                        <input class="form-control form-control-sm" placeholder="Buscar alumno..."
+                                                name="s" type="text">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-sm btn-default" type="submit">
+                                              <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table card-table table-striped table-vcenter">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">User</th>
+                                    <th>Aciertos / Intentos</th>
+                                    <th>Lenguajes</th>
+                                    <th>Última fecha de envío</th>
+                                    <th class="text-center">Último estado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set face = 0 %}
+                                {% for attempt in lastAttempts %}
+                                    {%
+                                        set face = (face > 32) ? 1 : (face + 1)
+                                    %}
+                                    <tr>
+                                        <td class="w-1">
+                                        <span class="avatar"
+                                                style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ face }}.jpg)"></span>
+                                        </td>
+                                        <td>
+                                            <div><a title="{{ attempt.first_name }}"
+                                                    href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">{{ attempt.first_name }} {{ attempt.last_name }}</a></div>
+                                        </td>
+                                        <td>
+                                            <div class="progress progress-sm">
+                                                {% set percent = ((attempt.accepted / attempt.attempts) * 100) %}
+                                                <div class="progress-bar bg-cyan-light"
+                                                        style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
+                                            </div>
+                                            <div class="small text-muted text-center">{{ attempt.accepted }}/{{ attempt.attempts }}</div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            {% for language in attempt.languages | split(',') %}
+                                                {% if language == 'JAV' %}
+                                                    {% set color = 'success' %}
+                                                {%  elseif language == 'CPP' %}
+                                                    {% set color = 'warning' %}
+                                                {%  elseif language == 'C' %}
+                                                    {% set color = 'danger' %}
+                                                {%  endif %}
+                                                <span class="badge badge-{{ color }}">{{ language }}</span>
+                                            {% endfor %}
+                                        </td>
+                                        <td class="text-nowrap">{{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}</td>
+                                        <td class="text-nowrap text-center"><span class="badge badge-{{ attempt.lastAttempt == 'AC' ? 'success' : 'danger' }}">{{ attempt.lastAttempt }}</span></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+{% endblock %}

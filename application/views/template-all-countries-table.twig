@@ -1,0 +1,111 @@
+{% extends theme_path ~ "/template-base.twig" %}
+
+{% block head %}
+    <link href="{{ twg_func( "base_url") }}assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="{{ twg_func( "base_url") }}assets/plugins/charts-c3/plugin.js"></script>
+{% endblock %}
+
+{% block content %}
+    <main id="main" role="main" class="my-3 my-md-5">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">{{ pageTitle }}</h1>
+            </div>
+
+            <div class="row row-cards row-deck">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Listado de países participantes</h4>
+                            <div class="card-options">
+                                <form action="">
+                                    <div class="input-group">
+                                        <input class="form-control form-control-sm" placeholder="Buscar país..."
+                                                name="s" type="text">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-sm btn-default" type="submit">
+                                              <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="map">
+                                <div class="map-content" id="map-world-svg"></div>
+                            </div>
+                        </div>
+                        <table class="table card-table">
+                            <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th class="text-right">Usuarios registrados</th>
+                                <th class="text-right">Porcentaje</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for country in countriesStats %}
+                                <tr>
+                                    <td width="60"><img alt="" src="{{ twg_func( 'assets_url') }}/images/flags/flags-svg/{{ country.id | lower }}.svg"</td>
+                                    <td>{{ country.name }}</td>
+                                    <td class="text-right">{{ country.totalUsers | number_format(0, ',', '.') }}</td>
+                                    <td class="text-right"><span class="text-muted">{{ (country.totalUsers / totalUsers * 100) | number_format(2, ',', '.') }}%</span></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        require(['jquery', 'vector-map', 'vector-map-world'], function(){
+            $(document).ready(function(){
+                let dataRaw = {{ countriesStats | json_encode | raw }},
+                    data = {};
+
+                dataRaw.map(function (item) {
+                    data[item.id] = item.totalUsers;
+                });
+
+
+                $('#map-world-svg').vectorMap({
+                    map: 'world_mill',
+                    zoomButtons : false,
+                    zoomOnScroll: false,
+                    panOnDrag: false,
+                    backgroundColor: 'transparent',
+                    markers: false,
+                    markerStyle: {
+                        initial: {
+                            fill: tabler.colors.blue,
+                            stroke: '#fff',
+                            "stroke-width": 1,
+                            r: 5
+                        },
+                    },
+                    onRegionTipShow: function(e, el, code, f){
+                        el.html(el.html() + (data[code] ? ': <small>' + data[code]+'</small>' : ''));
+                    },
+                    series: {
+                        regions: [{
+                            values: data,
+                            scale: ['#EFF3F6', tabler.colors.blue],
+                            normalizeFunction: 'polynomial'
+                        }]
+                    },
+                    regionStyle: {
+                        initial: {
+                            fill: '#F4F4F4'
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

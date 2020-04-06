@@ -1,0 +1,27 @@
+.progress-sm, .progress-sm .progress-bar {
+    height: 1.4rem;
+}
+
+.card-table a:hover {
+    text-decoration: none;
+}
+
+.col-xs-2{
+    background: #00f;
+    color: #FFF;
+}
+
+.col-half-offset{
+    margin-left: 4.166666667%
+}
+
+.institution-frame {
+    background-position: right -33px;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-body a:hover {
+    text-decoration: none;
+}

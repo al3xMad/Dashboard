@@ -1,0 +1,86 @@
+{% extends theme_path ~ "/template-base.twig" %}
+
+{% block head %}
+    <link href="{{ twg_func( "base_url") }}assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="{{ twg_func( "base_url") }}assets/plugins/charts-c3/plugin.js"></script>
+{% endblock %}
+
+{% block content %}
+    <main id="main" role="main" class="my-3 my-md-5">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">{{ pageTitle }}</h1>
+            </div>
+
+            <div class="row row-cards row-deck">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Listado de alumnos</h4>
+                            <div class="card-options">
+                                <form action="">
+                                    <div class="input-group">
+                                        <input class="form-control form-control-sm" placeholder="Buscar usuario..."
+                                                name="s" type="text">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-sm btn-default" type="submit">
+                                                <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                            <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th class="text-center">Aciertos / Envíos</th>
+                                    <th class="text-center">Fallidos / Envíos</th>
+                                    <th class="text-center">Último envío</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>
+                                        <div><a title="{{ user.first_name }}"
+                                                    href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</a></div>
+                                        <div class="small text-muted">
+                                            Registrado desde: {{ user.registrationDate != '0000-00-00 00:00:00' ? (user.registrationDate | date("d/m/Y")) : 'data desconocido' }}
+                                        </div>
+                                    </td>
+
+                                    <td>{{ user.email }}</td>
+
+                                    <td>
+                                        <div class="progress progress-sm">
+                                            {% set percent = user.TotalSubmissions == 0 ? 0 : ((user.TotalAC / user.TotalSubmissions) * 100) %}
+                                            <div class="progress-bar bg-cyan-light"
+                                                    style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
+                                        </div>
+                                        <div class="small text-muted text-center">{{ user.TotalAC }}/{{ user.TotalSubmissions }}</div>
+                                    </td>
+
+                                    <td>
+                                        <!-- falta la formula-->
+                                    </td>
+
+                                    <td class="text-center">{{ user.LastSubmission ? (user.LastSubmission | date("d/m/Y")) : 'Ningún envío' }}</td>
+
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}

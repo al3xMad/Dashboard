@@ -1,0 +1,39 @@
+{% extends theme_path ~ "/template-base.twig" %}
+
+{% block head %}
+	<!-- Head block -->
+{% endblock %}
+
+{% block content %}
+	<main id="main" role="main" class="my-3 my-md-5">
+		<div class="container mt-9">
+            <div class="page-header justify-content-center">
+                <h1 class="page-title">Selecciona tu rol de usuario</h1>
+			</div>
+
+			<div class="row justify-content-around mt-9">
+				<div class="col-4">
+					<div class="card">
+						<div class="card-header">
+							<h3 class="container-fluid card-title text-center">PROFESOR</h3>
+						</div>
+						<div class="card-body">
+							<a title="Entrada profesores" href="{{ twg_func('base_url') }}teachers" class="btn btn-primary btn-block text-white">ENTRAR</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="card">
+						<div class="card-header">
+							<h3 class="container-fluid card-title text-center">ADMINISTRADOR</h3>
+						</div>
+						<div class="card-body">
+							<a title="Entrada administradores" href="{{ twg_func('base_url') }}admindashboard" class="btn btn-primary btn-block">ENTRAR</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</main>
+{% endblock %}
