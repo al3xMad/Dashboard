@@ -19,17 +19,19 @@
                         <span style="font-color: blue;">
                             <a href="{{ twg_func('base_url') }}users/group/{{ groupId }}">
                             Ver listado completo de alumnos
-                        </a>
+                            </a>
                         </span>
                     </h3>
 
                     <div class="alert alert-warning">
                         //falta el nº
                         <span>nuevos problemas añadidos (si hay)</span>
+
                     </div>
+
                 </div>
                 <div class="col-sm-5">
-                    <div style="padding-bottom: 20px;">
+                    <div style="padding-bottom: 80px;">
                         <span><bold> VER: </bold></span>
                         <select>
                             <option>Todo el curso</option>
@@ -37,6 +39,11 @@
                             <option>Tema 2</option>
                         </select>
                     </div>
+                    <span style="font-color: blue;">
+                            <a href="{{ twg_func('base_url') }}problem/group/{{ groupId }}">
+                            Ver todos los problemas del curso
+                            </a>
+                        </span>
                 </div>
             </div>
 
