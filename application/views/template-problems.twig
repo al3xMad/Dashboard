@@ -26,18 +26,29 @@
                         <div class="table-responsive">
                             <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                 <thead>
-                                    <th>ID</th>
-                                    <th>Título</th>
-                                    <th>AC / Envíos</th>
-                                    <th>AC / Usuarios</th>
+                                    <th>Problema(ID)</th>
+                                    <th>Envíos/ Usuarios</th>
+                                    <th>AC únicos</th>
+                                    <th>Envíos</th>
+                                    <th>AC / Envíos totales</th>
+                                    <th>AC / Usuarios únicos</th>
                                 </thead>
                                 <tbody>
                                 {% for problem in problems %}
                                     <tr>
                                         <td><a href="{{ twg_func( 'base_url') }}problem/getProblem/{{ problem.internalId }}"
-                                                    title="">{{ problem.internalId }}</a></td>
-                                        <td><a href="{{ twg_func( 'base_url') }}problem/getProblem/{{ problem.internalId }}"
-                                                    title="">{{ problem.title ?: 'Nombre de problema desconocido' }}</a></td>
+                                                    title="">{{ problem.title ?: 'Nombre de problema desconocido' }}({{ problem.internalId }})</a></td>
+                                        <td><div class="progress progress-sm">
+                                                <div class="progress-bar bg-cyan-light" style="width: {{ problem.AC2 }}%">{{ problem.AC2 }}%</div>
+                                            </div>
+                                            <div class="text-center">{{ problem.totalSubs }} / {{ problem.totalDistinctUsers }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="text-center">{{ problem.totalAC }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="text-center">{{ problem.totalSubs }}</div>
+                                        </td>
                                         <td>
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-cyan-light" style="width: {{ problem.AC1 }}%">{{ problem.AC1 }}%</div>
