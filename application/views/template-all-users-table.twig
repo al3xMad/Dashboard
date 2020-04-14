@@ -36,6 +36,7 @@
                             <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                 <thead>
                                 <tr>
+                                    <th>Usuario</th>
                                     <th>Nombre</th>
                                     <th>Email</th>
                                     <th class="text-center">Aciertos / Envíos</th>
@@ -44,8 +45,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {% set avatarId = 1 %}
                                 {% for user in users %}
+                                    {% if avatarId > 16 %}
+                                        {% set avatarId = 1 %}
+                                    {% else %}
+                                        {% set avatarId = avatarId + 1 %}
+                                    {% endif %}
                                 <tr>
+                                    <td class="w-1">
+                                        <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
+                                    </td>
                                     <td>
                                         <div><a title="{{ user.first_name }}"
                                                     href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</a></div>
@@ -66,7 +76,12 @@
                                     </td>
 
                                     <td>
-                                        <!-- falta la formula-->
+                                        <div class="progress progress-sm">
+                                            {% set percent = user.TotalSubmissions == 0 ? 0 : (((user.TotalSubmissions - user.TotalAC) / user.TotalSubmissions) * 100) %}
+                                            <div class="progress-bar bg-cyan-light"
+                                                 style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
+                                        </div>
+                                        <div class="small text-muted text-center">{{ user.TotalSubmissions - user.TotalAC }}/{{ user.TotalSubmissions }}</div>
                                     </td>
 
                                     <td class="text-center">{{ user.LastSubmission ? (user.LastSubmission | date("d/m/Y")) : 'Ningún envío' }}</td>
@@ -74,6 +89,16 @@
                                 </tr>
                                 {% endfor %}
                                 </tbody>
+                                <div class="dataTables_length" id="DataTables_Table_1_length">
+                                    <label>Ver
+                                        <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    entradas</label>
+                                </div>
                             </table>
                         </div>
                         </div>

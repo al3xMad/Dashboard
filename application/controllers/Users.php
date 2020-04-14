@@ -15,7 +15,16 @@ class Users extends OL_Controller {
     }
 
     public function index() {
-        redirect(base_url() . 'teacherdashboard/', 'refresh');
+        //redirect(base_url() . 'teacherdashboard/', 'refresh');
+
+        // Retrieving vars
+        $data = $this->data;
+
+        $data['pageTitle'] = 'Listado completo de usuarios';
+
+        $data['users'] = $this->Musers->getAllUsersData();
+
+        $this->load->view('template-all-users-table', $data);
     }
 
     public function group($groupId) {
@@ -69,9 +78,22 @@ class Users extends OL_Controller {
 
         $data['lastAttempts'] = $this->Mproblems->getLastProblemsAttemptsByUserId($userId);
 
+        $data['problemsRanking'] = $this->Mproblems->getProblemsRankingByUserId($userId);
+
         $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByUserId($userId);
         $data['submissionErrors'] = $this->Mproblems->getChartErrorsByUserId($userId);
         $data['submissionErrorsTable'] = $this->Mproblems->getChartErrorsTableByUserId($userId);
+
+        $totalSubmissionsByMonthAndUserId = $this->Mproblems->getTotalSubmissionsByMonthAndUserId($userId);
+        $totalAcceptedByMonthAndUserId = $this->Mproblems->getTotalAcceptedByMonthAndUserId($userId);
+
+        $data['totalSubmissionsByMonthAndUserId'] = implode(', ', array_map(function ($month) {
+            return $month->total_submissions;
+        }, $totalSubmissionsByMonthAndUserId));
+
+        $data['totalAcceptedByMonthAndUserId'] = implode(', ', array_map(function ($month) {
+            return $month->total_submissions;
+        }, $totalAcceptedByMonthAndUserId));
 
         $this->load->view('template-user-details', $data);
     }
@@ -86,5 +108,18 @@ class Users extends OL_Controller {
         }
 
         return $user->first_name . ' ' . $user->last_name;
+    }
+
+    public function all() {
+        // Retrieving vars
+        $data = $this->data;
+
+        $data['users'] = $this->Musers->getAllUsers();
+
+        $this->load->view('template-users', $data);
+    }
+
+    public function problem($problems){
+        $data['problems'] = $problems;
     }
 }

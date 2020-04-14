@@ -21,7 +21,7 @@
                                   <i class="fe fe-thumbs-up"></i>
                                 </span>
                                 <div>
-                                    <h4 class="m-0"><a href="javascript:void(0)">{{ problems[0].totalAC }} <small>Aciertos</small></a></h4>
+                                    <h4 class="m-0"><a href="javascript:void(0)">{{ problems[0].totalAC }} <small>Aceptados</small></a></h4>
                                     <small class="text-muted"><a title="{{ problem.name }}"
                                                 href="{{ twg_func( 'base_url') }}problem/id/{{ problems[0].internalId }}">{{ problems[0].name }}</a></small>
                                 </div>
@@ -36,12 +36,32 @@
                                   <i class="fe fe-thumbs-down"></i>
                                 </span>
                                 <div>
-                                    <h4 class="m-0"><a href="javascript:void(0)">{{ worseProblem.totalAC }} <small>Aciertos</small></a></h4>
+                                    <h4 class="m-0"><a href="javascript:void(0)">{{ worseProblem.totalAC }} <small>Aceptados</small></a></h4>
                                     <small class="text-muted"><a title="{{ worseProblem.name }}"
                                                 href="{{ twg_func( 'base_url') }}problem/id/{{ worseProblem.internalId }}">{{ worseProblem.name }}</a></small>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                {% elseif silentResume %}
+                    <div class="col-sm-6">
+                        <div class="form-group"  style="padding-bottom: 20px;">
+                            <label class="form-label">Ver datos de:</label>
+                            <select name="subject" id="select-subject" class="form-control custom-select">
+                                <option value="all">Todo el curso</option>
+                                <option value="1">Tema 1</option>
+                                <option value="2">Tema 2</option>
+                                <option value="3">Tema 3</option>
+                                <option value="4">Tema 4</option>
+                                <option value="5">Tema 5</option>
+                            </select>
+                        </div>
+
+                        <span class="link-view-all-problems">
+                            <a href="{{ twg_func('base_url') }}problem/group/{{ groupId }}">
+                            Ver todos los problemas del curso
+                            </a>
+                        </span>
                     </div>
                 {% endif %}
 
@@ -69,11 +89,10 @@
                                 <thead>
                                 <tr>
                                     <th>Problema(ID)</th>
-                                    <th>Envíos/ Usuarios</th>
-                                    <th>AC únicos</th>
-                                    <th>Envíos</th>
-                                    <th>AC / Envíos totales</th>
-                                    <th>AC / Usuarios únicos</th>
+                                    <th>Envíos/ Usuarios únicos</th>
+                                    <th>AC únicos/ Envíos</th>
+                                    <th>Fallidos/ Envíos</th>
+                                    <th>AC únicos/ Usuarios únicos</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -88,18 +107,13 @@
                                         </div>
                                     </td>
 
-                                    <td><div class="progress progress-sm">
-                                            <div class="progress-bar bg-cyan-light" style="width: {{ problem.AC2 }}%">{{ problem.AC2 }}%</div>
+                                    <td>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-cyan-light" style="width: {{ problem.AC2 }}%">
+                                                {{ ((problem.totalSubs / problem.totalDistinctUsers)) | number_format(2, ',', '.') }}%
+                                            </div>
                                         </div>
-                                        <div class="text-center">{{ problem.totalSubs }} / {{ problem.totalDistinctUsers }}</div>
-                                    </td>
-
-                                    <td>
-                                        <div class="text-center">{{ problem.totalAC }}</div>
-                                    </td>
-
-                                    <td>
-                                        <div class="text-center">{{ problem.totalSubs }}</div>
+                                        <div class="small text-muted text-center">{{ problem.totalSubs }} / {{ problem.totalDistinctUsers }}</div>
                                     </td>
 
                                     <td>
@@ -107,9 +121,20 @@
                                                 href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-cyan-light"
-                                                        style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                                        style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
                                             </div>
-                                            <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalSubs }}</div>
+                                            <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalSubs }}</div>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <a title="{{ problem.name }}"
+                                           href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-cyan-light"
+                                                     style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ (((problem.totalSubs - problem.totalAC) / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                            </div>
+                                            <div class="small text-muted text-center">{{ problem.totalSubs - problem.totalAC }} / {{ problem.totalSubs }}</div>
                                         </a>
                                     </td>
 
@@ -118,14 +143,24 @@
                                                 href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-cyan-light"
-                                                        style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalDACU) * 100) | number_format(2, ',', '.') }}%</div>
+                                                        style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
                                             </div>
-                                            <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalDACU }}</div>
+                                            <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
                                         </a>
                                     </td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>
+                                <div class="dataTables_length" id="DataTables_Table_0_length">
+                                    <label>Ver
+                                        <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                        entradas</label>
+                                </div>
                             </table>
                         </div>
                         </div>

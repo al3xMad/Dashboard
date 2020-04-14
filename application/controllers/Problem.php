@@ -73,6 +73,8 @@ class Problem extends OL_Controller {
 
         $data['lastAttempts'] = $this->Mproblems->getLastUsersAttemptsByProblemId($id);
 
+        $data['usersRanking'] = $this->Musers->getUsersRankingByProblemId($id);
+
         $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByProblemId($id);
         $data['submissionErrors'] = $this->Mproblems->getChartErrorsByProblemId($id);
         $data['submissionErrorsTable'] = $this->Mproblems->getChartErrorsTableByProblemId($id);
@@ -82,6 +84,17 @@ class Problem extends OL_Controller {
         $data['problemAttemptsEvolution'] = array_column($problemAttemptsEvolution, 'attempts');
 
         $data['acceptedByCountry'] = $this->Mproblems->getAcceptedByCountryByProblemId($id);
+
+        $totalSubmissionsByMonthAndProblemId = $this->Mproblems->getTotalSubmissionsByMonthAndProblemId($id);
+        $totalAcceptedByMonthAndProblemId = $this->Mproblems->getTotalAcceptedByMonthAndProblemId($id);
+
+        $data['totalSubmissionsByMonthAndProblemId'] = implode(', ', array_map(function ($month) {
+            return $month->total_submissions;
+        }, $totalSubmissionsByMonthAndProblemId));
+
+        $data['totalAcceptedByMonthAndProblemId'] = implode(', ', array_map(function ($month) {
+            return $month->total_submissions;
+        }, $totalAcceptedByMonthAndProblemId));
 
         $this->load->view('template-problem-details', $data);
     }

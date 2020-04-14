@@ -12,6 +12,12 @@ let hexToRgba = function(hex, opacity) {
   return 'rgba(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', ' + opacity + ')';
 };
 
+let numberFormat = function(val, decimals) {
+  val = parseFloat(val);
+
+  return val.toFixed(decimals);
+};
+
 /**
  *
  */

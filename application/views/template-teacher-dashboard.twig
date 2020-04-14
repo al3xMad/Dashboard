@@ -16,30 +16,36 @@
                     <h2>{{ subjectDetails.name }}</h2>
                     <h3>
                         <span>{{ groupDetails.name }} - </span>
-                        <span style="font-color: blue;">
+                        <span class="teacher-link-view-all-users">
                             <a href="{{ twg_func('base_url') }}users/group/{{ groupId }}">
                             Ver listado completo de alumnos
                             </a>
                         </span>
                     </h3>
 
-                    <div class="alert alert-warning">
-                        //falta el nº
-                        <span>nuevos problemas añadidos (si hay)</span>
-
-                    </div>
+                    {% if lastWeekProblems > 0  %}
+                        <div class="alert alert-warning">
+                            <i class="fe fe-bell mr-2" aria-hidden="true"></i>
+                            {{ lastWeekProblems | number_format(0, ',', '.') }}
+                            <span>nuevo(s) problema(s) añadido(s) en la última semana</span>
+                        </div>
+                    {% endif %}
 
                 </div>
                 <div class="col-sm-5">
-                    <div style="padding-bottom: 80px;">
-                        <span><bold> VER: </bold></span>
-                        <select>
-                            <option>Todo el curso</option>
-                            <option>Tema 1</option>
-                            <option>Tema 2</option>
+                    <div class="form-group"  style="padding-bottom: 20px;">
+                        <label class="form-label">Ver datos de:</label>
+                        <select name="subject" id="select-subject" class="form-control custom-select">
+                            <option value="all">Todo el curso</option>
+                            <option value="1">Tema 1</option>
+                            <option value="2">Tema 2</option>
+                            <option value="3">Tema 3</option>
+                            <option value="4">Tema 4</option>
+                             <option value="5">Tema 5</option>
                         </select>
                     </div>
-                    <span style="font-color: blue;">
+
+                    <span class="link-view-all-problems">
                             <a href="{{ twg_func('base_url') }}problem/group/{{ groupId }}">
                             Ver todos los problemas del curso
                             </a>
@@ -121,7 +127,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for problem in problems %}
+                                    {% for problem in problemsAttempts %}
                                         <tr>
                                             <td class="w-1">
                                                 <span class="avatar"
@@ -129,17 +135,17 @@
                                             </td>
                                             <td>
                                                 <div>
-                                                    <a title="{{ attempt.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
-                                                        {{ attempt.first_name }} {{ attempt.last_name }}
+                                                    <a title="{{ problem.first_name }}"
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}">
+                                                        {{ problem.first_name }} {{ problem.last_name }}
                                                     </a>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div>
-                                                    <a title="{{ attempt.email }}"
+                                                    <a title="{{ problem.email }}"
                                                        href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
-                                                        {{ attempt.email }}
+                                                        {{ problem.email }}
                                                     </a>
                                                 </div>
                                             </td>
@@ -153,8 +159,8 @@
                                             </td>
 
                                             <td class="text-nowrap text-center">
-                                                <span class="badge badge-{{ attempt.lastAttempt == 'AC' ? 'success' : 'danger' }}">
-                                                    {{ attempt.lastAttempt }}
+                                                <span class="badge badge-{{ problem.status == 'AC' ? 'success' : 'danger' }}">
+                                                    {{ problem.status }}
                                                 </span>
                                             </td>
 
@@ -181,11 +187,21 @@
                                             </td>
 
                                             <td class="text-nowrap">
-                                                {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
+                                                {{ problem.submissionDate | date("d/m/Y H:i:s") }}
                                             </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
+                                    <div class="dataTables_length" id="DataTables_Table_0_length">
+                                        <label>Ver
+                                            <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        entradas</label>
+                                    </div>
                                 </table>
                             </div>
                         </div>
@@ -200,7 +216,8 @@
                             <h4 class="card-title">Evolución de envíos</h4>
                         </div>
                         <div class="card-body">
-                            <div id="chart-bar-attempsEvolution" style="height: 16rem; max-height: 256px; position: relative;" class="c3">
+                            <div id="chart-bar-attempsEv"
+                                 style="height: 16rem; max-height: 256px; position: relative;" class="c3">
                             </div>
                         </div>
                     </div>
@@ -212,14 +229,11 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <span class="tag tag-gray-dark">101</span>
-                                <span class="tag tag-gray-dark">102</span>
-                                <span class="tag tag-gray">103</span>
-                                <span class="tag tag-gray">104</span>
-                                <span class="tag tag-gray-dark">105</span>
-                                <span class="tag tag-gray-dark">106</span>
-                                <span class="tag tag-gray">107</span>
-                                <span class="tag tag-gray-dark">108</span>
+                                {% for problem in problems %}
+                                    <span title="{{ problem.name }} - {{ problem.totalAC }} AC" class="tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'green' }}">
+                                        {{ problem.internalId }}
+                                    </span>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -238,7 +252,7 @@
                                     <thead>
                                     <tr>
                                         <th>Problema (ID)</th>
-                                        <th>Último veredicto</th>
+                                        <th>Último resultado</th>
                                         <th class="text-center">AC / Envíos</th>
                                         <th class="text-center">AC / Usuarios</th>
                                         <th>Fecha último envío</th>
@@ -428,6 +442,36 @@
                     axis: {},
                     legend: {
                         show: true,
+                    },
+                    padding: {
+                        bottom: 0,
+                        top: 0
+                    },
+                });
+                let chartattempsEv = c3.generate({
+                    bindto: '#chart-bar-attempsEv', // id of attemps evolution chart wrapper
+                    data: {
+                        columns: [
+                            ['Enviados', 30, 200, 100, 400, 150, 250, 30, 200, 100, 400, 150],
+                            ['Aceptados', 130, 100, 140, 200, 150, 50, 30, 200, 100, 400, 150]
+                        ],
+                        type: 'bar', // default type of chart
+                        colors: {
+                            'Enviados': tabler.colors["blue-darker"],
+                            'Aceptados': tabler.colors["blue"]
+                        },
+                        names: {}
+                    },
+                    bar: {
+                        width: {
+                            ratio: 0.5 // this makes bar width 50% of length between ticks
+                        }
+                    },
+                    axis: {
+                        x: {
+                            type: 'category',
+                            categories: ['Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+                        },
                     },
                     padding: {
                         bottom: 0,

@@ -14,8 +14,12 @@ class Admindashboard extends OL_Controller {
 
         $data['pageTitle'] = 'Admin Dashboard';
 
+        $data['totalInternalErrors'] = $this->Mproblems->getSumAllIR()->total;
+        $data['IELastWeek'] = count($this->Mproblems->getLastIR());
+        $data['lastWeekUsers'] = count($this->Musers->getLastRegisteredUsers());
+
         $data['totalUsers'] = count($this->Musers->getAllUsers());
-        $data['countriesStats'] = $this->Mcountries->getAllCountriesWithUsers(['limit' => 10]);
+        $data['countriesStats'] = $this->Mcountries->getAllCountriesWithUsers();
 
         $data['countriesStatsForMap'] = [];
         foreach($data['countriesStats'] as $country) {
@@ -25,20 +29,33 @@ class Admindashboard extends OL_Controller {
         $data['totalCountries'] = $this->Mcountries->getCountAllCountriesWithUsers();
         $problems = $this->Mproblems->getAllProblems(
             [
-                'order' => 'totalAC',
-                'direction' => 'DESC'
+                'order' => 'internalId',
+                'direction' => 'ASC'
             ]
         );
 
+        $data['problems'] = $problems;
         $data['totalProblemsSum'] = count($problems);
-        $data['problems'] = array_slice($problems, 0, 15);
-
-        $data['totalAccepted'] = $this->Mproblems->getSumAllAccepted()->total;
-
         $data['totalProblemsAttempts'] = $this->Mproblems->getSumAllAttempts()->total;
 
         $data['programmingLanguages'] = $this->Mproblems->getChartLanguages();
+        $data['totalAccepted'] = $this->Mproblems->getSumAllAccepted()->total;
         $data['submissionErrors'] = $this->Mproblems->getChartErrors();
+
+        $data['problemsAttempts'] = $this->Mproblems->getLastProblemsAttempts();
+        $data['problemsRanking'] = $this->Mproblems->getProblemsRanking();
+        $data['usersRanking'] = $this->Musers->getUsersRanking();
+
+        $totalSubmissionsByMonth = $this->Mproblems->getTotalSubmissionsByMonth();
+        $totalAcceptedByMonth = $this->Mproblems->getTotalAcceptedByMonth();
+
+        $data['totalSubmissionsByMonth'] = implode(', ', array_map(function ($month) {
+            return $month->total_submissions;
+        }, $totalSubmissionsByMonth));
+
+        $data['totalAcceptedByMonth'] = implode(', ', array_map(function ($month) {
+            return $month->total_submissions;
+        }, $totalAcceptedByMonth));
 
 		$this->load->view('template-admin-dashboard', $data);
 	}

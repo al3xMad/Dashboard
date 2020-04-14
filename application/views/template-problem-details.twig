@@ -46,15 +46,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-1">
-                    <span><bold> VER: </bold></span>
-                </div>
-                <div class="col-sm-2">
-                    <select>
-                        <option>Todo el curso</option>
-                        <option>Tema 1</option>
-                        <option>Tema 2</option>
-                    </select>
+                <div class="col-sm-3">
+                    <div class="form-group"  style="padding-bottom: 20px;">
+                        <label class="form-label">Ver datos de:</label>
+                        <select name="subject" id="select-subject" class="form-control custom-select">
+                            <option value="all">Todo el curso</option>
+                            <option value="1">Tema 1</option>
+                            <option value="2">Tema 2</option>
+                            <option value="3">Tema 3</option>
+                            <option value="4">Tema 4</option>
+                            <option value="5">Tema 5</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <!-- PONER UNA BARRA CON ACEPTADOS % Y TIPOS DE FALLIDOS %
@@ -108,7 +111,7 @@
                                     <th colspan="2">Usuario</th>
                                     <th>Email</th>
                                     <th class="text-center">Resultado</th>
-                                    <th>Aciertos / Envíos</th>
+                                    <th>Aceptados /Envíos</th>
                                     <th>Fecha envío</th>
                                 </tr>
                                 </thead>
@@ -156,26 +159,53 @@
                                 </tr>
                                 {% endfor %}
                                 </tbody>
+                                <div class="dataTables_length" id="DataTables_Table_1_length">
+                                    <label style="padding-top: 10px; padding-left:25px;">Ver
+                                        <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                        entradas</label>
+                                </div>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row row-cards row-deck">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Evolución de envíos</h4>
                         </div>
                         <div class="card-body">
-                            <div id="chart-bar-attempsEvolution" style="height: 16rem; max-height: 256px; position: relative;" class="c3">
+                            <div id="chart-bar-attempsEv"
+                                 style="height: 16rem; max-height: 256px; position: relative;" class="c3">
                             </div>
                         </div>
                     </div>
                 </div>
+                <!--PROFESOR SOLO div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Usuarios que lo han intentado</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                {% for problem in problems %}
+                                    <span title="{{ user.name }} - {{ problem.result }}" class="tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'green' }}">
+                                        {{ problem.internalId }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div-->
             </div>
             <div class="row row-cards row-deck">
-                <div class="col-12">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Ranking usuarios</h4>
@@ -193,56 +223,68 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for problem in problems %}
+                                    {% set avatarId = 1 %}
+                                    {% for user in usersRanking %}
+                                        {% if avatarId > 16 %}
+                                            {% set avatarId = 1 %}
+                                        {% else %}
+                                            {% set avatarId = avatarId + 1 %}
+                                        {% endif %}
                                         <tr>
                                             <td class="w-1">
-                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ face }}.jpg)"></span>
+                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
                                             </td>
                                             <td>
                                                 <div>
-                                                    <a title="{{ attempt.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
-                                                        {{ attempt.first_name }} {{ attempt.last_name }}
+                                                    <a title="{{ user.first_name }}"
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                        {{ user.first_name }} {{ user.last_name }}
                                                     </a>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div>
-                                                    <a title="{{ attempt.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
-                                                        {{ attempt.email }}
+                                                    <a title="{{ user.email }}"
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                        {{ user.email }}
                                                     </a>
                                                 </div>
                                             </td>
 
                                             <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
+                                                        {{ ((user.totalAC / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
                                                     </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalSubs }}</div>
-                                                </a>
+                                                </div>
+                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ user.totalSubs }}</div>
                                             </td>
 
                                             <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / (totalProblemsAttempts - totalAccepted) | number_format(0, ',', '.')) * 100) | number_format(2, ',', '.') }}%</div>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
+                                                        {{ (((user.totalSubs - user.totalAC) / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
                                                     </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalAc }} / {{ (totalProblemsAttempts - totalAccepted) }}</div>
-                                                </a>
+                                                </div>
+                                                <div class="small text-muted text-center">{{ user.totalSubs - user.totalAC }} / {{ user.totalSubs }}</div>
                                             </td>
 
                                             <td class="text-nowrap">
-                                                {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
+                                                {{ user.last_submission | date("d/m/Y H:i:s") }}
                                             </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
+                                    <div class="dataTables_length" id="DataTables_Table_1_length">
+                                        <label>Ver
+                                            <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            entradas</label>
+                                    </div>
                                 </table>
                             </div>
                         </div>
@@ -290,6 +332,36 @@
                     axis: {},
                     legend: {
                         show: true,
+                    },
+                    padding: {
+                        bottom: 0,
+                        top: 0
+                    },
+                });
+                let chartattempsEv = c3.generate({
+                    bindto: '#chart-bar-attempsEv', // id of attemps evolution chart wrapper
+                    data: {
+                        columns: [
+                            ['Enviados', {{ totalSubmissionsByMonthAndProblemId }}],
+                            ['Aceptados', {{ totalAcceptedByMonthAndProblemId }}]
+                        ],
+                        type: 'bar', // default type of chart
+                        colors: {
+                            'Enviados': tabler.colors["blue-darker"],
+                            'Aceptados': tabler.colors["blue"]
+                        },
+                        names: {}
+                    },
+                    bar: {
+                        width: {
+                            ratio: 0.5 // this makes bar width 50% of length between ticks
+                        }
+                    },
+                    axis: {
+                        x: {
+                            type: 'category',
+                            categories: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+                        },
                     },
                     padding: {
                         bottom: 0,

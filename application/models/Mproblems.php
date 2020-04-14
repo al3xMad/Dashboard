@@ -44,8 +44,6 @@ class Mproblems extends CI_Model {
         return $query->result();
     }
 
-
-
     public function getProblemById($id = null)
     {
         if (empty($id)) {
@@ -127,6 +125,128 @@ class Mproblems extends CI_Model {
             ORDER BY `s`.`submissionDate` DESC
             LIMIT $limit
         ";
+
+        return $this->db->query($sql)->result();
+    }
+
+    public function getLastProblemsAttempts()
+    {
+        $sql = "
+            SELECT 
+                udata.id,
+                udata.first_name,
+                udata.last_name,
+                udata.email,
+                s.`language`, s.`status`, s.submissionDate,
+                pr.`name`,
+                p.internalId,
+                p.totalAC,
+                p.totalSubs,
+                p.totalDACU,
+                p.totalDistinctUsers,
+                p.publicationDate
+            FROM submission s 
+            LEFT JOIN userdata udata ON s.user_id = udata.id
+            INNER JOIN problem p ON s.problem_id = p.internalId
+            INNER JOIN problem_details pr ON s.problem_id = pr.id
+            
+            ORDER BY s.submissionDate DESC
+            LIMIT 10;
+        ";
+
+        return $this->db->query($sql)->result();
+    }
+
+    public function getProblemsRanking()
+    {
+        $sql = "
+            SELECT 	
+                (
+                    SELECT GROUP_CONCAT(DISTINCT(s.`language`))
+                    FROM submission s
+                    WHERE s.problem_id = p.internalId	
+                ) AS languages,
+                (
+                    SELECT s.submissionDate
+                    FROM submission s
+                    WHERE s.problem_id = p.internalId
+                    ORDER BY s.submissionDate DESC
+                    LIMIT 1
+                ) AS last_date_attempt,
+                (
+                    SELECT s.`status`
+                    FROM submission s
+                    WHERE s.problem_id = p.internalId
+                    ORDER BY s.submissionDate DESC
+                    LIMIT 1
+                ) AS last_status,
+                pr.`name`,
+                p.*
+                
+            FROM problem p
+            INNER JOIN problem_details pr ON p.internalId = pr.id
+            
+            GROUP BY p.internalId
+            ORDER BY p.totalAC DESC
+            
+            LIMIT 10;
+        ";
+
+        return $this->db->query($sql)->result();
+    }
+
+    public function getProblemsRankingByUserId($id, $params = []){
+        if (empty($id)) {
+            return false;
+        }
+
+        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
+        $sql = "
+            SELECT
+                (
+                    SELECT GROUP_CONCAT(DISTINCT(s.`language`))
+                    FROM submission s
+                    WHERE s.problem_id = p.internalId and s.user_id = $id
+                    ) AS languages,
+                (
+                    SELECT s.submissionDate
+                    FROM submission s
+                    WHERE s.problem_id = p.internalId and s.user_id = $id
+                    ORDER BY s.submissionDate DESC
+                    LIMIT 1
+                ) AS last_date_attempt,
+                (
+                    SELECT s.`status`
+                    FROM submission s
+                    WHERE s.problem_id = p.internalId and s.user_id = $id
+                    ORDER BY s.submissionDate DESC
+                    LIMIT 1
+                ) AS last_status,
+                (
+                    SELECT COUNT(s.id)
+                    FROM submission s
+                    WHERE s.user_id = $id AND s.problem_id = p.internalId
+                ) AS totalSubs,
+                    (
+                    SELECT COUNT(s.id)
+                    FROM submission s
+                    WHERE s.user_id = $id AND s.problem_id = p.internalId AND s.`status` = 'AC'
+                ) AS totalAC,
+            
+                pr.`name`,
+                p.internalId,
+                p.publicationDate
+            
+            FROM problem p
+            INNER JOIN problem_details pr ON p.internalId = pr.id
+            INNER  JOIN submission s ON s.problem_id = p.internalId
+            WHERE s.user_id = $id
+            
+            GROUP BY p.internalId
+            ORDER BY totalSubs DESC
+
+            LIMIT $limit;";
 
         return $this->db->query($sql)->result();
     }
@@ -351,6 +471,37 @@ class Mproblems extends CI_Model {
         return $query->result();
     }
 
+    public function getLastIR() {
+        $this->db->select('*')
+            ->from('submission s')
+            ->where('s.submissionDate BETWEEN date_sub(now(),INTERVAL 1 WEEK) and NOW()')
+            ->where('s.status', 'IR');
+
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getLastWeekProblems(){
+        $this->db->select('*')
+            ->from('problem p')
+            ->where('p.publicationDate BETWEEN date_sub(now(),INTERVAL 1 WEEK) and NOW()');
+
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
+    public function getSumAllIR()
+    {
+        $this->db->select('count(*) AS total')
+            ->from('submission s')
+            ->where('s.status', 'IR');
+
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function getSumAllAccepted()
     {
         $this->db->select('count(*) AS total')
@@ -471,5 +622,136 @@ class Mproblems extends CI_Model {
         $query = $this->db->get();
 
         return $query->result();
+    }
+
+    function getTotalSubmissionsByMonth() {
+        $sql = '
+            SELECT 	
+                COUNT(i.submissionDate) AS total_submissions,
+                `month`
+            FROM (select 1 AS `month` union all select 2 union all select 3 union all select 4 union all
+              select 5 union all select 6 union all select 7 union all select 8 union all
+              select 9 union all select 10 union all select 11 union all select 12
+             ) m 
+            LEFT OUTER JOIN
+                submission i
+                ON m.`month` = MONTH(i.submissionDate) 
+                AND YEAR(i.submissionDate) = YEAR(CURDATE())
+            GROUP BY m.`month`;';
+
+        return $this->db->query($sql)->result();
+    }
+
+    function getTotalAcceptedByMonth() {
+        $sql = '
+            SELECT 	
+                COUNT(i.submissionDate) AS total_submissions,
+                `month`
+            FROM (select 1 AS `month` union all select 2 union all select 3 union all select 4 union all
+              select 5 union all select 6 union all select 7 union all select 8 union all
+              select 9 union all select 10 union all select 11 union all select 12
+             ) m 
+            LEFT OUTER JOIN
+                submission i
+                ON m.`month` = MONTH(i.submissionDate) 
+                    AND YEAR(i.submissionDate) = YEAR(CURDATE()) 
+                    AND i.`status` = "AC"
+            GROUP BY m.`month`;';
+
+        return $this->db->query($sql)->result();
+    }
+
+    function getTotalSubmissionsByMonthAndUserId($userId) {
+        if (empty($userId)) {
+            return [];
+        }
+
+        $sql = '
+            SELECT 	
+                COUNT(i.submissionDate) AS total_submissions,
+                `month`
+            FROM (select 1 AS `month` union all select 2 union all select 3 union all select 4 union all
+              select 5 union all select 6 union all select 7 union all select 8 union all
+              select 9 union all select 10 union all select 11 union all select 12
+             ) m 
+            LEFT OUTER JOIN
+                submission i
+                ON m.`month` = MONTH(i.submissionDate) 
+                AND YEAR(i.submissionDate) = YEAR(CURDATE())
+                AND i.user_id = ' . $userId . '
+            GROUP BY m.`month`;';
+
+        return $this->db->query($sql)->result();
+    }
+
+    function getTotalAcceptedByMonthAndUserId($userId) {
+        if (empty($userId)) {
+            return [];
+        }
+
+        $sql = '
+            SELECT 	
+                COUNT(i.submissionDate) AS total_submissions,
+                `month`
+            FROM (select 1 AS `month` union all select 2 union all select 3 union all select 4 union all
+              select 5 union all select 6 union all select 7 union all select 8 union all
+              select 9 union all select 10 union all select 11 union all select 12
+             ) m 
+            LEFT OUTER JOIN
+                submission i
+                ON m.`month` = MONTH(i.submissionDate) 
+                    AND YEAR(i.submissionDate) = YEAR(CURDATE()) 
+                    AND i.`status` = "AC"
+                    AND i.user_id = ' . $userId . '
+            GROUP BY m.`month`;';
+
+        return $this->db->query($sql)->result();
+    }
+
+    function getTotalSubmissionsByMonthAndProblemId($problemId) {
+        if (empty($problemId)) {
+            return [];
+        }
+
+        $sql = '
+            SELECT 	
+                COUNT(i.submissionDate) AS total_submissions,
+                `month`
+            FROM (select 1 AS `month` union all select 2 union all select 3 union all select 4 union all
+              select 5 union all select 6 union all select 7 union all select 8 union all
+              select 9 union all select 10 union all select 11 union all select 12
+             ) m 
+            LEFT OUTER JOIN
+                submission i
+                ON m.`month` = MONTH(i.submissionDate) 
+                AND YEAR(i.submissionDate) = YEAR(CURDATE())
+                AND i.problem_id = ' . $problemId . '
+            GROUP BY m.`month`;';
+
+        return $this->db->query($sql)->result();
+    }
+
+    function getTotalAcceptedByMonthAndProblemId($problemId) {
+        if (empty($problemId)) {
+            return [];
+        }
+
+        $sql = '
+            SELECT 	
+                COUNT(i.submissionDate) AS total_submissions,
+                `month`
+            FROM (select 1 AS `month` union all select 2 union all select 3 union all select 4 union all
+              select 5 union all select 6 union all select 7 union all select 8 union all
+              select 9 union all select 10 union all select 11 union all select 12
+             ) m 
+            LEFT OUTER JOIN
+                submission i
+                ON m.`month` = MONTH(i.submissionDate) 
+                    AND YEAR(i.submissionDate) = YEAR(CURDATE()) 
+                    AND i.`status` = "AC"
+                    AND i.problem_id = ' . $problemId . '
+            GROUP BY m.`month`;';
+
+        return $this->db->query($sql)->result();
     }
 }

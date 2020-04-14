@@ -421,7 +421,7 @@ h6, .h6 {
 }
 
 .display-4 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 300;
   line-height: 1.1;
 }
@@ -9839,7 +9839,7 @@ a.text-dark:hover, a.text-dark:focus {
   .table, .text-wrap table {
     border-collapse: collapse !important;
   }
-  
+
   .table td,
   .text-wrap table td, .table th, .text-wrap table th {
     background-color: #fff !important;
@@ -18607,4 +18607,44 @@ svg {
 
 .fe-zoom-out:before {
   content: "\ea06";
+}
+
+.link-view-all-problems {
+  color: #467fcf;
+  padding-top: 15px;
+}
+
+.link-view-all-users{
+  color: #467fcf;
+  padding-top: 20px;
+}
+
+.teacher-link-view-all-users{
+  color: #467fcf;
+  text-decoration: none;
+  background-color: transparent;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+#lastAttemps thead .sorting {
+  position: relative;
+}
+
+#lastAttemps thead .sorting:before {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  content: "\e930";
+  font-family: 'feather' !important;
+}
+
+#lastAttemps thead .sorting:after {
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  content: "\e92d";
+  font-family: 'feather' !important;
 }
