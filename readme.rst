@@ -12,13 +12,13 @@ Installation
 
 El proceso de instalación es sencillo y se resume en cuatro pasos: 
 
--  PASO 1:  Descomprimir el .zip con los ficheros fuente. Una vez descomprimido el .zip, el resultado serán varias carpetas y ficheros (adjuntar captura con el filesystem)  
+-  PASO 1: Descomprimir el .zip con los ficheros fuente. Una vez descomprimido el .zip, el resultado serán varias carpetas y ficheros (adjuntar captura con el filesystem)  
 
--  `PASO 2: ` Subir las carpetas descomprimidas a la raíz del servidor web. Por defecto, cada carpeta incluye un fichero .htaccess para prevenir un acceso directo vía navegador. 
+-  PASO 2: Subir las carpetas descomprimidas a la raíz del servidor web. Por defecto, cada carpeta incluye un fichero .htaccess para prevenir un acceso directo vía navegador. 
 
--  `PASO 3: ` Desplegar la base de datos en el servidor. La base de datos (MySQL), se facilita en un fichero de tipo .sql, por lo que puede desplegarse con cualquier herramienta de gestión (SGBD) como phpMyAdmin. Para conocer los detalles sobre el modelo relacional de la base de datos, se puede consultar el Apéndice C - Base de datos.  
+-  PASO 3: Desplegar la base de datos en el servidor. La base de datos (MySQL), se facilita en un fichero de tipo .sql, por lo que puede desplegarse con cualquier herramienta de gestión (SGBD) como phpMyAdmin. Para conocer los detalles sobre el modelo relacional de la base de datos, se puede consultar el Apéndice C - Base de datos.  
 
--  `PASO 4: ` Configurar los "ficheros application/config/config.php" y "application/config/database.php" según los parámetros del servidor. Una vez conozcamos los detalles del servidor que alojará el proyecto, es necesario configurar los dos ficheros arriba señalados para su correcta ejecución. Ambos ficheros son auto explicativos, pero se enumeran a continuación los cambios más importantes que deben realizarse. 
+-  PASO 4: Configurar los "ficheros application/config/config.php" y "application/config/database.php" según los parámetros del servidor. Una vez conozcamos los detalles del servidor que alojará el proyecto, es necesario configurar los dos ficheros arriba señalados para su correcta ejecución. Ambos ficheros son auto explicativos, pero se enumeran a continuación los cambios más importantes que deben realizarse. 
    
 - config.php: Este fichero multipropósito permite configurar los aspectos más pormenorizados del proyecto, siendo la mayoría opcionales. Se encuentran aquí recogidos temas como la seguridad, la codificación de caracteres o las cookies. Para nuestro propósito, el único campo que deberemos comprobar es el relativo a la URL base del proyecto: 
 $config['base_url'] = $root;
@@ -39,63 +39,3 @@ https://www.codeigniter.com/user_guide/installation/index.html#
 
  NOTA: Como se comentó en la sección Capítulo 4 - Infraestructura y requisitos mínimos, el sistema está idealmente planificado para ejecutarse sobre un servidor Apache. Si se desea utilizar un Nginx, se recomienda adaptar el recetario que figura en la Wiki del proyecto redactado a tal efecto: https://www.nginx.com/resources/wiki/start/topics/recipes/codeigniter/  
 Tras la configuración anterior, el proyecto debería estar disponible y navegable a través de la URL, ya sea local o externa, definida por el servidor.
-
-
-*******************
-Release Information
-*******************
-
-This repo contains in-development code for future releases. To download the
-latest stable release please visit the `CodeIgniter Downloads
-<https://codeigniter.com/download>`_ page.
-
-**************************
-Changelog and New Features
-**************************
-
-You can find a list of all changes for each release in the `user
-guide change log <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
-
-*******************
-Server Requirements
-*******************
-
-PHP version 5.6 or newer is recommended.
-
-It should work on 5.3.7 as well, but we strongly advise you NOT to run
-such old versions of PHP, because of potential security and performance
-issues, as well as missing features.
-
-************
-Installation
-************
-
-Please see the `installation section <https://codeigniter.com/user_guide/installation/index.html>`_
-of the CodeIgniter User Guide.
-
-*******
-License
-*******
-
-Please see the `license
-agreement <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/license.rst>`_.
-
-*********
-Resources
-*********
-
--  `User Guide <https://codeigniter.com/docs>`_
--  `Language File Translations <https://github.com/bcit-ci/codeigniter3-translations>`_
--  `Community Forums <http://forum.codeigniter.com/>`_
--  `Community Wiki <https://github.com/bcit-ci/CodeIgniter/wiki>`_
--  `Community Slack Channel <https://codeigniterchat.slack.com>`_
-
-Report security issues to our `Security Panel <mailto:security@codeigniter.com>`_
-or via our `page on HackerOne <https://hackerone.com/codeigniter>`_, thank you.
-
-***************
-Acknowledgement
-***************
-
-The CodeIgniter team would like to thank EllisLab, all the
-contributors to the CodeIgniter project and you, the CodeIgniter user.
