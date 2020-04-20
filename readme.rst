@@ -37,5 +37,6 @@ Donde 'hostname', 'username', 'password', y 'database' deben corresponderse con 
 Para cualquier configuración adicional, así como para la búsqueda de soluciones a problemas eventuales, se remite a la Guía Oficial de Instalación del framework base, el cual se mantenido inalterado para la realización de este proyecto:
 https://www.codeigniter.com/user_guide/installation/index.html#
 
- NOTA: Como se comentó en la sección Capítulo 4 - Infraestructura y requisitos mínimos, el sistema está idealmente planificado para ejecutarse sobre un servidor Apache. Si se desea utilizar un Nginx, se recomienda adaptar el recetario que figura en la Wiki del proyecto redactado a tal efecto: https://www.nginx.com/resources/wiki/start/topics/recipes/codeigniter/
+ NOTA: El sistema está idealmente planificado para ejecutarse sobre un servidor Apache. Si se desea utilizar un Nginx, se recomienda adaptar el recetario que figura en la Wiki del proyecto redactado a tal efecto: https://www.nginx.com/resources/wiki/start/topics/recipes/codeigniter/
+
 Tras la configuración anterior, el proyecto debería estar disponible y navegable a través de la URL, ya sea local o externa, definida por el servidor.
