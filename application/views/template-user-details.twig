@@ -60,28 +60,26 @@
                             <h3 class="card-title">Aceptados/ Fallidos</h3>
                         </div>
                         <div class="card-body">
-                            <!-- BARRA CON ACEPTADOS % Y TIPOS DE ERRORES%
-                            {% for submissionError in submissionErrorsTable %}
-                                    <tr>
-                                        <td>{{ submissionError.status }}</td>
-                                        <td>{{ submissionError.name }}</td>
-                                        <td class="text-left">{{ submissionError.totals }}</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                {% set errorPercent = ((submissionError.totals / userDetails.TotalSubmissions) * 100) %}
-
-                                                <div class="progress-bar bg-cyan-light"
-                                                        style="width: {{ errorPercent | number_format(0, ',', '.') }}%">{{ errorPercent | number_format(2, ',', '.') }}%</div>
-                                            </div>
-                                            <div class="small text-muted text-center">{{ submissionError.totals }} / {{ userDetails.TotalSubmissions }}</div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}-->
-                            <div class="progress progress-sm">
-                                <div class="progress-bar bg-blue" style="width: 75%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                    <span class="sr-only">65% Complete</span>
-                                </div>
+                            <div class="col-sm-4">
+                                <div id="chart-bar-errors" class="c3 text-center"></div>
                             </div>
+                            <!-- BARRA CON ACEPTADOS % Y TIPOS DE ERRORES%-->
+                            <!--como se añaden los aceptados??-->
+                            {% for submissionError in submissionErrorsTable %}
+                                <tr>
+                                    <td>{{ submissionError.status }}</td>
+                                    <td>({{ submissionError.name }})</td>
+                                    <td class="text-left"> - {{ submissionError.totals }} errores</td>
+                                    <td>
+                                        <div class="progress progress-sm">
+                                            {% set errorPercent = ((submissionError.totals / userDetails.TotalSubmissions) * 100) %}
+                                            <div class="progress-bar bg-cyan-light"
+                                                 style="width: {{ errorPercent | number_format(0, ',', '.') }}%">{{ errorPercent | number_format(2, ',', '.') }}%</div>
+                                        </div>
+                                        <div class="small text-muted text-center">{{ submissionError.totals }} / {{ userDetails.TotalSubmissions }}</div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -252,10 +250,10 @@
 
 
                 let chartErrors = c3.generate({
-                    bindto: '#chart-pie-errors', // id of chart wrapper
+                    bindto: '#chart-bar-errors', // id of bar wrapper
                     data: {
                         columns: dataErrors,
-                        type: 'pie', // default type of chart
+                        type: 'bar', // default type of bar
                         colors: {
                             'data1': tabler.colors["blue-darker"],
                             'data2': tabler.colors["blue"],
