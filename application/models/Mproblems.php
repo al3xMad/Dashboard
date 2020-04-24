@@ -159,6 +159,49 @@ class Mproblems extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
+    public function getLastProblemsAttemptsByGroupId($groupId, $params = [])
+    {
+        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
+        $sql = "
+            SELECT 
+                udata.id,
+                udata.first_name,
+                udata.last_name,
+                udata.email,
+                gu.id_group,
+                s.`language`, s.`status`, s.submissionDate,
+                pr.`name`,
+                p.internalId,
+                p.totalAC,
+                p.totalSubs,
+                p.totalDACU,
+                p.totalDistinctUsers,
+                p.publicationDate
+            FROM submission s 
+            LEFT JOIN userdata udata ON s.user_id = udata.id
+            LEFT JOIN groupusers gu ON gu.id_user = udata.id
+            INNER JOIN problem p ON s.problem_id = p.internalId
+            INNER JOIN problem_details pr ON s.problem_id = pr.id
+            WHERE gu.id_group = $groupId
+            ORDER BY s.submissionDate DESC
+            LIMIT $limit;
+        ";
+
+        return $this->db->query($sql)->result();
+    }
+
+    public function getLastWeekProblems()
+    {
+        $sql = "
+        SELECT COUNT(p.internalId) FROM problem p
+        WHERE p.publicationDate >= curdate() - INTERVAL DAYOFWEEK(curdate())+6 DAY
+        AND p.publicationDate < curdate() - INTERVAL DAYOFWEEK(curdate())-1 DAY
+        ";
+
+        return $this->db->query($sql)->num_rows();
+    }
+
     public function getProblemsRanking($params = [])
     {
         $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
