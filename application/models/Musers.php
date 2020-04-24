@@ -113,7 +113,10 @@ class Musers extends CI_Model {
         return $this->db->query($sql)->row();
     }
 
-    public function getUsersRanking() {
+    public function getUsersRanking($params = []) {
+
+        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
         $sql = "
             SELECT `u`.*,(
                 SELECT group_concat(DISTINCT(s.language)) from submission s where s.user_id = u.id
@@ -125,7 +128,7 @@ class Musers extends CI_Model {
             SELECT count(DISTINCT(s4.problem_id)) from submission s4 where s4.user_id = u.id and s4.`status` = 'AC'
                ) as unique_totalAC, (
             SELECT s4.submissionDate from submission s4 where s4.user_id = u.id order by s4.submissionDate DESC limit 1
-            ) as last_submission from userdata u order by unique_totalAC DESC limit 10";
+            ) as last_submission from userdata u order by unique_totalAC DESC LIMIT $limit";
 
         return $this->db->query($sql)->result();
     }

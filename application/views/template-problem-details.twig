@@ -46,6 +46,7 @@
                         </div>
                     </div>
                 </div>
+                {% if (role == 'teacher') %}
                 <div class="col-sm-3">
                     <div class="form-group"  style="padding-bottom: 20px;">
                         <label class="form-label">Ver datos de:</label>
@@ -59,6 +60,7 @@
                         </select>
                     </div>
                 </div>
+                {% endif %}
             </div>
             <!-- PONER UNA BARRA CON ACEPTADOS % Y TIPOS DE FALLIDOS %
             div class="row row-cards row-deck">
@@ -98,78 +100,81 @@
                 </div>
             </div-->
 
-            <div class="row row-cards">
+            <div class="row row-cards row-deck">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Últimos envíos</h3>
+                            <h4 class="card-title">Últimos envíos</h4>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table card-table table-striped table-vcenter">
-                                <thead>
-                                <tr>
-                                    <th colspan="2">Usuario</th>
-                                    <th>Email</th>
-                                    <th class="text-center">Resultado</th>
-                                    <th>Aceptados /Envíos</th>
-                                    <th>Fecha envío</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% set face = 0 %}
-                                {% for attempt in lastAttempts %}
-                                    {% set face = face + 1 %}
-                                <tr>
-                                    <td class="w-1">
-                                        <span class="avatar"
-                                            style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ face }}.jpg)"></span>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <a title="{{ attempt.first_name }}"
-                                                href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
-                                                {{ attempt.first_name }} {{ attempt.last_name }}
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <a title="{{ attempt.email }}"
-                                               href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
-                                                {{ attempt.email }}
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="text-nowrap text-center">
-                                        <span class="badge badge-{{ attempt.lastAttempt == 'AC' ? 'success' : 'danger' }}">
-                                            {{ attempt.lastAttempt }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="progress progress-sm">
-                                            {% set percent = attempt.attempts == 0 ? 0 : ((attempt.accepted / attempt.attempts) * 100) %}
-                                            <div class="progress-bar bg-cyan-light"
-                                                    style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
-                                        </div>
-                                        <div class="small text-muted text-center">{{ attempt.accepted }}/{{ attempt.attempts }}</div>
-                                    </td>
-                                    <td class="text-nowrap">
-                                        {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                                <div class="dataTables_length" id="DataTables_Table_1_length">
-                                    <label style="padding-top: 10px; padding-left:25px;">Ver
-                                        <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                        entradas</label>
-                                </div>
-                            </table>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="lastAttemps" class="table card-table table-striped table-vcenter">
+                                    <thead>
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                        <th class="text-center">Resultado</th>
+                                        <th>AC/Envíos</th>
+                                        <th>Fecha envío</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% set face = 0 %}
+                                    {% for attempt in lastAttempts %}
+                                        {% set face = face + 1 %}
+                                    <tr>
+                                        <td class="w-1">
+                                            <span class="avatar"
+                                                style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ face }}.jpg)"></span>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <a title="{{ attempt.first_name }}"
+                                                    href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
+                                                    {{ attempt.first_name }} {{ attempt.last_name }}
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <a title="{{ attempt.email }}"
+                                                   href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
+                                                    {{ attempt.email }}
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap text-center">
+                                            <span class="badge badge-{{ attempt.lastAttempt == 'AC' ? 'success' : 'danger' }}">
+                                                {{ attempt.lastAttempt }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="progress progress-sm">
+                                                {% set percent = attempt.attempts == 0 ? 0 : ((attempt.accepted / attempt.attempts) * 100) %}
+                                                <div class="progress-bar bg-cyan-light"
+                                                        style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
+                                            </div>
+                                            <div class="small text-muted text-center">{{ attempt.accepted }}/{{ attempt.attempts }}</div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                        <th class="text-center">Resultado</th>
+                                        <th>AC/Envíos</th>
+                                        <th>Fecha envío</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -212,10 +217,11 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                <table id="usersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                     <thead>
                                     <tr>
-                                        <th colspan="2">Usuario</th>
+                                        <th>Avatar</th>
+                                        <th>Usuario</th>
                                         <th>Email</th>
                                         <th class="text-center">AC / Envíos</th>
                                         <th class="text-center">AC / Fallidos</th>
@@ -275,16 +281,16 @@
                                         </tr>
                                     {% endfor %}
                                     </tbody>
-                                    <div class="dataTables_length" id="DataTables_Table_1_length">
-                                        <label>Ver
-                                            <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                            entradas</label>
-                                    </div>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                        <th class="text-center">AC / Envíos</th>
+                                        <th class="text-center">AC / Fallidos</th>
+                                        <th>Fecha último envío</th>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -295,7 +301,7 @@
         </div>
     </main>
     <script>
-        require(['c3', 'jquery'], function(c3, $) {
+        require(['c3', 'jquery', 'datatables'], function(c3, $) {
             $(document).ready(function(){
                 let programmingLanguages = {{ programmingLanguages | json_encode | raw }},
                     submissionErrors = {{ submissionErrors | json_encode | raw }},
@@ -303,6 +309,9 @@
                     dataLanguages = [],
                     dataErrors = [],
                     dataCountries = [];
+
+                $('#lastAttemps').DataTable();
+                $('#usersTable').DataTable();
 
                 programmingLanguages.map(function (language) {
                     dataLanguages.push([ language.language, language.totals]);
@@ -360,7 +369,7 @@
                     axis: {
                         x: {
                             type: 'category',
-                            categories: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+                            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
                         },
                     },
                     padding: {

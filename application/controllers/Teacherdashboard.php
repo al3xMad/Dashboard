@@ -24,7 +24,7 @@ class Teacherdashboard extends OL_Controller {
 
         $data['pageTitle'] = 'Teachers Dashboard';
 
-        $data['lastWeekProblems'] = count($this->Mproblems->getLastWeekProblems());
+        $data['lastWeekProblems'] = 10;//count($this->Mproblems->getLastWeekProblems());
 
         $data['totalUsers'] = count($usersInGroup);
 
@@ -41,6 +41,8 @@ class Teacherdashboard extends OL_Controller {
             'order' => 'totalAC',
             'direction' => 'DESC'
         ];
+
+        $data['problemsAttempts'] = $this->Mproblems->getLastProblemsAttemptsByGroupId($groupId);
 
         $problemsSubmitted = $this->Mproblems->getAllProblemsSubmittedByGroup($groupId, $problemsParams);
         $data['totalProblemsSum'] = count($problemsSubmitted);

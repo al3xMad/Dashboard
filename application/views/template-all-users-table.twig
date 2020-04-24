@@ -17,27 +17,14 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Listado de alumnos</h4>
-                            <div class="card-options">
-                                <form action="">
-                                    <div class="input-group">
-                                        <input class="form-control form-control-sm" placeholder="Buscar usuario..."
-                                                name="s" type="text">
-                                        <span class="input-group-btn ml-2">
-                                            <button class="btn btn-sm btn-default" type="submit">
-                                                <span class="fe fe-search"></span>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                            <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                            <table id="allUsersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                 <thead>
                                 <tr>
+                                    <th>Avatar</th>
                                     <th>Usuario</th>
-                                    <th>Nombre</th>
                                     <th>Email</th>
                                     <th class="text-center">Aciertos / Envíos</th>
                                     <th class="text-center">Fallidos / Envíos</th>
@@ -89,16 +76,16 @@
                                 </tr>
                                 {% endfor %}
                                 </tbody>
-                                <div class="dataTables_length" id="DataTables_Table_1_length">
-                                    <label>Ver
-                                        <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                    entradas</label>
-                                </div>
+                                <tfoot>
+                                <tr>
+                                    <th>Avatar</th>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th class="text-center">Aciertos / Envíos</th>
+                                    <th class="text-center">Fallidos / Envíos</th>
+                                    <th class="text-center">Último envío</th>
+                                </tr>
+                                </tfoot>
                             </table>
                         </div>
                         </div>
@@ -108,4 +95,13 @@
 
         </div>
     </main>
+    <script>
+        require(['jquery', 'datatables'], function($) {
+            $(document).ready(function(){
+
+                $('#allUsersTable').DataTable();
+
+            });
+        });
+    </script>
 {% endblock %}

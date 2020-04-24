@@ -3,7 +3,7 @@ class Mproblems extends CI_Model {
 
     const DEFAULT_ORDER_CRITERIA = '';
     const DEFAULT_ORDER_DIRECTION = 'DESC';
-    const DEFAULT_LAST_ATTEMPTS_LIMIT = 10;
+    const DEFAULT_LAST_ATTEMPTS_LIMIT = 100;
 
     public function getProblemsByCategoryId($id)
     {
@@ -115,7 +115,7 @@ class Mproblems extends CI_Model {
                 FROM `submission` `s2`
                 LEFT JOIN `users` `u2` ON `s2`.`user_id` = `u2`.`id`
                 JOIN `userdata` `udata2` ON `udata2`.`id` = `u2`.`id`
-                WHERE `s2`.`problem_id` = '109' and u2.id = u.id ORDER BY s2.submissionDate DESC LIMIT 1	
+                WHERE `s2`.`problem_id` = $id and u2.id = u.id ORDER BY s2.submissionDate DESC LIMIT 1	
                 ) as lastAttempt
             FROM `submission` `s`
             LEFT JOIN `users` `u` ON `s`.`user_id` = `u`.`id`
@@ -129,8 +129,10 @@ class Mproblems extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
-    public function getLastProblemsAttempts()
+    public function getLastProblemsAttempts($params = [])
     {
+        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
         $sql = "
             SELECT 
                 udata.id,
@@ -151,14 +153,16 @@ class Mproblems extends CI_Model {
             INNER JOIN problem_details pr ON s.problem_id = pr.id
             
             ORDER BY s.submissionDate DESC
-            LIMIT 10;
+            LIMIT $limit;
         ";
 
         return $this->db->query($sql)->result();
     }
 
-    public function getProblemsRanking()
+    public function getProblemsRanking($params = [])
     {
+        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
         $sql = "
             SELECT 	
                 (
@@ -189,7 +193,7 @@ class Mproblems extends CI_Model {
             GROUP BY p.internalId
             ORDER BY p.totalAC DESC
             
-            LIMIT 10;
+            LIMIT $limit;
         ";
 
         return $this->db->query($sql)->result();
@@ -250,6 +254,21 @@ class Mproblems extends CI_Model {
 
         return $this->db->query($sql)->result();
     }
+
+    /*public function getUsersRankingByProblemId($id, $params = []){
+        if (empty($id)) {
+            return false;
+        }
+
+        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
+        $sql = "
+
+        ";
+
+
+        return $this->db->query($sql)->result();
+    }*/
 
     public function getLastProblemsAttemptsByUserId($id = null, $params = [])
     {
@@ -478,16 +497,6 @@ class Mproblems extends CI_Model {
             ->where('s.status', 'IR');
 
         $query = $this->db->get();
-        return $query->result();
-    }
-
-    public function getLastWeekProblems(){
-        $this->db->select('*')
-            ->from('problem p')
-            ->where('p.publicationDate BETWEEN date_sub(now(),INTERVAL 1 WEEK) and NOW()');
-
-        $query = $this->db->get();
-
         return $query->result();
     }
 

@@ -15,17 +15,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
-                        {% if lastWeekUsers > 0  %}
-                            <div class="col-md-8">
-                                    <div class="alert alert-warning">
-                                        <i class="fe fe-bell mr-2" aria-hidden="true"></i>
-                                        {{ lastWeekUsers | number_format(0, ',', '.') }}
-                                        <span>nuevo(s) usuario(s) en la última semana</span>
-                                    </div>
+                        <div class="col-md-8">
+                            <div class="alert alert-warning">
+                                <i class="fe fe-bell mr-2" aria-hidden="true"></i>
+                                {{ lastWeekUsers | number_format(0, ',', '.') }}
+                                <span>nuevo(s) usuario(s) en la última semana</span>
                             </div>
-                        {% else %}
-                            <div class="col-md-4"></div>
-                        {% endif %}
+                        </div>
                         <div class="col-md-4">
                             <p class="link-view-all-users">
                                 <a href="{{ twg_func('base_url') }}users">
@@ -37,15 +33,13 @@
                 </div>
                 <div class="col-md-12">
                     <div class="row">
-                        {% if IELastWeek > 0  %}
-                            <div class="col-md-4">
-                                <div class="alert alert-danger">
-                                    <i class="fe fe-alert-triangle mr-2" aria-hidden="true"></i>
-                                    {{ IELastWeek | number_format(0, ',', '.') }}
-                                    <span>IE en la última semana</span>
-                                </div>
+                        <div class="col-md-4">
+                            <div class="alert alert-danger">
+                                <i class="fe fe-alert-triangle mr-2" aria-hidden="true"></i>
+                                {{ IELastWeek | number_format(0, ',', '.') }}
+                                <span>IE en la última semana</span>
                             </div>
-                        {% endif %}
+                        </div>
                         <div class="col-md-4">
                             <div class="alert alert-danger">
                                 <i class="fe fe-alert-triangle mr-2" aria-hidden="true"></i>
@@ -153,35 +147,22 @@
                         <div class="card-header">
                             <h4 class="card-title">Últimos envíos</h4>
                         </div>
+
                         <div class="card-body">
                             <div class="table-responsive">
                             <table id="lastAttemps" class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                 <thead>
-                                <tr role="row">
-                                    <th colspan="2" tabindex="0"
-                                        rowspan="1" colspan="1" aria-label="Usuario: activate to sort column ascending"
-                                        style="width: 99px;">Usuario</th>
-                                    <th tabindex="0"
-                                        rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending"
-                                        style="width: 99px;">Email</th>
-                                    <th tabindex="0"
-                                        rowspan="1" colspan="1" aria-label="Nombre del problema (ID): activate to sort column ascending"
-                                        style="width: 99px;">Nombre del problema (ID)</th>
-                                    <th tabindex="0"
-                                        rowspan="1" colspan="1" aria-label="Resultado: activate to sort column ascending"
-                                        style="width: 99px;">Resultado</th>
-                                    <th>Lenguaje</th>
-                                    <th class="text-center" tabindex="0"
-                                        rowspan="1" colspan="1" aria-label="AC / Envíos: activate to sort column ascending"
-                                        style="width: 99px;">AC / Envíos</th>
-                                    <th class="text-center" tabindex="0"
-                                        rowspan="1" colspan="1" aria-label="AC / Usuarios: activate to sort column ascending"
-                                        style="width: 99px;">AC / Usuarios</th>
-                                    <th tabindex="0"
-                                        rowspan="1" colspan="1" aria-label="Fecha envío: activate to sort column ascending"
-                                        style="width: 99px;">Fecha envío</th>
-
-                                </tr>
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                        <th>Nombre del problema (ID)</th>
+                                        <th>Resultado</th>
+                                        <th>Lenguaje</th>
+                                        <th>AC / Envíos</th>
+                                        <th>AC / Usuarios</th>
+                                        <th>Fecha envío</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 {% set avatarId = 1 %}
@@ -211,7 +192,6 @@
                                             </a>
                                         </div>
                                     </td>
-
                                     <td>
                                         <div>
                                             <a title="{{ problem.name }}"
@@ -223,13 +203,11 @@
                                             Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
                                         </div>
                                     </td>
-
                                     <td class="text-nowrap text-center">
                                         <span class="badge badge-{{ problem.status == 'AC' ? 'success' : 'danger' }}">
                                             {{ problem.status }}
                                         </span>
                                     </td>
-
                                     <td class="text-nowrap">
                                         {% if problem.language == 'JAV' %}
                                                 {% set color = 'success' %}
@@ -240,7 +218,6 @@
                                         {%  endif %}
                                         <span class="badge badge-{{ color }}">{{ problem.language }}</span>
                                     </td>
-
                                     <td>
                                         <a title="{{ problem.name }}"
                                                 href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
@@ -254,7 +231,6 @@
                                             </div>
                                         </a>
                                     </td>
-
                                     <td>
                                         <a title="{{ problem.name }}" href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
                                             <div class="progress progress-sm">
@@ -267,23 +243,25 @@
                                             </div>
                                         </a>
                                     </td>
-
                                     <td class="text-nowrap">
                                         {{ problem.submissionDate | date("d/m/Y H:i:s") }}
                                     </td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>
-                                <div class="dataTables_length" id="DataTables_Table_0_length">
-                                    <label>Ver
-                                        <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                        entradas</label>
-                                </div>
+                                <tfoot>
+                                <tr>
+                                    <th>Avatar</th>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Nombre del problema (ID)</th>
+                                    <th>Resultado</th>
+                                    <th>Lenguaje</th>
+                                    <th>AC / Envíos</th>
+                                    <th>AC / Usuarios</th>
+                                    <th>Fecha envío</th>
+                                </tr>
+                                </tfoot>
                             </table>
                         </div>
                         </div>
@@ -312,7 +290,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 {% for problem in problems %}
-                                    <span title="{{ problem.name }} - {{ problem.totalAC }} AC" class="tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'green' }}">
+                                    <span title="{{ problem.name }} - {{ problem.totalAC }} AC" class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'green' }}">
                                         {{ problem.internalId }}
                                     </span>
                                 {% endfor %}
@@ -330,11 +308,11 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                <table id="problemsTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                     <thead>
                                     <tr>
                                         <th>Problema (ID)</th>
-                                        <th>Último resultado</th>
+                                        <th>Último veredicto</th>
                                         <th>Lenguaje/s</th>
                                         <th class="text-center">AC / Envíos</th>
                                         <th class="text-center">AC / Usuarios</th>
@@ -407,16 +385,16 @@
                                         </tr>
                                     {% endfor %}
                                     </tbody>
-                                    <div class="dataTables_length" id="DataTables_Table_1_length">
-                                        <label>Ver
-                                            <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                            entradas</label>
-                                    </div>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Problema (ID)</th>
+                                        <th>Último veredicto</th>
+                                        <th>Lenguaje/s</th>
+                                        <th class="text-center">AC / Envíos</th>
+                                        <th class="text-center">AC / Usuarios</th>
+                                        <th>Fecha último envío</th>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -431,12 +409,13 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                <table id="usersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                     <thead>
                                     <tr>
-                                        <th colspan="2">Usuario</th>
+                                        <th>Avatar</th>
+                                        <th>Usuario</th>
                                         <th>Email</th>
-                                        <th>Lenguaje/ s</th>
+                                        <th>Lenguaje</th>
                                         <th class="text-center">AC / Envíos</th>
                                         <th class="text-center">AC Únicos</th>
                                         <th>Fecha último envío</th>
@@ -503,16 +482,17 @@
                                         </tr>
                                     {% endfor %}
                                     </tbody>
-                                    <div class="dataTables_length" id="DataTables_Table_2_length">
-                                        <label>Ver
-                                            <select name="DataTables_Table_2_length" aria-controls="DataTables_Table_2" class="">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                            entradas</label>
-                                    </div>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                        <th>Lenguaje</th>
+                                        <th class="text-center">AC / Envíos</th>
+                                        <th class="text-center">AC Únicos</th>
+                                        <th>Fecha último envío</th>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -521,7 +501,6 @@
             </div>
         </div>
     </div>
-    </main>
 
     <script>
         require(['jquery', 'vector-map', 'vector-map-world'], function() {
@@ -571,7 +550,7 @@
         });
     </script>
     <script>
-        require(['c3', 'jquery'], function(c3, $) {
+        require(['c3', 'jquery', 'datatables'], function(c3, $) {
             $(document).ready(function(){
                 let programmingLanguages = {{ programmingLanguages | json_encode | raw }},
                     submissionErrors = {{ submissionErrors | json_encode | raw }},
@@ -581,6 +560,10 @@
                         ['Aceptados', {{ totalAccepted }}],
                         ['Fallidos', {{ totalProblemsAttempts - totalAccepted }}]
                     ];
+
+                $('#lastAttemps').DataTable();
+                $('#problemsTable').DataTable();
+                $('#usersTable').DataTable();
 
                 programmingLanguages.map(function (language) {
                     dataLanguages.push([ language.language, language.totals]);

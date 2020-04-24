@@ -6,6 +6,8 @@ class Teachers extends OL_Controller {
 	public function __construct () {
 		parent::__construct();
 
+        $this->session->set_userdata('role', 'teacher');
+
         $subjectId = $this->input->post('subject');
         $groupId = $this->input->post('group');
         if (

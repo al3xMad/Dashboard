@@ -5,6 +5,8 @@ class Admindashboard extends OL_Controller {
 
 	public function __construct () {
 		parent::__construct();
+
+        $this->session->set_userdata('role', 'admin');
 	}
 
 	public function index() {

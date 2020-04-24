@@ -12853,7 +12853,7 @@ a.icon:hover {
 .table th, .text-wrap table th {
   color: #9aa0ac;
   text-transform: uppercase;
-  font-size: 0.875rem;
+  font-size: 0.72rem;
   font-weight: 400;
 }
 
@@ -13138,12 +13138,12 @@ a.icon:hover {
 
 .card-table tr td:first-child,
 .card-table tr th:first-child {
-  padding-left: 1.5rem;
+  padding-left: 0.5rem;
 }
 
 .card-table tr td:last-child,
 .card-table tr th:last-child {
-  padding-right: 1.5rem;
+  padding-right: .4rem;
 }
 
 .card-body + .card-table {
@@ -18647,4 +18647,29 @@ svg {
   bottom: 5px;
   content: "\e92d";
   font-family: 'feather' !important;
+}
+
+.dataTables_wrapper > .row:last-of-type {
+  padding-top: 40px;
+}
+.dataTables_length label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.dataTables_length select {
+  margin: 0 10px;
+  max-width: 100px;
+}
+
+.dataTables_filter > label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.dataTables_filter input {
+  max-width: 300px;
+  margin-left: 10px;
 }

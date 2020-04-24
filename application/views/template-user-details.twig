@@ -65,21 +65,25 @@
                             </div>
                             <!-- BARRA CON ACEPTADOS % Y TIPOS DE ERRORES%-->
                             <!--como se añaden los aceptados??-->
-                            {% for submissionError in submissionErrorsTable %}
-                                <tr>
-                                    <td>{{ submissionError.status }}</td>
-                                    <td>({{ submissionError.name }})</td>
-                                    <td class="text-left"> - {{ submissionError.totals }} errores</td>
-                                    <td>
-                                        <div class="progress progress-sm">
-                                            {% set errorPercent = ((submissionError.totals / userDetails.TotalSubmissions) * 100) %}
-                                            <div class="progress-bar bg-cyan-light"
-                                                 style="width: {{ errorPercent | number_format(0, ',', '.') }}%">{{ errorPercent | number_format(2, ',', '.') }}%</div>
-                                        </div>
-                                        <div class="small text-muted text-center">{{ submissionError.totals }} / {{ userDetails.TotalSubmissions }}</div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
+                            <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                <tbody>
+                                {% for submissionError in submissionErrorsTable %}
+                                    <tr>
+                                        <td>{{ submissionError.status }}</td>
+                                        <td>({{ submissionError.name }})</td>
+                                        <td class="text-left"> - {{ submissionError.totals }} errores</td>
+                                        <td>
+                                            <div class="progress progress-sm">
+                                                {% set errorPercent = ((submissionError.totals / userDetails.TotalSubmissions) * 100) %}
+                                                <div class="progress-bar bg-cyan-light"
+                                                     style="width: {{ errorPercent | number_format(0, ',', '.') }}%">{{ errorPercent | number_format(2, ',', '.') }}%</div>
+                                            </div>
+                                            <div class="small text-muted text-center">{{ submissionError.totals }} / {{ userDetails.TotalSubmissions }}</div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -89,10 +93,11 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Últimos envíos:</h3>
+                            <h4 class="card-title">Últimos envíos:</h4>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table card-table table-striped table-vcenter">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                            <table id="lastAttemps" class="table card-table table-striped table-vcenter">
                                 <thead>
                                 <tr>
                                     <th>Problema (ID)</th>
@@ -128,17 +133,16 @@
                                 </tr>
                                 {% endfor %}
                                 </tbody>
-                                <div class="dataTables_length" id="DataTables_Table_1_length">
-                                    <label style="padding-top: 10px; padding-left:25px;">Ver
-                                        <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                    entradas</label>
-                                </div>
+                                <tfoot>
+                                <tr>
+                                    <th>Problema (ID)</th>
+                                    <th class="text-center">Resultado</th>
+                                    <th>Aceptados /Envíos</th>
+                                    <th>Última fecha de envío</th>
+                                </tr>
+                                </tfoot>
                             </table>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -182,7 +186,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                <table id="problemsTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                     <thead>
                                     <tr>
                                         <th>Problema (ID)</th>
@@ -219,16 +223,15 @@
                                         </tr>
                                     {% endfor %}
                                     </tbody>
-                                    <div class="dataTables_length" id="DataTables_Table_1_length">
-                                        <label>Ver
-                                            <select name="DataTables_Table_1_length" aria-controls="DataTables_Table_1" class="">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                            entradas</label>
-                                    </div>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Problema (ID)</th>
+                                        <th class="text-center">Resultado</th>
+                                        <th class="text-center">Aceptados</th>
+                                        <th class="text-center">Envíos</th>
+                                        <th>Fecha último envío</th>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -238,11 +241,13 @@
         </div>
     </main>
     <script>
-        require(['c3', 'jquery'], function(c3, $) {
+        require(['c3', 'jquery', 'datatables'], function(c3, $) {
             $(document).ready(function(){
                 let submissionErrors = {{ submissionErrors | json_encode | raw }},
                     dataErrors = [];
 
+                $('#lastAttemps').DataTable();
+                $('#problemsTable').DataTable();
 
                 submissionErrors.map(function (userError) {
                     dataErrors.push([ userError.status, userError.totals]);

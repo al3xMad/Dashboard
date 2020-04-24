@@ -54,6 +54,7 @@ class Problem extends OL_Controller {
         ];
 
         $data['problems'] = $this->Mproblems->getAllProblemsSubmittedByGroup($groupId, $problemParams);
+        $data['groupId'] = $groupId;
 
         $data['worseProblem'] = end($data['problems']);
 
@@ -63,6 +64,7 @@ class Problem extends OL_Controller {
     public function id($id) {
         // Retrieving vars
         $data = $this->data;
+        $data['role'] = $this->session->userdata('role');
 
         if (empty($id)) {
             redirect(base_url());
