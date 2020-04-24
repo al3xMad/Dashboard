@@ -1,7 +1,7 @@
 <?php
 class Musers extends CI_Model {
 
-    const DEFAULT_LAST_ATTEMPTS_LIMIT = 10;
+    const DEFAULT_LAST_ATTEMPTS_LIMIT = 100;
 
     public function getAllUsers() {
         $this->db->select('u.id, data.*')
