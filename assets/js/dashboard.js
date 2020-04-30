@@ -7,8 +7,11 @@ shim: {
 'vector-map-de': ['vector-map', 'jquery'],
 'vector-map-world': ['vector-map', 'jquery'],
 'core': ['bootstrap', 'jquery'],
+'datatables': ['bootstrap', 'jquery'],
 },
 paths: {
+'datatables.net': "assets/plugins/datatables/DataTables-1.10.16/js/jquery.dataTables",
+'datatables' : "assets/plugins/datatables/DataTables-1.10.16/js/dataTables.bootstrap4",
 'core': 'assets/js/core',
 'jquery': 'assets/js/vendors/jquery-3.2.1.min',
 'bootstrap': 'assets/js/vendors/bootstrap.bundle.min',

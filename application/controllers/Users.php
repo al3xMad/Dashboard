@@ -110,15 +110,6 @@ class Users extends OL_Controller {
         return $user->first_name . ' ' . $user->last_name;
     }
 
-    public function all() {
-        // Retrieving vars
-        $data = $this->data;
-
-        $data['users'] = $this->Musers->getAllUsers();
-
-        $this->load->view('template-users', $data);
-    }
-
     public function problem($problems){
         $data['problems'] = $problems;
     }

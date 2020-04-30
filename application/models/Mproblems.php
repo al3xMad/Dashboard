@@ -298,21 +298,6 @@ class Mproblems extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
-    /*public function getUsersRankingByProblemId($id, $params = []){
-        if (empty($id)) {
-            return false;
-        }
-
-        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
-
-        $sql = "
-
-        ";
-
-
-        return $this->db->query($sql)->result();
-    }*/
-
     public function getLastProblemsAttemptsByUserId($id = null, $params = [])
     {
         if (empty($id)) {

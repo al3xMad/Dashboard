@@ -35,6 +35,7 @@ class Problem extends OL_Controller {
     public function group($groupId) {
         // Retrieving vars
         $data = $this->data;
+        $groupId = 3;
 
         $groupDetails = $this->Msubjects->getGroupById($groupId);
 

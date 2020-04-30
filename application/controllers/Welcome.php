@@ -12,9 +12,6 @@ class Welcome extends OL_Controller {
 		$data = $this->data;
         $data['no_breadcrumb'] = true;
 
-//        $data['categories'] = $this->Mcategories->getAllCategories();
-//        $data['pageTitle'] = 'Categorías';
-
 		$this->load->view('template-select-role', $data);
 	}
 }

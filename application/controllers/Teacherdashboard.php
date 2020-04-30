@@ -12,8 +12,8 @@ class Teacherdashboard extends OL_Controller {
 		$data = $this->data;
         $data['no_breadcrumb'] = true;
 
-        $subjectId = $this->session->userdata('subjectId');
-        $groupId = $this->session->userdata('groupId');
+        $subjectId = 1;
+        $groupId = 3;
 
         $usersInGroup = $this->Musers->getAllUsersByGroupId($groupId);
 
