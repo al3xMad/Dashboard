@@ -3,11 +3,7 @@
 /**
  * This file is a Twig extension for assist in working with text based on CodeIgniter own helpers.
  * The native CodeIgniter functions will be called when avaible.
- * (c) 2012 Carlos Benitez | EtnasSoft
- * For the full copyright and license information, please view the LICENSE
- * file in the following web address: https://openlibra.com/license
- *
- * @author Carlos Benitez | EtnasSoft <info@etnassoft.com>
+ * @author Alexandra Pérez
  * @package Twig
  * @subpackage Twig-extensions
  */

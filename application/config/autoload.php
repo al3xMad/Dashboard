@@ -144,4 +144,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = ['Musers', 'Mcategories', 'Mproblems', 'Mcountries', 'Msubjects'];
+$autoload['model'] = ['Musers', 'Mproblems', 'Mcountries', 'Msubjects'];

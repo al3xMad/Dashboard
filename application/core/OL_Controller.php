@@ -2,7 +2,9 @@
 defined( 'BASEPATH' ) OR exit( 'No direct script access allowed' );
 
 class OL_Controller extends CI_Controller {
-	/**
+	const FAKE_USER = 'user';
+
+    /**
 	 * @var array   Main data params
 	 */
 	public $data;
@@ -19,35 +21,12 @@ class OL_Controller extends CI_Controller {
 		$this->data['brandImage'] = assets_url() . config_item('brand');
 		$this->data['projectTitle'] = '¡ACEPTA EL RETO!';
 
-        if ($_POST) {
-            $this->loginAFakeUser();
-        }
-
-        if (!$this->isUserLogged() && !$this->isLoginPage()) {
-            redirect(base_url() . 'login', 'refresh');
-        }
-
-        if (!$this->isLoginPage()) {
-            $this->data['user'] = $this->session->userdata['user_name'];
-        }
+        $this->loginAFakeUser();
 	}
 
-	private function isUserLogged () {
-	    return isset($this->session->userdata['user_name']);
-    }
-
-    private function isLoginPage () {
-	    return $this->router->fetch_class() === 'login';
-    }
-
-    private function loginAFakeUser () {
-        $username = $this->input->post('user_name');
-	    if (empty($username)) {
-            return false;
-        }
-
+	private function loginAFakeUser () {
 	    $user = [
-            'user_name' => $this->input->post('user_name')
+            'user_name' => self::FAKE_USER
         ];
 
         $this->session->set_userdata($user);
