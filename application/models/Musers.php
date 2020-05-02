@@ -38,6 +38,8 @@ class Musers extends CI_Model {
     }
 
     public function getAllUsersData() {
+        $limit = self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
         $sql = "
             SELECT `udata`.*, `u`.`gender`, `u`.`registrationDate`, `u`.`country_id`, `u`.`institution_id`,
             (
@@ -52,7 +54,7 @@ class Musers extends CI_Model {
             FROM `users` `u`
             LEFT JOIN `userdata` `udata` ON `udata`.`id` = `u`.`id`
             ORDER BY TotalSubmissions DESC, TotalAC DESC
-            LIMIT 30;";
+            LIMIT $limit;";
 
         return $this->db->query($sql)->result();
     }

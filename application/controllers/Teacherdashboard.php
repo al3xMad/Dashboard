@@ -24,19 +24,11 @@ class Teacherdashboard extends OL_Controller {
 
         $data['pageTitle'] = 'Teachers Dashboard';
 
-        $data['lastWeekProblems'] = 10;//count($this->Mproblems->getLastWeekProblems());
+        $data['lastWeekProblems'] = count($this->Mproblems->getLastWeekProblems());
 
         $data['totalUsers'] = count($usersInGroup);
 
-        /*$data['countriesStats'] = $this->Mcountries->getAllCountriesWithUsersByGroupId($groupId, ['limit' => 10]);
 
-        $data['countriesStatsForMap'] = [];
-        foreach($data['countriesStats'] as $country) {
-            $data['countriesStatsForMap'][] = [$country->id => $country->totalUsers];
-        }
-
-        $data['totalCountries'] = $this->Mcountries->getCountAllCountriesWithUsersByGroupId($groupId);
-*/
         $problemsParams = [
             'order' => 'totalAC',
             'direction' => 'DESC'
