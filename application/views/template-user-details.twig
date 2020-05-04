@@ -60,30 +60,9 @@
                             <h3 class="card-title">Aceptados/ Fallidos</h3>
                         </div>
                         <div class="card-body">
-                            <div class="col-sm-4">
-                                <div id="chart-bar-errors" class="c3 text-center"></div>
+                            <div class="col-sm-12">
+                                <div id="chart-bar-submissions" class="c3 text-center" style="max-height: 10px"></div>
                             </div>
-                            <!-- BARRA CON ACEPTADOS % Y TIPOS DE ERRORES%-->
-                            <!--como se añaden los aceptados??-->
-                            <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                <tbody>
-                                {% for submissionError in submissionErrorsTable %}
-                                    <tr>
-                                        <td>{{ submissionError.status }}</td>
-                                        <td>({{ submissionError.name }})</td>
-                                        <td class="text-left"> - {{ submissionError.totals }} errores</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                {% set errorPercent = ((submissionError.totals / userDetails.TotalSubmissions) * 100) %}
-                                                <div class="progress-bar bg-cyan-light"
-                                                     style="width: {{ errorPercent | number_format(0, ',', '.') }}%">{{ errorPercent | number_format(2, ',', '.') }}%</div>
-                                            </div>
-                                            <div class="small text-muted text-center">{{ submissionError.totals }} / {{ userDetails.TotalSubmissions }}</div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -167,7 +146,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                {% for problem in problems %}
+                                {% for problem in problemsRanking %}
                                     <span title="{{ problem.name }} - {{ problem.totalAC }} AC" class="tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'green' }}">
                                         {{ problem.internalId }}
                                     </span>
@@ -243,31 +222,33 @@
     <script>
         require(['c3', 'jquery', 'datatables'], function(c3, $) {
             $(document).ready(function(){
-                let submissionErrors = {{ submissionErrors | json_encode | raw }},
-                    dataErrors = [];
+                let submissionChart = {{ submissionChartTable | json_encode | raw }};
+                submissionChart = Object.entries(submissionChart[0]);
+                let submissionChartKeys = submissionChart.map((ele) => ele[0]);
 
                 $('#lastAttemps').DataTable();
                 $('#problemsTable').DataTable();
 
-                submissionErrors.map(function (userError) {
-                    dataErrors.push([ userError.status, userError.totals]);
-                });
-
-
-                let chartErrors = c3.generate({
-                    bindto: '#chart-bar-errors', // id of bar wrapper
-                    data: {
-                        columns: dataErrors,
-                        type: 'bar', // default type of bar
-                        colors: {
-                            'data1': tabler.colors["blue-darker"],
-                            'data2': tabler.colors["blue"],
-                            'data3': tabler.colors["blue-light"],
-                            'data4': tabler.colors["blue-lighter"]
-                        },
-                        names: {}
+                let chartSubmissions = c3.generate({
+                    bindto: '#chart-bar-submissions', // id of bar wrapper
+                    size: {
+                        height: 100
                     },
-                    axis: {},
+                    data: {
+                        columns: submissionChart,
+                        type: 'bar', // default type of bar
+                        groups: [submissionChartKeys],
+                        names: {},
+                    },
+                    axis: {
+                      rotated: true,
+                      x: {
+                        show: false
+                      },
+                      y: {
+                        show: false
+                      }
+                    },
                     legend: {
                         show: true,
                     },
@@ -275,6 +256,11 @@
                         bottom: 0,
                         top: 0
                     },
+                    tooltip: {
+                        format: {
+                            title: () => 'Resumen Envíos:'
+                        }
+                    }
                 });
 
                 let chartattempsEv = c3.generate({

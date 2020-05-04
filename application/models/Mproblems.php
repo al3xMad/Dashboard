@@ -242,6 +242,30 @@ class Mproblems extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
+    public function getChartSubmissionsByUserId($id)
+    {
+        if (empty($id)) {
+            return false;
+        }
+
+        $sql = "SELECT 	         
+          SUM(CASE WHEN STATUS = 'AC' THEN 1 ELSE 0 END) totalAC, 
+          SUM(CASE WHEN STATUS = 'CE' THEN 1 ELSE 0 END) totalCE, 
+          SUM(CASE WHEN STATUS = 'IR' THEN 1 ELSE 0 END) totalIR, 
+          SUM(CASE WHEN STATUS = 'ML' THEN 1 ELSE 0 END) totalML, 
+          SUM(CASE WHEN STATUS = 'OL' THEN 1 ELSE 0 END) totalOL, 
+          SUM(CASE WHEN STATUS = 'PE' THEN 1 ELSE 0 END) totalPE, 
+          SUM(CASE WHEN STATUS = 'RF' THEN 1 ELSE 0 END) totalRF, 
+          SUM(CASE WHEN STATUS = 'RTE' THEN 1 ELSE 0 END) totalRTE, 
+          SUM(CASE WHEN STATUS = 'TL' THEN 1 ELSE 0 END) totalTL, 
+          SUM(CASE WHEN STATUS = 'WA' THEN 1 ELSE 0 END) totalWA        
+        FROM submission s
+        WHERE s.user_id = $id
+        GROUP BY s.user_id;";
+
+        return $this->db->query($sql)->result();
+    }
+
     public function getProblemsRankingByUserId($id, $params = []){
         if (empty($id)) {
             return false;
@@ -518,6 +542,50 @@ class Mproblems extends CI_Model {
         return $query->result();
     }
 
+    public function getChartSubmissionTableByUserId($userId = null)
+    {
+        if (empty($userId)) {
+            return false;
+        }
+
+        $this->db->select('s.status, e.name, count(s.status) AS totals')
+            ->from('submission s')
+            ->join('status e', 'e.id = s.status', 'left')
+            ->where([
+                's.user_id' => $userId
+            ])
+            ->group_by('s.status')
+            ->order_by('totals', 'DESC');
+
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
+    public function getChartSubmissionsByGroupId($groupId = null)
+    {
+        if (empty($groupId)) {
+            return false;
+        }
+
+        $sql = " SELECT 	         
+	          SUM(CASE WHEN STATUS = 'AC' THEN 1 ELSE 0 END) totalAC, 
+	          SUM(CASE WHEN STATUS = 'CE' THEN 1 ELSE 0 END) totalCE, 
+	          SUM(CASE WHEN STATUS = 'IR' THEN 1 ELSE 0 END) totalIR, 
+	          SUM(CASE WHEN STATUS = 'ML' THEN 1 ELSE 0 END) totalML, 
+	          SUM(CASE WHEN STATUS = 'OL' THEN 1 ELSE 0 END) totalOL, 
+	          SUM(CASE WHEN STATUS = 'PE' THEN 1 ELSE 0 END) totalPE, 
+	          SUM(CASE WHEN STATUS = 'RF' THEN 1 ELSE 0 END) totalRF, 
+	          SUM(CASE WHEN STATUS = 'RTE' THEN 1 ELSE 0 END) totalRTE, 
+	          SUM(CASE WHEN STATUS = 'TL' THEN 1 ELSE 0 END) totalTL, 
+	          SUM(CASE WHEN STATUS = 'WA' THEN 1 ELSE 0 END) totalWA
+            FROM submission s
+            INNER JOIN groupusers gu ON s.user_id = gu.id_user
+            WHERE gu.id_group = $groupId;";
+
+        return $this->db->query($sql)->result();
+    }
+
     public function getLastIR() {
         $this->db->select('*')
             ->from('submission s')
@@ -640,7 +708,7 @@ class Mproblems extends CI_Model {
             return false;
         }
 
-        $this->db->select('det.name, p.*')
+        $this->db->select('det.name, p.*, s.*')
             ->from('problem p')
             ->join('problem_details det', 'p.internalId = det.id', 'left')
             ->join('submission s', 's.problem_id = p.internalId', 'left')

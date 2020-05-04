@@ -24,9 +24,11 @@ class Teacherdashboard extends OL_Controller {
 
         $data['pageTitle'] = 'Teachers Dashboard';
 
-        $data['lastWeekProblems'] = count($this->Mproblems->getLastWeekProblems());
+        $data['lastWeekProblems'] = $this->Mproblems->getLastWeekProblems();
 
         $data['totalUsers'] = count($usersInGroup);
+
+        $data['submissionChartTable'] = $this->Mproblems->getChartSubmissionsByGroupId($groupId);
 
 
         $problemsParams = [

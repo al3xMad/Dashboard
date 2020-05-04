@@ -82,8 +82,8 @@ class Users extends OL_Controller {
 
         $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByUserId($userId);
         $data['submissionErrors'] = $this->Mproblems->getChartErrorsByUserId($userId);
-        $data['submissionErrorsTable'] = $this->Mproblems->getChartErrorsTableByUserId($userId);
-
+        $data['submissionChartTable'] = $this->Mproblems->getChartSubmissionsByUserId($userId);
+        
         $totalSubmissionsByMonthAndUserId = $this->Mproblems->getTotalSubmissionsByMonthAndUserId($userId);
         $totalAcceptedByMonthAndUserId = $this->Mproblems->getTotalAcceptedByMonthAndUserId($userId);
 

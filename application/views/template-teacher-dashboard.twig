@@ -95,12 +95,9 @@
                         <div class="card-header">
                             <h3 class="card-title">Aceptados/ Fallidos</h3>
                         </div>
-                        <!-- hacerlo bien-->
                         <div class="card-body">
-                            <div class="progress progress-sm">
-                                <div class="progress-bar bg-blue" style="width: 75%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                    <span class="sr-only">75% Complete</span>
-                                </div>
+                            <div class="col-sm-12">
+                                <div id="chart-bar-submissions" class="c3 text-center" style="max-height: 10px"></div>
                             </div>
                         </div>
                     </div>
@@ -427,9 +424,47 @@
                         ['Errores', {{ totalProblemsAttempts - totalAccepted }}]
                     ];
 
+                let submissionChart = {{ submissionChartTable | json_encode | raw }};
+                submissionChart = Object.entries(submissionChart[0]);
+                let submissionChartKeys = submissionChart.map((ele) => ele[0]);
+
                 $('#lastAttemps').DataTable();
                 $('#problemsRanking').DataTable();
                 $('#usersRanking').DataTable();
+
+              let chartSubmissions = c3.generate({
+                bindto: '#chart-bar-submissions', // id of bar wrapper
+                size: {
+                  height: 100
+                },
+                data: {
+                  columns: submissionChart,
+                  type: 'bar', // default type of bar
+                  groups: [submissionChartKeys],
+                  names: {},
+                },
+                axis: {
+                  rotated: true,
+                  x: {
+                    show: false
+                  },
+                  y: {
+                    show: false
+                  }
+                },
+                legend: {
+                  show: true,
+                },
+                padding: {
+                  bottom: 0,
+                  top: 0
+                },
+                tooltip: {
+                  format: {
+                    title: () => 'Resumen Envíos:'
+                  }
+                }
+              });
 
                 submissionErrors.map(function (userError) {
                     dataErrors.push([ userError.status, userError.totals]);
