@@ -44,7 +44,7 @@ class Teacherdashboard extends OL_Controller {
         $data['problems'] = array_slice($problemsSubmitted, 0, 15);
 
         $data['totalAccepted'] = $this->Mproblems->getSumAllAcceptedByGroupId($groupId);
-        $data['totalProblemsAttempts'] = $this->Mproblems->getSumAllAttemptsByGroupId($groupId);
+        $data['totalProblemsAttempts'] = $this->Mproblems->getSumAllAttemptsByGroupId($groupId)->total;
 
         $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByGroupId($groupId);
 

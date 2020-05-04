@@ -76,15 +76,14 @@ class Mproblems extends CI_Model {
             return false;
         }
 
-        $this->db->select('*')
+        $this->db->select('COUNT((s.id)) as total')
             ->from('submission s')
             ->join('groupusers gr', 'gr.id_user = s.user_id', 'left')
-            ->where('gr.id_group', $groupId)
-            ->group_by('s.id');
+            ->where('gr.id_group', $groupId);
 
         $query = $this->db->get();
 
-        return $query->num_rows();
+        return $query->row();
     }
 
     public function getLastUsersAttemptsByProblemId($id = null, $params = [])
@@ -686,7 +685,7 @@ class Mproblems extends CI_Model {
             ->join('submission s', 's.problem_id = p.internalId', 'left')
             ->join('groupusers gr', 'gr.id_user = s.user_id', 'left')
             ->where('gr.id_group', $groupId)
-            ->where('det.name IS NOT NULL')
+            //->where('det.name IS NOT NULL')
             ->group_by('p.internalId');
 
         if (isset($params['limit'])) {
