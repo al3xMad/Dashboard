@@ -83,7 +83,7 @@ class Users extends OL_Controller {
         $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByUserId($userId);
         $data['submissionErrors'] = $this->Mproblems->getChartErrorsByUserId($userId);
         $data['submissionChartTable'] = $this->Mproblems->getChartSubmissionsByUserId($userId);
-        
+
         $totalSubmissionsByMonthAndUserId = $this->Mproblems->getTotalSubmissionsByMonthAndUserId($userId);
         $totalAcceptedByMonthAndUserId = $this->Mproblems->getTotalAcceptedByMonthAndUserId($userId);
 
@@ -95,11 +95,19 @@ class Users extends OL_Controller {
             return $month->total_submissions;
         }, $totalAcceptedByMonthAndUserId));
 
+        $data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndUserId);
+
         $this->load->view('template-user-details', $data);
     }
 
     public function submissions($id = null) {
         redirect(base_url() . 'teacherdashboard/', 'refresh');
+    }
+
+    public function notSubmissions($submissionChart){
+        $data = array_column($submissionChart, 'total_submissions');
+
+        return empty(array_filter($data));
     }
 
     private function _getUserName($user) {

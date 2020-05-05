@@ -679,7 +679,7 @@ class Mproblems extends CI_Model {
             return false;
         }
 
-        $this->db->select('det.name, p.*')
+        $this->db->select('det.name, p.*, s.status')
             ->from('problem p')
             ->join('problem_details det', 'p.internalId = det.id', 'left')
             ->join('submission s', 's.problem_id = p.internalId', 'left')

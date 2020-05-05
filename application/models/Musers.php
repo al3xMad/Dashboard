@@ -176,4 +176,39 @@ class Musers extends CI_Model {
 
         return $this->db->query($sql)->result();
     }
+
+    public function getUsersRankingByGroup($groupId, $params = []){
+        if (empty($groupId)) {
+            return false;
+        }
+
+        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
+        $sql = "
+            SELECT 
+            `u`.*,(
+            SELECT COUNT(*) 
+            from submission s2 
+            where s2.user_id = u.id
+               ) as totalSubs, 
+               (
+            SELECT COUNT(*) 
+            from submission s3 
+            where s3.user_id = u.id and s3.`status` = 'AC'
+               ) as totalAC, 
+               (
+            SELECT s4.submissionDate 
+            from submission s4 
+            where s4.user_id = u.id 
+            order by s4.submissionDate 
+            DESC limit 1
+            ) as last_submission 
+            from userdata u
+            LEFT JOIN groupusers g ON g.id_user = u.id
+            WHERE g.id_group = $groupId
+            ORDER BY totalAC DESC
+            LIMIT $limit";
+
+        return $this->db->query($sql)->result();
+    }
 }

@@ -62,43 +62,6 @@
                 </div>
                 {% endif %}
             </div>
-            <!-- PONER UNA BARRA CON ACEPTADOS % Y TIPOS DE FALLIDOS %
-            div class="row row-cards row-deck">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                <thead>
-                                <tr>
-                                    <th>Prefijo</th>
-                                    <th>Tipo de error</th>
-                                    <th class="text-left">Total de ocurrencias</th>
-                                    <th class="text-center">Ocurrencias / Totales</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for submissionError in submissionErrorsTable %}
-                                    <tr>
-                                        <td>{{ submissionError.status }}</td>
-                                        <td>{{ submissionError.name }}</td>
-                                        <td class="text-left">{{ submissionError.totals }}</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                {% set errorPercent = ((submissionError.totals / problem.totalSubs) * 100) %}
-
-                                                <div class="progress-bar bg-cyan-light"
-                                                        style="width: {{ errorPercent | number_format(0, ',', '.') }}%">{{ errorPercent | number_format(2, ',', '.') }}%</div>
-                                            </div>
-                                            <div class="small text-muted text-center">{{ submissionError.totals }} / {{ problem.totalSubs }}</div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div-->
 
             <div class="row row-cards row-deck">
                 <div class="col-lg-12">
@@ -120,9 +83,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% set face = 0 %}
+                                    {% set face = 1 %}
                                     {% for attempt in lastAttempts %}
+                                    {% if face > 16 %}
+                                        {% set face = 1 %}
+                                    {% else %}
                                         {% set face = face + 1 %}
+                                    {% endif %}
                                     <tr>
                                         <td class="w-1">
                                             <span class="avatar"

@@ -276,8 +276,8 @@
                                             </td>
 
                                             <td class="text-nowrap text-center">
-                                                <span class="badge badge-{{ attempt.lastAttempt == 'AC' ? 'success' : 'danger' }}">
-                                                    {{ attempt.lastAttempt }}
+                                                <span class="badge badge-{{ problem.status == 'AC' ? 'success' : 'danger' }}">
+                                                    {{ problem.status }}
                                                 </span>
                                             </td>
 
@@ -344,52 +344,54 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for problem in problems %}
+                                    {% set avatarId = 1 %}
+                                    {% for user in usersRanking %}
+                                    {% if avatarId > 16 %}
+                                        {% set avatarId = 1 %}
+                                    {% else %}
+                                        {% set avatarId = avatarId + 1 %}
+                                    {% endif %}
                                         <tr>
                                             <td class="w-1">
-                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ face }}.jpg)"></span>
+                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
                                             </td>
                                             <td>
                                                 <div>
-                                                    <a title="{{ attempt.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
-                                                        {{ attempt.first_name }} {{ attempt.last_name }}
+                                                    <a title="{{ user.first_name }}"
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                        {{ user.first_name }} {{ user.last_name }}
                                                     </a>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div>
-                                                    <a title="{{ attempt.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
-                                                        {{ attempt.email }}
+                                                    <a title="{{ user.email }}"
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                        {{ user.email }}
                                                     </a>
                                                 </div>
                                             </td>
 
                                             <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
+                                                        {{ ((user.totalAC / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
                                                     </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalSubs }}</div>
-                                                </a>
+                                                </div>
+                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ user.totalSubs }}</div>
                                             </td>
 
                                             <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / (totalProblemsAttempts - totalAccepted) | number_format(0, ',', '.')) * 100) | number_format(2, ',', '.') }}%</div>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
+                                                        {{ ((user.totalAC / (user.totalSubs - user.totalAC)) * 100) | number_format(2, ',', '.') }}%
                                                     </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalAc }} / {{ (totalProblemsAttempts - totalAccepted) }}</div>
-                                                </a>
+                                                </div>
+                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ (user.totalSubs - user.totalAC) }}</div>
                                             </td>
 
                                             <td class="text-nowrap">
-                                                {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
+                                                {{ user.last_submission | date("d/m/Y H:i:s") }}
                                             </td>
                                         </tr>
                                     {% endfor %}

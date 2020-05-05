@@ -72,7 +72,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Últimos envíos:</h4>
+                            <h4 class="card-title">Últimos problemas intentados:</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -133,9 +133,13 @@
                             <h4 class="card-title">Evolución de envíos</h4>
                         </div>
                         <div class="card-body">
+                            {% if notSubmissions %}
+                                <div style="color: #9aa0ac; text-align: center;"> No hay datos en el año actual</div>
+                            {% else %}
                             <div id="chart-bar-attempsEv"
                                  style="height: 16rem; max-height: 256px; position: relative;" class="c3">
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
