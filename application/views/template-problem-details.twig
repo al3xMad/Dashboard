@@ -98,7 +98,7 @@
                                         <td>
                                             <div>
                                                 <a title="{{ attempt.first_name }}"
-                                                    href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
+                                                    href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
                                                     {{ attempt.first_name }} {{ attempt.last_name }}
                                                 </a>
                                             </div>
@@ -106,7 +106,7 @@
                                         <td>
                                             <div>
                                                 <a title="{{ attempt.email }}"
-                                                   href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
+                                                   href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
                                                     {{ attempt.email }}
                                                 </a>
                                             </div>
@@ -153,28 +153,16 @@
                             <h4 class="card-title">Evolución de envíos</h4>
                         </div>
                         <div class="card-body">
+                            {% if notSubmissions %}
+                            <div style="color: #9aa0ac; text-align: center;"> No hay datos en el año actual</div>
+                            {% else %}
                             <div id="chart-bar-attempsEv"
                                  style="height: 16rem; max-height: 256px; position: relative;" class="c3">
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                <!--PROFESOR SOLO div class="col-sm-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Usuarios que lo han intentado</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                {% for problem in problems %}
-                                    <span title="{{ user.name }} - {{ problem.result }}" class="tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'green' }}">
-                                        {{ problem.internalId }}
-                                    </span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div-->
             </div>
             <div class="row row-cards row-deck">
                 <div class="col-md-12">
@@ -210,7 +198,7 @@
                                             <td>
                                                 <div>
                                                     <a title="{{ user.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
                                                         {{ user.first_name }} {{ user.last_name }}
                                                     </a>
                                                 </div>
@@ -218,7 +206,7 @@
                                             <td>
                                                 <div>
                                                     <a title="{{ user.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
                                                         {{ user.email }}
                                                     </a>
                                                 </div>

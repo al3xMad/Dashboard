@@ -115,6 +115,37 @@ class Musers extends CI_Model {
         return $this->db->query($sql)->row();
     }
 
+    public function getAllUserDataByIdAndGroupId($userId, $groupId)
+    {
+        if (empty($userId) || empty($groupId)) {
+            return false;
+        }
+
+        $sql = "
+          SELECT `udata`.*, `u`.`gender`, `u`.`registrationDate`, `u`.`country_id`, `u`.`institution_id`,(
+            SELECT count(*) from submission s where s.user_id = u.id
+          ) as TotalSubmissions, (
+            SELECT count(*) from submission s where s.user_id = u.id and s.`status` = 'AC'
+          ) as TotalAC,
+          (
+		    SELECT s.submissionDate from submission s where s.user_id = u.id order by s.submissionDate DESC limit 1
+	      ) as LastSubmission, (
+	        SELECT COUNT(DISTINCT(s.problem_id)) FROM submission s where s.user_id = u.id 
+	      ) as problemAttempted, (
+	        SELECT COUNT(DISTINCT(s.problem_id)) FROM submission s where s.user_id = u.id and s.`status` = 'AC'
+	      ) as problemResolved
+
+            FROM `users` `u`
+            LEFT JOIN `groupusers` `gr` ON `gr`.`id_user` = `u`.`id`
+            LEFT JOIN `userdata` `udata` ON `udata`.`id` = `u`.`id`
+
+            WHERE `u`.`id` = $userId AND gr.id_group = $groupId
+            ORDER BY TotalSubmissions DESC, TotalAC DESC";
+
+
+        return $this->db->query($sql)->row();
+    }
+
     public function getUsersRanking($params = []) {
 
         $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
@@ -208,6 +239,49 @@ class Musers extends CI_Model {
             WHERE g.id_group = $groupId
             ORDER BY totalAC DESC
             LIMIT $limit";
+
+        return $this->db->query($sql)->result();
+    }
+    public function getUsersRankingByProblemIdAndGroupId($id, $groupId, $params = []){
+        if (empty($id) || empty($groupId)) {
+            return false;
+        }
+
+        $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
+
+        $sql = "
+        SELECT 
+            p.internalId, 
+            p.publicationDate,
+            pd.*,
+            udata.*,
+            (
+            SELECT COUNT(s.id)
+            FROM submission s
+            WHERE s.problem_id = p.internalId AND s.user_id = udata.id
+            ) AS totalSubs,
+            (
+            SELECT COUNT(s.id)
+            FROM submission s
+            WHERE s.problem_id = p.internalId AND s.user_id = udata.id AND s.`status` = 'AC'
+            ) AS totalAC,
+            (
+            SELECT s.submissionDate
+            FROM submission s
+            WHERE s.problem_id = p.internalId AND s.user_id = udata.id
+            ORDER BY s.submissionDate DESC
+            LIMIT 1
+            ) AS last_submission
+        FROM problem p
+        LEFT JOIN problem_details pd ON pd.id = p.internalId
+        LEFT JOIN submission s ON s.problem_id = p.internalId
+        LEFT JOIN userdata udata ON udata.id = s.user_id
+        LEFT JOIN groupusers gu ON gu.id_user = udata.id
+        WHERE p.internalId = $id
+        AND gu.id_group = $groupId
+        GROUP BY udata.id
+        ORDER BY totalAC DESC
+        LIMIT $limit";
 
         return $this->db->query($sql)->result();
     }

@@ -90,7 +90,7 @@
                                 {% for attempt in lastAttempts %}
                                 <tr>
                                     <td>
-                                        <a href="{{ twg_func( 'base_url') }}problem/id/{{ attempt.problem_id }}"
+                                        <a href="{{ twg_func( 'base_url') }}problem/id/{{ attempt.problem_id }}/group/{{ groupId }}"
                                                 title="{{ attempt.problem_name ?: 'Nombre de problema desconocido' }}">
                                             {{ attempt.problem_name ?: 'Nombre de problema desconocido' }}({{ attempt.problem_id }})
                                         </a>
@@ -150,7 +150,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                {% for problem in problemsRanking %}
+                                {% for problem in problemsSubmitted %}
                                     <span title="{{ problem.name }} - {{ problem.totalAC }} AC" class="tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'green' }}">
                                         {{ problem.internalId }}
                                     </span>
@@ -185,7 +185,7 @@
 
                                             <td>
                                                 <div><a title="{{ problem.name }}"
-                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
+                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
                                                 <div class="small text-muted">
                                                     Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
                                                 </div>

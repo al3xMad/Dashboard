@@ -140,7 +140,7 @@
                                             <td>
                                                 <div>
                                                     <a title="{{ problem.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}">
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}/group/{{ groupId }}">
                                                         {{ problem.first_name }} {{ problem.last_name }}
                                                     </a>
                                                 </div>
@@ -148,7 +148,7 @@
                                             <td>
                                                 <div>
                                                     <a title="{{ problem.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}">
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}/group/{{ groupId }}">
                                                         {{ problem.email }}
                                                     </a>
                                                 </div>
@@ -156,7 +156,7 @@
 
                                             <td>
                                                 <div><a title="{{ problem.name }}"
-                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
+                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
                                                 <div class="small text-muted">
                                                     Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
                                                 </div>
@@ -170,7 +170,7 @@
 
                                             <td>
                                                 <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
                                                     <div class="progress progress-sm">
                                                         <div class="progress-bar bg-cyan-light"
                                                              style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
@@ -181,7 +181,7 @@
 
                                             <td>
                                                 <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
                                                     <div class="progress progress-sm">
                                                         <div class="progress-bar bg-cyan-light"
                                                              style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
@@ -269,7 +269,7 @@
                                         <tr>
                                             <td>
                                                 <div><a title="{{ problem.name }}"
-                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
+                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
                                                 <div class="small text-muted">
                                                     Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
                                                 </div>
@@ -283,7 +283,7 @@
 
                                             <td>
                                                 <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
                                                     <div class="progress progress-sm">
                                                         <div class="progress-bar bg-cyan-light"
                                                              style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
@@ -294,7 +294,7 @@
 
                                             <td>
                                                 <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
                                                     <div class="progress progress-sm">
                                                         <div class="progress-bar bg-cyan-light"
                                                              style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
@@ -358,7 +358,7 @@
                                             <td>
                                                 <div>
                                                     <a title="{{ user.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">
                                                         {{ user.first_name }} {{ user.last_name }}
                                                     </a>
                                                 </div>
@@ -366,7 +366,7 @@
                                             <td>
                                                 <div>
                                                     <a title="{{ user.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">
                                                         {{ user.email }}
                                                     </a>
                                                 </div>

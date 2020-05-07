@@ -32,8 +32,8 @@ class Teacherdashboard extends OL_Controller {
 
 
         $problemsParams = [
-            'order' => 'totalAC',
-            'direction' => 'DESC'
+            'order' => 'internalId',
+            'direction' => 'ASC'
         ];
 
         $data['problemsAttempts'] = $this->Mproblems->getLastProblemsAttemptsByGroupId($groupId);

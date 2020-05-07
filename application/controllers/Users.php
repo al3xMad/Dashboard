@@ -52,6 +52,8 @@ class Users extends OL_Controller {
     }
 
     public function id($userId) {
+        $urlData = $this->uri->uri_to_assoc(2);
+
         // Retrieving vars
         $data = $this->data;
 
@@ -66,8 +68,13 @@ class Users extends OL_Controller {
             ]
         ];
 
-        $data['userDetails']= $this->Musers->getAllUserDataById($userId);
-
+        if (isset($urlData['group'])) {
+            $data['groupId'] = $urlData['group'];
+            $data['userDetails']= $this->Musers->getAllUserDataByIdAndGroupId($userId, $urlData['group']);
+        } else {
+            $data['groupId'] = false;
+            $data['userDetails']= $this->Musers->getAllUserDataById($userId);
+        }
 
         if (empty($data['userDetails'])) {
             redirect(base_url() . 'teacherdashboard/', 'refresh');
@@ -79,6 +86,8 @@ class Users extends OL_Controller {
         $data['lastAttempts'] = $this->Mproblems->getLastProblemsAttemptsByUserId($userId);
 
         $data['problemsRanking'] = $this->Mproblems->getProblemsRankingByUserId($userId);
+
+        $data['problemsSubmitted'] = $this->Mproblems->getProblemsSubmittedByUserId($userId);
 
         $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByUserId($userId);
         $data['submissionErrors'] = $this->Mproblems->getChartErrorsByUserId($userId);

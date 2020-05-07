@@ -65,6 +65,8 @@ class Problem extends OL_Controller {
     public function id($id) {
         // Retrieving vars
         $data = $this->data;
+        $urlData = $this->uri->uri_to_assoc(2);
+
         $data['role'] = $this->session->userdata('role');
 
         if (empty($id)) {
@@ -72,29 +74,41 @@ class Problem extends OL_Controller {
         }
 
         $data['pageTitle'] = 'Detalle del problema';
-        $data['problem'] = $this->Mproblems->getProblemById($id);
 
-        $data['lastAttempts'] = $this->Mproblems->getLastUsersAttemptsByProblemId($id);
-
-        $data['usersRanking'] = $this->Musers->getUsersRankingByProblemId($id);
-
-        $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByProblemId($id);
-        $data['submissionErrors'] = $this->Mproblems->getChartErrorsByProblemId($id);
-        $data['submissionErrorsTable'] = $this->Mproblems->getChartErrorsTableByProblemId($id);
-
-        $problemAttemptsEvolution = $this->Mproblems->getProblemAttemptsEvolutionByProblemId($id);
+        if (isset($urlData['group'])) {
+            $data['groupId'] = $urlData['group'];
+            $data['problem'] = $this->Mproblems->getProblemByIdAndGroupId($id, $urlData['group']);
+            $data['lastAttempts'] = $this->Mproblems->getLastUsersAttemptsByProblemIdAndGroupId($id, $urlData['group']);
+            $data['usersRanking'] = $this->Musers->getUsersRankingByProblemIdAndGroupId($id, $urlData['group']);
+            $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByProblemIdAndGroupId($id, $urlData['group']);
+            $data['submissionErrors'] = $this->Mproblems->getChartErrorsByProblemIdAndGroupId($id, $urlData['group']);
+            $data['submissionErrorsTable'] = $this->Mproblems->getChartErrorsTableByProblemIdAndGroupId($id, $urlData['group']);
+            $problemAttemptsEvolution = $this->Mproblems->getProblemAttemptsEvolutionByProblemIdAndGroupId($id, $urlData['group']);
+            $data['acceptedByCountry'] = $this->Mproblems->getAcceptedByCountryByProblemIdAndGroupId($id, $urlData['group']);
+            $totalSubmissionsByMonthAndProblemId = $this->Mproblems->getTotalSubmissionsByMonthAndProblemIdAndGroupId($id, $urlData['group']);
+            $totalAcceptedByMonthAndProblemId = $this->Mproblems->getTotalAcceptedByMonthAndProblemIdAndGroupId($id, $urlData['group']);
+        } else {
+            $data['groupId'] = false;
+            $data['problem'] = $this->Mproblems->getProblemById($id);
+            $data['lastAttempts'] = $this->Mproblems->getLastUsersAttemptsByProblemId($id);
+            $data['usersRanking'] = $this->Musers->getUsersRankingByProblemId($id);
+            $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByProblemId($id);
+            $data['submissionErrors'] = $this->Mproblems->getChartErrorsByProblemId($id);
+            $data['submissionErrorsTable'] = $this->Mproblems->getChartErrorsTableByProblemId($id);
+            $problemAttemptsEvolution = $this->Mproblems->getProblemAttemptsEvolutionByProblemId($id);
+            $data['acceptedByCountry'] = $this->Mproblems->getAcceptedByCountryByProblemId($id);
+            $totalSubmissionsByMonthAndProblemId = $this->Mproblems->getTotalSubmissionsByMonthAndProblemId($id);
+            $totalAcceptedByMonthAndProblemId = $this->Mproblems->getTotalAcceptedByMonthAndProblemId($id);
+        }
 
         $data['problemAttemptsEvolution'] = array_column($problemAttemptsEvolution, 'attempts');
-
-        $data['acceptedByCountry'] = $this->Mproblems->getAcceptedByCountryByProblemId($id);
-
-        $totalSubmissionsByMonthAndProblemId = $this->Mproblems->getTotalSubmissionsByMonthAndProblemId($id);
-        $totalAcceptedByMonthAndProblemId = $this->Mproblems->getTotalAcceptedByMonthAndProblemId($id);
 
         $data['totalSubmissionsByMonthAndProblemId'] = implode(', ', array_map(function ($month) {
             return $month->total_submissions;
         }, $totalSubmissionsByMonthAndProblemId));
 
+        $data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndProblemId);
+        
         $data['totalAcceptedByMonthAndProblemId'] = implode(', ', array_map(function ($month) {
             return $month->total_submissions;
         }, $totalAcceptedByMonthAndProblemId));
@@ -172,5 +186,11 @@ class Problem extends OL_Controller {
         }
 
         return $user->first_name . ' ' . $user->last_name;
+    }
+
+    private function notSubmissions($submissionChart){
+        $data = array_column($submissionChart, 'total_submissions');
+
+        return empty(array_filter($data));
     }
 }

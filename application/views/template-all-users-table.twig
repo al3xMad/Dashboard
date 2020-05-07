@@ -45,7 +45,7 @@
                                     </td>
                                     <td>
                                         <div><a title="{{ user.first_name }}"
-                                                    href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</a></div>
+                                                    href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">{{ user.first_name }} {{ user.last_name }}</a></div>
                                         <div class="small text-muted">
                                             Registrado desde: {{ user.registrationDate != '0000-00-00 00:00:00' ? (user.registrationDate | date("d/m/Y")) : 'data desconocido' }}
                                         </div>
