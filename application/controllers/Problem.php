@@ -9,7 +9,7 @@ class Problem extends OL_Controller {
         $this->data['breadcrumb'] = [
             [
                 'url' => base_url() . 'admindashboard',
-                'title' => 'problemas'
+                'title' => 'Admin dashboard'
             ]
         ];
     }
@@ -42,7 +42,7 @@ class Problem extends OL_Controller {
         $data['breadcrumb'] = [
             [
                 'url' => base_url() . 'teacherdashboard',
-                'title' => 'problemas'
+                'title' => 'Teacher dashboard'
             ]
         ];
 
@@ -108,7 +108,7 @@ class Problem extends OL_Controller {
         }, $totalSubmissionsByMonthAndProblemId));
 
         $data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndProblemId);
-        
+
         $data['totalAcceptedByMonthAndProblemId'] = implode(', ', array_map(function ($month) {
             return $month->total_submissions;
         }, $totalAcceptedByMonthAndProblemId));
@@ -124,7 +124,7 @@ class Problem extends OL_Controller {
         $data['breadcrumb'] = [
             [
                 'url' => base_url() . 'admindashboard',
-                'title' => 'problemas'
+                'title' => 'Admin dashboard'
             ], [
                 'url' => base_url() . 'problem/id/' . $data['problem']->id,
                 'title' => 'problema ' . $data['problem']->name
@@ -163,7 +163,7 @@ class Problem extends OL_Controller {
         $data['breadcrumb'] = [
             [
                 'url' => base_url() . 'teacherdashboard',
-                'title' => 'problemas'
+                'title' => 'Teacher dashboard'
             ], [
                 'url' => base_url() . 'users/id/' . $userId,
                 'title' => 'Usuario ' . $data['userName']

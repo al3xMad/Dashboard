@@ -9,7 +9,7 @@ class Users extends OL_Controller {
         $this->data['breadcrumb'] = [
             [
                 'url' => base_url() . 'admindashboard',
-                'title' => 'usuarios'
+                'title' => 'Admin dashboard'
             ]
         ];
     }
@@ -38,7 +38,7 @@ class Users extends OL_Controller {
         $data['breadcrumb'] = [
             [
                 'url' => base_url() . 'teacherdashboard',
-                'title' => 'problemas'
+                'title' => 'Teacher dashboard'
             ]
         ];
 
@@ -64,7 +64,7 @@ class Users extends OL_Controller {
         $data['breadcrumb'] = [
             [
                 'url' => base_url() . 'teacherdashboard',
-                'title' => 'usuarios'
+                'title' => 'Teacher dashboard'
             ]
         ];
 
