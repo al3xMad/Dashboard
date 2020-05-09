@@ -216,7 +216,7 @@
             </div>
 
             <div class="row row-cards row-deck">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Evolución de envíos</h4>
@@ -228,7 +228,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Problemas intentados</h4>
@@ -236,9 +236,11 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 {% for problem in problems %}
-                                    <span title="{{ problem.name }} - {{ problem.totalAC }} AC" class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'green' }}">
+                                    <a title="{{ problem.name }} - {{ problem.totalAC }} AC"
+                                       href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}"
+                                       class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'azure' }}">
                                         {{ problem.internalId }}
-                                    </span>
+                                    </a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -443,6 +445,18 @@
                   columns: submissionChart,
                   type: 'bar', // default type of bar
                   groups: [submissionChartKeys],
+                  colors: {
+                      'AC': tabler.colors["green"],
+                      'WA': tabler.colors["purple"],
+                      'RTE': tabler.colors["indigo"],
+                      'TL': tabler.colors["teal"],
+                      'CE': tabler.colors["cyan"],
+                      'ML': tabler.colors["gray"],
+                      'PE': tabler.colors["azure"],
+                      'RF': tabler.colors["pink"],
+                      'OL': tabler.colors["lime"],
+                      'IR': tabler.colors["primary"]
+                  },
                   names: {},
                 },
                 axis: {
@@ -524,7 +538,7 @@
                             ['Enviados', 30, 200, 100, 400, 150, 250, 30, 200, 100, 400, 150],
                             ['Aceptados', 130, 100, 140, 200, 150, 50, 30, 200, 100, 400, 150]
                         ],
-                        type: 'bar', // default type of chart
+                        type: 'line', // default type of chart
                         colors: {
                             'Enviados': tabler.colors["blue-darker"],
                             'Aceptados': tabler.colors["blue"]

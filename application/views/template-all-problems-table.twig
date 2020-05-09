@@ -22,8 +22,10 @@
                                 </span>
                                 <div>
                                     <h4 class="m-0"><a href="javascript:void(0)">{{ problems[0].totalAC }} <small>Aceptados</small></a></h4>
-                                    <small class="text-muted"><a title="{{ problem.name }}"
-                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problems[0].internalId }}/group/{{ groupId }}">{{ problems[0].name }}</a></small>
+                                    <small class="text-muted">
+                                        <span style="color: #495057;">Problema: </span>
+                                        <a title="{{ problem.name }}"
+                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problems[0].internalId }}/group/{{ groupId }}"> {{ problems[0].name }} ({{ problems[0].internalId }})</a></small>
                                 </div>
                             </div>
                         </div>
@@ -37,8 +39,10 @@
                                 </span>
                                 <div>
                                     <h4 class="m-0"><a href="javascript:void(0)">{{ worseProblem.totalAC }} <small>Aceptados</small></a></h4>
-                                    <small class="text-muted"><a title="{{ worseProblem.name }}"
-                                                href="{{ twg_func( 'base_url') }}problem/id/{{ worseProblem.internalId }}">{{ worseProblem.name }}</a></small>
+                                    <small class="text-muted">
+                                        <span style="color: #495057;">Problema: </span>
+                                        <a title="{{ worseProblem.name }}"
+                                                href="{{ twg_func( 'base_url') }}problem/id/{{ worseProblem.internalId }}">{{ worseProblem.name }} ({{ worseProblem.internalId }})</a></small>
                                 </div>
                             </div>
                         </div>

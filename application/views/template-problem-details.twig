@@ -147,7 +147,7 @@
                 </div>
             </div>
             <div class="row row-cards row-deck">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Evolución de envíos</h4>
@@ -309,10 +309,10 @@
                             ['Enviados', {{ totalSubmissionsByMonthAndProblemId }}],
                             ['Aceptados', {{ totalAcceptedByMonthAndProblemId }}]
                         ],
-                        type: 'bar', // default type of chart
+                        type: 'line', // default type of chart
                         colors: {
                             'Enviados': tabler.colors["blue-darker"],
-                            'Aceptados': tabler.colors["blue"]
+                            'Aceptados': tabler.colors["green"]
                         },
                         names: {}
                     },
@@ -324,7 +324,7 @@
                     axis: {
                         x: {
                             type: 'category',
-                            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                            categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
                         },
                     },
                     padding: {

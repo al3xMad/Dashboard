@@ -248,16 +248,16 @@ class Mproblems extends CI_Model {
         }
 
         $sql = "SELECT 	         
-          SUM(CASE WHEN STATUS = 'AC' THEN 1 ELSE 0 END) totalAC, 
-          SUM(CASE WHEN STATUS = 'CE' THEN 1 ELSE 0 END) totalCE, 
-          SUM(CASE WHEN STATUS = 'IR' THEN 1 ELSE 0 END) totalIR, 
-          SUM(CASE WHEN STATUS = 'ML' THEN 1 ELSE 0 END) totalML, 
-          SUM(CASE WHEN STATUS = 'OL' THEN 1 ELSE 0 END) totalOL, 
-          SUM(CASE WHEN STATUS = 'PE' THEN 1 ELSE 0 END) totalPE, 
-          SUM(CASE WHEN STATUS = 'RF' THEN 1 ELSE 0 END) totalRF, 
-          SUM(CASE WHEN STATUS = 'RTE' THEN 1 ELSE 0 END) totalRTE, 
-          SUM(CASE WHEN STATUS = 'TL' THEN 1 ELSE 0 END) totalTL, 
-          SUM(CASE WHEN STATUS = 'WA' THEN 1 ELSE 0 END) totalWA        
+          SUM(CASE WHEN STATUS = 'AC' THEN 1 ELSE 0 END) AC, 
+          SUM(CASE WHEN STATUS = 'CE' THEN 1 ELSE 0 END) CE, 
+          SUM(CASE WHEN STATUS = 'IR' THEN 1 ELSE 0 END) IR, 
+          SUM(CASE WHEN STATUS = 'ML' THEN 1 ELSE 0 END) ML, 
+          SUM(CASE WHEN STATUS = 'OL' THEN 1 ELSE 0 END) OL, 
+          SUM(CASE WHEN STATUS = 'PE' THEN 1 ELSE 0 END) PE, 
+          SUM(CASE WHEN STATUS = 'RF' THEN 1 ELSE 0 END) RF, 
+          SUM(CASE WHEN STATUS = 'RTE' THEN 1 ELSE 0 END) RTE, 
+          SUM(CASE WHEN STATUS = 'TL' THEN 1 ELSE 0 END) TL, 
+          SUM(CASE WHEN STATUS = 'WA' THEN 1 ELSE 0 END) WA        
         FROM submission s
         WHERE s.user_id = $id
         GROUP BY s.user_id;";
@@ -376,16 +376,16 @@ class Mproblems extends CI_Model {
 	          s.submissionDate AS 'last_date_attempt',
 	          det.name AS problem_name,
 	          det.id AS problem_id, 
-	          SUM(CASE WHEN STATUS = 'AC' THEN 1 ELSE 0 END) totalAC, 
-	          SUM(CASE WHEN STATUS = 'CE' THEN 1 ELSE 0 END) totalCE, 
-	          SUM(CASE WHEN STATUS = 'IR' THEN 1 ELSE 0 END) totalIR, 
-	          SUM(CASE WHEN STATUS = 'ML' THEN 1 ELSE 0 END) totalML, 
-	          SUM(CASE WHEN STATUS = 'OL' THEN 1 ELSE 0 END) totalOL, 
-	          SUM(CASE WHEN STATUS = 'PE' THEN 1 ELSE 0 END) totalPE, 
-	          SUM(CASE WHEN STATUS = 'RF' THEN 1 ELSE 0 END) totalRF, 
-	          SUM(CASE WHEN STATUS = 'RTE' THEN 1 ELSE 0 END) totalRTE, 
-	          SUM(CASE WHEN STATUS = 'TL' THEN 1 ELSE 0 END) totalTL, 
-	          SUM(CASE WHEN STATUS = 'WA' THEN 1 ELSE 0 END) totalWA, 
+	          SUM(CASE WHEN STATUS = 'AC' THEN 1 ELSE 0 END) AC, 
+	          SUM(CASE WHEN STATUS = 'CE' THEN 1 ELSE 0 END) CE, 
+	          SUM(CASE WHEN STATUS = 'IR' THEN 1 ELSE 0 END) IR, 
+	          SUM(CASE WHEN STATUS = 'ML' THEN 1 ELSE 0 END) ML, 
+	          SUM(CASE WHEN STATUS = 'OL' THEN 1 ELSE 0 END) OL, 
+	          SUM(CASE WHEN STATUS = 'PE' THEN 1 ELSE 0 END) PE, 
+	          SUM(CASE WHEN STATUS = 'RF' THEN 1 ELSE 0 END) RF, 
+	          SUM(CASE WHEN STATUS = 'RTE' THEN 1 ELSE 0 END) RTE, 
+	          SUM(CASE WHEN STATUS = 'TL' THEN 1 ELSE 0 END) TL, 
+	          SUM(CASE WHEN STATUS = 'WA' THEN 1 ELSE 0 END) WA, 
 	          (		
                 SELECT 
                     s2.`status`
@@ -608,16 +608,16 @@ class Mproblems extends CI_Model {
         }
 
         $sql = " SELECT 	         
-	          SUM(CASE WHEN STATUS = 'AC' THEN 1 ELSE 0 END) totalAC, 
-	          SUM(CASE WHEN STATUS = 'CE' THEN 1 ELSE 0 END) totalCE, 
-	          SUM(CASE WHEN STATUS = 'IR' THEN 1 ELSE 0 END) totalIR, 
-	          SUM(CASE WHEN STATUS = 'ML' THEN 1 ELSE 0 END) totalML, 
-	          SUM(CASE WHEN STATUS = 'OL' THEN 1 ELSE 0 END) totalOL, 
-	          SUM(CASE WHEN STATUS = 'PE' THEN 1 ELSE 0 END) totalPE, 
-	          SUM(CASE WHEN STATUS = 'RF' THEN 1 ELSE 0 END) totalRF, 
-	          SUM(CASE WHEN STATUS = 'RTE' THEN 1 ELSE 0 END) totalRTE, 
-	          SUM(CASE WHEN STATUS = 'TL' THEN 1 ELSE 0 END) totalTL, 
-	          SUM(CASE WHEN STATUS = 'WA' THEN 1 ELSE 0 END) totalWA
+	          SUM(CASE WHEN STATUS = 'AC' THEN 1 ELSE 0 END) AC, 
+	          SUM(CASE WHEN STATUS = 'CE' THEN 1 ELSE 0 END) CE, 
+	          SUM(CASE WHEN STATUS = 'IR' THEN 1 ELSE 0 END) IR, 
+	          SUM(CASE WHEN STATUS = 'ML' THEN 1 ELSE 0 END) ML, 
+	          SUM(CASE WHEN STATUS = 'OL' THEN 1 ELSE 0 END) OL, 
+	          SUM(CASE WHEN STATUS = 'PE' THEN 1 ELSE 0 END) PE, 
+	          SUM(CASE WHEN STATUS = 'RF' THEN 1 ELSE 0 END) RF, 
+	          SUM(CASE WHEN STATUS = 'RTE' THEN 1 ELSE 0 END) RTE, 
+	          SUM(CASE WHEN STATUS = 'TL' THEN 1 ELSE 0 END) TL, 
+	          SUM(CASE WHEN STATUS = 'WA' THEN 1 ELSE 0 END) WA
             FROM submission s
             INNER JOIN groupusers gu ON s.user_id = gu.id_user
             WHERE gu.id_group = $groupId;";
