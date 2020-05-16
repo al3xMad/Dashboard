@@ -61,12 +61,21 @@ class Users extends OL_Controller {
             redirect(base_url() . 'teacherdashboard/', 'refresh');
         }
 
-        $data['breadcrumb'] = [
-            [
-                'url' => base_url() . 'teacherdashboard',
-                'title' => 'Teacher dashboard'
-            ]
-        ];
+        if (isset($urlData['group'])) {
+            $data['breadcrumb'] = [
+                [
+                    'url' => base_url() . 'teacherdashboard',
+                    'title' => 'Teacher dashboard'
+                ]
+            ];
+        } else {
+            $data['breadcrumb'] = [
+                [
+                    'url' => base_url() . 'admindashboard',
+                    'title' => 'Admin dashboard'
+                ]
+            ];
+        }
 
         if (isset($urlData['group'])) {
             $data['groupId'] = $urlData['group'];

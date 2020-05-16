@@ -805,6 +805,59 @@ class Mproblems extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
+    function getTotalSubmissionsByMonthAndGroupId($groupId) {
+        if (empty($groupId)) {
+            return [];
+        }
+
+        $sql = '
+            SELECT 	
+                COUNT(i.submissionDate) AS total_submissions,
+                `month`
+            FROM (select 1 AS `month` union all select 2 union all select 3 union all select 4 union all
+              select 5 union all select 6 union all select 7 union all select 8 union all
+              select 9 union all select 10 union all select 11 union all select 12
+             ) m 
+            LEFT OUTER JOIN
+                submission i
+                ON m.`month` = MONTH(i.submissionDate) 
+                AND YEAR(i.submissionDate) = YEAR(CURDATE())
+            LEFT JOIN
+                groupusers gr
+                ON gr.id_user = i.user_id
+                WHERE  gr.id_group = ' . $groupId . '
+            GROUP BY m.`month`;';
+
+        return $this->db->query($sql)->result();
+    }
+
+    function getTotalAcceptedByMonthAndGroupId($groupId) {
+        if (empty($groupId)) {
+            return [];
+        }
+
+        $sql = '
+            SELECT 	
+                COUNT(i.submissionDate) AS total_submissions,
+                `month`
+            FROM (select 1 AS `month` union all select 2 union all select 3 union all select 4 union all
+              select 5 union all select 6 union all select 7 union all select 8 union all
+              select 9 union all select 10 union all select 11 union all select 12
+             ) m 
+            LEFT OUTER JOIN
+                submission i
+                ON m.`month` = MONTH(i.submissionDate) 
+                    AND YEAR(i.submissionDate) = YEAR(CURDATE()) 
+                    AND i.`status` = "AC"
+            LEFT JOIN
+                groupusers gr
+                ON gr.id_user = i.user_id
+                WHERE  gr.id_group = ' . $groupId . '
+            GROUP BY m.`month`;';
+
+        return $this->db->query($sql)->result();
+    }
+
     function getTotalSubmissionsByMonthAndUserId($userId) {
         if (empty($userId)) {
             return [];

@@ -50,6 +50,17 @@ class Teacherdashboard extends OL_Controller {
 
         $data['submissionErrors'] = $this->Mproblems->getChartErrorsByGroupId($groupId);
 
+        $totalSubmissionsByMonthAndGroupId = $this->Mproblems->getTotalSubmissionsByMonthAndGroupId($groupId);
+        $totalAcceptedByMonthAndGroupId = $this->Mproblems->getTotalAcceptedByMonthAndGroupId($groupId);
+
+        $data['totalSubmissionsByMonth'] = implode(', ', array_map(function ($month) {
+            return $month->total_submissions;
+        }, $totalSubmissionsByMonthAndGroupId));
+
+        $data['totalAcceptedByMonth'] = implode(', ', array_map(function ($month) {
+            return $month->total_submissions;
+        }, $totalAcceptedByMonthAndGroupId));
+
 		$this->load->view('template-teacher-dashboard', $data);
 	}
 }

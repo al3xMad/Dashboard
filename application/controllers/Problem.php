@@ -76,6 +76,22 @@ class Problem extends OL_Controller {
         $data['pageTitle'] = 'Detalle del problema';
 
         if (isset($urlData['group'])) {
+            $data['breadcrumb'] = [
+                [
+                    'url' => base_url() . 'teacherdashboard',
+                    'title' => 'Teacher dashboard'
+                ]
+            ];
+        } else {
+            $data['breadcrumb'] = [
+                [
+                    'url' => base_url() . 'admindashboard',
+                    'title' => 'Admin dashboard'
+                ]
+            ];
+        }
+
+        if (isset($urlData['group'])) {
             $data['groupId'] = $urlData['group'];
             $data['problem'] = $this->Mproblems->getProblemByIdAndGroupId($id, $urlData['group']);
             $data['lastAttempts'] = $this->Mproblems->getLastUsersAttemptsByProblemIdAndGroupId($id, $urlData['group']);

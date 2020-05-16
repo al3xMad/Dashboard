@@ -26,19 +26,14 @@
                                     <th>Avatar</th>
                                     <th>Usuario</th>
                                     <th>Email</th>
-                                    <th class="text-center">Aciertos / Envíos</th>
-                                    <th class="text-center">Fallidos / Envíos</th>
+                                    <th class="text-center">AC totales / Envíos totales</th>
+                                    <th class="text-center">Fallidos / Envíos totales</th>
                                     <th class="text-center">Último envío</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% set avatarId = 1 %}
                                 {% for user in users %}
-                                    {% if avatarId > 16 %}
-                                        {% set avatarId = 1 %}
-                                    {% else %}
-                                        {% set avatarId = avatarId + 1 %}
-                                    {% endif %}
+                                {% set avatarId = user.id % 32 %}
                                 <tr>
                                     <td class="w-1">
                                         <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
@@ -81,8 +76,8 @@
                                     <th>Avatar</th>
                                     <th>Usuario</th>
                                     <th>Email</th>
-                                    <th class="text-center">Aciertos / Envíos</th>
-                                    <th class="text-center">Fallidos / Envíos</th>
+                                    <th class="text-center">AC totales / Envíos totales</th>
+                                    <th class="text-center">Fallidos / Envíos totales</th>
                                     <th class="text-center">Último envío</th>
                                 </tr>
                                 </tfoot>

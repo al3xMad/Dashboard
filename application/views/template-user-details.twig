@@ -18,8 +18,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
-                                        {% set avatarId = avatarId + 1 %}
-                                        <span class="avatar" style="width: 6rem; height: 6rem; width: 6rem; background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
+                                    {% set avatarId = userDetails.id % 32 %}
+                                    <span class="avatar" style="width: 6rem; height: 6rem; width: 6rem; background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="form-group">
@@ -68,7 +68,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Últimos problemas intentados:</h4>
+                            <h4 class="card-title">Últimos envíos:</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -77,7 +77,7 @@
                                 <tr>
                                     <th>Problema (ID)</th>
                                     <th class="text-center">Resultado</th>
-                                    <th>Aceptados /Envíos</th>
+                                    <th>AC totales /Envíos totales</th>
                                     <th>Última fecha de envío</th>
                                 </tr>
                                 </thead>
@@ -92,17 +92,36 @@
                                         </a>
                                     </td>
                                     <td class="text-nowrap text-center">
-                                        <span class="badge badge-{{ attempt.lastAttempt == 'AC' ? 'success' : 'danger' }}">
-                                            {{ attempt.lastAttempt }}
-                                        </span>
+                                        {% if attempt.lastAttempt == 'AC' %}
+                                            {% set color = 'green' %}
+                                        {%  elseif attempt.lastAttempt == 'WA' %}
+                                            {% set color = 'purple' %}
+                                        {%  elseif attempt.lastAttempt == 'RTE' %}
+                                            {% set color = 'indigo' %}
+                                        {%  elseif attempt.lastAttempt == 'TL' %}
+                                            {% set color = 'teal' %}
+                                        {%  elseif attempt.lastAttempt == 'CE' %}
+                                            {% set color = 'cyan' %}
+                                        {%  elseif attempt.lastAttempt == 'ML' %}
+                                            {% set color = 'gray' %}
+                                        {%  elseif attempt.lastAttempt == 'PE' %}
+                                            {% set color = 'azure' %}
+                                        {%  elseif attempt.lastAttempt == 'RF' %}
+                                            {% set color = 'pink' %}
+                                        {%  elseif attempt.lastAttempt == 'OL' %}
+                                            {% set color = 'lime' %}
+                                        {%  elseif attempt.lastAttempt == 'IR' %}
+                                            {% set color = 'primary' %}
+                                        {%  endif %}
+                                        <span class="badge badge-{{ color }}">{{ attempt.lastAttempt }}</span>
                                     </td>
                                     <td>
                                         <div class="progress progress-sm">
-                                            {% set percent = attempt.totalAttempts == 0 ? 0 : ((attempt.totalAC / attempt.totalAttempts) * 100) %}
+                                            {% set percent = attempt.totalAttempts == 0 ? 0 : ((attempt.AC / attempt.totalAttempts) * 100) %}
                                             <div class="progress-bar bg-cyan-light"
                                                     style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
                                         </div>
-                                        <div class="small text-muted text-center">{{ attempt.totalAC }}/{{ attempt.totalAttempts }}</div>
+                                        <div class="small text-muted text-center">{{ attempt.AC }}/{{ attempt.totalAttempts }}</div>
                                     </td>
                                     <td class="text-nowrap">{{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}</td>
                                 </tr>
@@ -112,7 +131,7 @@
                                 <tr>
                                     <th>Problema (ID)</th>
                                     <th class="text-center">Resultado</th>
-                                    <th>Aceptados /Envíos</th>
+                                    <th>AC totales /Envíos totales</th>
                                     <th>Última fecha de envío</th>
                                 </tr>
                                 </tfoot>
@@ -142,7 +161,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Últimos envíos</h4>
+                            <h4 class="card-title">Problemas intentados</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -172,8 +191,8 @@
                                     <tr>
                                         <th>Problema (ID)</th>
                                         <th class="text-center">Resultado</th>
-                                        <th class="text-center">Aceptados</th>
-                                        <th class="text-center">Envíos</th>
+                                        <th class="text-center">AC totales</th>
+                                        <th class="text-center">Envíos totales</th>
                                         <th>Fecha último envío</th>
                                     </tr>
                                     </thead>
@@ -190,9 +209,28 @@
                                             </td>
 
                                             <td class="text-nowrap text-center">
-                                                <span class="badge badge-{{ problem.last_status == 'AC' ? 'success' : 'danger' }}">
-                                                    {{ problem.last_status }}
-                                                </span>
+                                                {% if problem.last_status == 'AC' %}
+                                                    {% set color = 'green' %}
+                                                {%  elseif problem.last_status == 'WA' %}
+                                                    {% set color = 'purple' %}
+                                                {%  elseif problem.last_status == 'RTE' %}
+                                                    {% set color = 'indigo' %}
+                                                {%  elseif problem.last_status == 'TL' %}
+                                                    {% set color = 'teal' %}
+                                                {%  elseif problem.last_status == 'CE' %}
+                                                    {% set color = 'cyan' %}
+                                                {%  elseif problem.last_status == 'ML' %}
+                                                    {% set color = 'gray' %}
+                                                {%  elseif problem.last_status == 'PE' %}
+                                                    {% set color = 'azure' %}
+                                                {%  elseif problem.last_status == 'RF' %}
+                                                    {% set color = 'pink' %}
+                                                {%  elseif problem.last_status == 'OL' %}
+                                                    {% set color = 'lime' %}
+                                                {%  elseif problem.last_status == 'IR' %}
+                                                    {% set color = 'primary' %}
+                                                {%  endif %}
+                                                <span class="badge badge-{{ color }}">{{ problem.last_status }}</span>
                                             </td>
                                             <td class="text-nowrap text-center">{{ problem.totalAC }}</td>
 
@@ -208,8 +246,8 @@
                                     <tr>
                                         <th>Problema (ID)</th>
                                         <th class="text-center">Resultado</th>
-                                        <th class="text-center">Aceptados</th>
-                                        <th class="text-center">Envíos</th>
+                                        <th class="text-center">AC totales</th>
+                                        <th class="text-center">Envíos totales</th>
                                         <th>Fecha último envío</th>
                                     </tr>
                                     </tfoot>

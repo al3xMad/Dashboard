@@ -4854,29 +4854,36 @@ input[type="button"].btn-block {
 .badge-orange{
   background-color: #fd9644 !important;
 }
---blue: #467fcf;
---indigo: #6574cd;
---purple: #a55eea;
---pink: #f66d9b;
---red: #cd201f;
---orange: #fd9644;
---yellow: #f1c40f;
---green: #5eba00;
---teal: #2bcbba;
---cyan: #17a2b8;
---white: #fff;
---gray: #868e96;
---gray-dark: #343a40;
---azure: #45aaf2;
---lime: #7bd235;
---primary: #467fcf;
---secondary: #868e96;
---success: #5eba00;
---info: #45aaf2;
---warning: #f1c40f;
---danger: #cd201f;
---light: #f8f9fa;
---dark: #343a40;
+.badge-green{
+  background-color: #5eba00;
+}
+.badge-purple{
+  background-color: #a55eea;
+}
+.badge-indigo{
+  background-color: #6574cd;
+}
+.badge-teal{
+  background-color: #2bcbba;
+}
+.badge-cyan{
+  background-color: #17a2b8;
+}
+badge-gray{
+  background-color: #868e96;
+}
+.badge-azure{
+  background-color: #45aaf2;
+}
+.badge-pink{
+  background-color: #f66d9b;
+}
+.badge-lime{
+  background-color: #7bd235;
+}
+.badge-primary{
+  background-color: #467fcf;
+}
 
 .jumbotron {
   padding: 2rem 1rem;
