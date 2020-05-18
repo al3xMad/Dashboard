@@ -12,7 +12,7 @@ class Admindashboard extends OL_Controller {
 	public function index() {
 		// Retrieving vars
 		$data = $this->data;
-        $data['no_breadcrumb'] = true;
+        $data['breadcrumb'] = [];
 
         $data['pageTitle'] = 'Admin Dashboard';
 

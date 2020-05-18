@@ -10,7 +10,7 @@ class Teacherdashboard extends OL_Controller {
 	public function index() {
 		// Retrieving vars
 		$data = $this->data;
-        $data['no_breadcrumb'] = true;
+        $data['breadcrumb'] = [];
 
         $subjectId = 1;
         $groupId = 3;
