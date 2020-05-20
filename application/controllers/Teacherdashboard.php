@@ -5,6 +5,8 @@ class Teacherdashboard extends OL_Controller {
 
 	public function __construct () {
 		parent::__construct();
+
+        $this->session->set_userdata('role', 'teacher');
 	}
 
 	public function index() {
@@ -53,11 +55,11 @@ class Teacherdashboard extends OL_Controller {
         $totalSubmissionsByMonthAndGroupId = $this->Mproblems->getTotalSubmissionsByMonthAndGroupId($groupId);
         $totalAcceptedByMonthAndGroupId = $this->Mproblems->getTotalAcceptedByMonthAndGroupId($groupId);
 
-        $data['totalSubmissionsByMonth'] = implode(', ', array_map(function ($month) {
+        $data['totalSubmissionsByMonthAndGroupId'] = implode(', ', array_map(function ($month) {
             return $month->total_submissions;
         }, $totalSubmissionsByMonthAndGroupId));
 
-        $data['totalAcceptedByMonth'] = implode(', ', array_map(function ($month) {
+        $data['totalAcceptedByMonthAndGroupId'] = implode(', ', array_map(function ($month) {
             return $month->total_submissions;
         }, $totalAcceptedByMonthAndGroupId));
 

@@ -46,6 +46,22 @@
                             </div>
                         </div>
                     </div>
+                    {% if (role == 'teacher') %}
+                        <div class="col-md-3">
+                            <div class="form-group"  style="padding-bottom: 20px;">
+                                <label class="form-label">Ver datos de:</label>
+                                <select name="subject" id="select-subject" class="form-control custom-select">
+                                    <option value="all">Todo el curso</option>
+                                    <option value="1">Tema 1</option>
+                                    <option value="2">Tema 2</option>
+                                    <option value="3">Tema 3</option>
+                                    <option value="4">Tema 4</option>
+                                    <option value="5">Tema 5</option>
+                                    <option value="6">Tema 6</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -151,9 +167,8 @@
                             {% if notSubmissions %}
                                 <div style="color: #9aa0ac; text-align: center;"> No hay datos en el año actual</div>
                             {% else %}
-                            <div id="chart-bar-attempsEv"
-                                 style="height: 16rem; max-height: 256px; position: relative;" class="c3">
-                            </div>
+                                {% set charId = (role == 'teacher') ? 'chart-bar-attempsEv' : 'chart-bar-attempsEvYear' %}
+                                <div id="{{charId}}" style="height: 16rem; max-height: 256px; position: relative;" class="c3"></div>
                             {% endif %}
                         </div>
                     </div>
@@ -168,7 +183,7 @@
                                 {% for problem in problemsSubmitted %}
                                     <a title="{{ problem.name }} - {{ problem.totalAC }} AC"
                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}"
-                                       class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'azure' }}">
+                                       class="mb-1 tag tag-{{ problem.totalAC == '0' ? 'red' : 'green' }}">
                                         {{ problem.internalId }}
                                     </a>
                                 {% endfor %}
@@ -317,6 +332,36 @@
 
                 let chartattempsEv = c3.generate({
                     bindto: '#chart-bar-attempsEv', // id of attemps evolution chart wrapper
+                    data: {
+                        columns: [
+                            ['Enviados', {{ totalSubmissionsByMonthAndUserId }}],
+                            ['Aceptados', {{ totalAcceptedByMonthAndUserId }}]
+                        ],
+                        type: 'line', // default type of chart
+                        colors: {
+                            'Enviados': tabler.colors["blue-darker"],
+                            'Aceptados': tabler.colors["green"]
+                        },
+                        names: {}
+                    },
+                    bar: {
+                        width: {
+                            ratio: 0.5 // this makes bar width 50% of length between ticks
+                        }
+                    },
+                    axis: {
+                        x: {
+                            type: 'category',
+                            categories: ['Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago']
+                        },
+                    },
+                    padding: {
+                        bottom: 0,
+                        top: 0
+                    },
+                });
+                let chartattempsEvYear = c3.generate({
+                    bindto: '#chart-bar-attempsEvYear', // id of attemps evolution chart wrapper
                     data: {
                         columns: [
                             ['Enviados', {{ totalSubmissionsByMonthAndUserId }}],

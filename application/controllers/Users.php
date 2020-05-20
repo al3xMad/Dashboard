@@ -53,6 +53,7 @@ class Users extends OL_Controller {
 
     public function id($userId) {
         $urlData = $this->uri->uri_to_assoc(2);
+        $data['role'] = $this->session->userdata('role');
 
         // Retrieving vars
         $data = $this->data;
