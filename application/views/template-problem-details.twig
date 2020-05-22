@@ -187,7 +187,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 {% for user in usersRanking %}
-                                    <a title="{{ user.first_name }} {{ user.last_name }}- {{ user.totalAC }} AC"
+                                    <a data-toggle="tooltip" data-placement="top" title="{{ user.first_name }} {{ user.last_name }}- {{ user.totalAC }} AC"
                                             href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}"
                                             class="mb-1 tag tag-{{ user.totalAC == '0' ? 'red' : 'green' }}">
                                         {{ user.id }}

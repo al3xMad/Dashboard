@@ -305,7 +305,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 {% for problem in problems %}
-                                    <a title="{{ problem.name }} - {{ problem.totalAC }} AC"
+                                    <a data-toggle="tooltip" data-placement="top" title="{{ problem.name }} - {{ problem.totalAC }} AC"
                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}"
                                        class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'azure' }}">
                                         {{ problem.internalId }}
