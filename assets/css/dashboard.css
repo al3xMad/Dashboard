@@ -591,6 +591,12 @@ pre code {
   }
 }
 
+@media (min-width: 2250px){
+  .resizing * {
+    font-size: 9px !important;
+  }
+}
+
 .container-fluid {
   width: 100%;
   padding-right: 0.75rem;
@@ -1815,7 +1821,6 @@ pre code {
 .table-responsive {
   display: block;
   width: 100%;
-  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
@@ -18716,3 +18721,44 @@ svg {
   margin-left: 10px;
 }
 
+#column-left{
+  width: 250px;
+  min-height: 80px;
+  text-align: center;
+  position: relative;
+  top: -24px;
+  padding-top: 24px;
+}
+
+#column-right{
+  height: auto !important;
+  min-height: 0px !important;
+}
+
+.tabs__container {}
+
+.tabs__container .tabs {}
+
+.tabs__container .tabs .flex {
+  display: flex;
+}
+
+.tabs__container .tabs .flex .tab {
+  flex-grow: 1;
+}
+
+.tabs__container .tabs .flex .tab .tab--current {
+  position: relative;
+  top: 0;
+  border-bottom: 1px solid #fff;
+  z-index: 1;
+  box-shadow: none;
+}
+
+.tabs__container .tab__content {
+  border: 1px solid rgba(0, 40, 100, 0.12);
+  background-color: #FFF;
+  padding: 10px;
+  position: relative;
+  top: -1px;
+}
