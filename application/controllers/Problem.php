@@ -86,6 +86,7 @@ class Problem extends OL_Controller {
             $totalSubmissionsByMonthAndProblemId = $this->Mproblems->getTotalSubmissionsByMonthAndProblemIdAndGroupId($id, $urlData['group']);
             $totalAcceptedByMonthAndProblemId = $this->Mproblems->getTotalAcceptedByMonthAndProblemIdAndGroupId($id, $urlData['group']);
             $data['submissionMonths'] = array_column($totalSubmissionsByMonthAndProblemId, 'month');
+
         } else {
             $data['groupId'] = false;
             $data['problem'] = $this->Mproblems->getProblemById($id);
@@ -110,7 +111,7 @@ class Problem extends OL_Controller {
 
         $data['problemAttemptsEvolution'] = array_column($problemAttemptsEvolution, 'attempts');
 
-        //$data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndProblemId);
+        $data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndProblemId);
 
         $this->load->view('template-problem-details', $data);
     }
@@ -169,9 +170,7 @@ class Problem extends OL_Controller {
         return $user->first_name . ' ' . $user->last_name;
     }
 
-    /*private function notSubmissions($submissionChart){
-        $data = array_column($submissionChart, 'total_submissions');
-
-        return empty(array_filter($data));
-    }*/
+    private function notSubmissions($submissionChart){
+        return empty($submissionChart);
+    }
 }

@@ -29,15 +29,16 @@ class Mproblems extends CI_Model {
     {
         $this->db->select()
             ->from('problem p')
-            ->join('problem_details d', 'd.id = p.internalId');
+            ->join('problem_details d', 'd.id = p.internalId')
+            ->order_by('name', 'ASC');
 
         if (isset($params['limit'])) {
             $this->db->limit($params['limit']);
         }
 
-        if (isset($params['order'])) {
+        /*if (isset($params['order'])) {
             $this->db->order_by($params['order'], $params['direction']);
-        }
+        }*/
 
         $query = $this->db->get();
 
@@ -581,7 +582,7 @@ class Mproblems extends CI_Model {
             LEFT JOIN problem_details det ON det.id = s.problem_id
             INNER JOIN groupusers gu ON s.user_id = gu.id_user
             WHERE gu.id_group = $groupId AND s.user_id = $userId AND det.id IS NOT NULL
-            AND s.submissionDate  BETWEEN '" . (date('Y') -1) . "-10-20' and '" . date('Y') . "-08-31'
+            /*AND s.submissionDate  BETWEEN '" . (date('Y') -1) . "-10-20' and '" . date('Y') . "-08-31'*/
             GROUP BY s.problem_id
             ORDER BY `s`.`submissionDate` DESC, last_date_attempt DESC
             LIMIT $limit;
@@ -966,15 +967,16 @@ class Mproblems extends CI_Model {
             ->where('gr.id_group', $groupId)
             ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-10-20" and "'. date('Y') . '-08-31"')
             //->where('det.name IS NOT NULL')
-            ->group_by('p.internalId');
+            ->group_by('p.internalId')
+            ->order_by('p.totalDACU', 'DESC');
 
         if (isset($params['limit'])) {
             $this->db->limit($params['limit']);
         }
 
-        if (isset($params['order'])) {
+        /*if (isset($params['order'])) {
             $this->db->order_by($params['order'], $params['direction']);
-        }
+        }*/
 
         $query = $this->db->get();
 

@@ -131,7 +131,7 @@
                             </div>
                         </div>
                         {% if (role == 'teacher') %}
-                        <div class="col-sm-3">
+                        <!--div class="col-sm-3">
                             <div class="form-group"  style="padding-bottom: 20px;">
                                 <label class="form-label">Ver datos de:</label>
                                 <select name="subject" id="select-subject" class="form-control custom-select">
@@ -144,7 +144,7 @@
                                     <option value="6">Tema 6</option>
                                 </select>
                             </div>
-                        </div>
+                        </div-->
                         {% endif %}
                     </div>
 
@@ -299,6 +299,7 @@
                                                 <th>Email</th>
                                                 <th class="text-center">AC totales/ Envíos totales</th>
                                                 <th class="text-center">Fallidos totales/ Envíos totales</th>
+                                                <th class="text-center">AC totales</th>
                                                 <th>Fecha último envío</th>
                                             </tr>
                                             </thead>
@@ -344,6 +345,10 @@
                                                         <div class="small text-muted text-center">{{ user.totalSubs - user.totalAC }} / {{ user.totalSubs }}</div>
                                                     </td>
 
+                                                    <td class="text-nowrap text-center">
+                                                        {{ user.totalAC }}
+                                                    </td>
+
                                                     <td class="text-nowrap">
                                                         {{ user.last_submission | date("d/m/Y H:i:s") }}
                                                     </td>
@@ -357,6 +362,7 @@
                                                 <th>Email</th>
                                                 <th class="text-center">AC totales/ Envíos totales</th>
                                                 <th class="text-center">Fallidos totales/ Envíos totales</th>
+                                                <th class="text-center">AC totales</th>
                                                 <th>Fecha último envío</th>
                                             </tr>
                                             </tfoot>
@@ -424,8 +430,8 @@
                     bindto: '#chart-bar-attempsEv', // id of attemps evolution chart wrapper
                     data: {
                         columns: [
-                            ['Enviados', {{ totalSubmissionsByMonthAndUserId }}],
-                            ['Aceptados', {{ totalAcceptedByMonthAndUserId }}]
+                            ['Enviados', {{ totalSubmissionsByMonthAndProblemId }}],
+                            ['Aceptados', {{ totalAcceptedByMonthAndProblemId }}]
                         ],
                         type: 'line', // default type of chart
                         colors: {

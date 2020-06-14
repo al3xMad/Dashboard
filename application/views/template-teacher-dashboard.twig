@@ -42,7 +42,7 @@
                             </div>
                             <div class="col-lg-11" style="padding-bottom: 5px;">
                                 <a title="Ranking de problemas"
-                                   href=#rankingProblemas""
+                                   href="#rankingProblemas"
                                    class="btn btn-secondary btn-block">Ranking de problemas</a>
                             </div>
                             <div class="col-lg-11">
@@ -92,7 +92,7 @@
                                         {% endif %}
 
                                     </div>
-                                    <div class="col-sm-5" style="padding-top: 25px;">
+                                    <!--div class="col-sm-5" style="padding-top: 25px;">
                                         <div class="form-group" style="padding-bottom: 20px;">
                                             <label class="form-label">Ver datos de:</label>
                                             <select name="subject" id="select-subject" class="form-control custom-select">
@@ -105,7 +105,7 @@
                                                 <option value="6">Tema 6</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div-->
                                 </div>
                             </div>
 
@@ -333,6 +333,7 @@
                                                         <th>Último resultado</th>
                                                         <th class="text-center">AC totales/ Envíos totales</th>
                                                         <th class="text-center">AC únicos/ Usuarios únicos</th>
+                                                        <th class="text-center">AC únicos</th>
                                                         <th>Fecha último envío</th>
                                                     </tr>
                                                     </thead>
@@ -394,6 +395,10 @@
                                                                 </a>
                                                             </td>
 
+                                                            <td class="text-nowrap text-center">
+                                                                {{ problem.totalDACU }}
+                                                            </td>
+
                                                             <td class="text-nowrap">
                                                                 {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
                                                             </td>
@@ -406,6 +411,7 @@
                                                         <th>Último resultado</th>
                                                         <th class="text-center">AC totales/ Envíos totales</th>
                                                         <th class="text-center">AC únicos/ Usuarios únicos</th>
+                                                        <th class="text-center">AC únicos</th>
                                                         <th>Fecha último envío</th>
                                                     </tr>
                                                     </tfoot>
@@ -432,6 +438,7 @@
                                                         <th>Email</th>
                                                         <th class="text-center">AC totales/Envíos totales</th>
                                                         <th class="text-center">AC totales/Fallidos totales</th>
+                                                        <th class="text-center">AC totales</th>
                                                         <th>Fecha último envío</th>
                                                     </tr>
                                                     </thead>
@@ -483,6 +490,10 @@
                                                                 <div class="small text-muted text-center">{{ user.totalAC }} / {{ (user.totalSubs - user.totalAC) }}</div>
                                                             </td>
 
+                                                            <td class="text-nowrap text-center">
+                                                                {{ user.totalAC }}
+                                                            </td>
+
                                                             <td class="text-nowrap">
                                                                 {{ user.last_submission | date("d/m/Y H:i:s") }}
                                                             </td>
@@ -496,6 +507,7 @@
                                                         <th>Email</th>
                                                         <th class="text-center">AC totales/Envíos totales</th>
                                                         <th class="text-center">AC totales/Fallidos totales</th>
+                                                        <th class="text-center">AC totales</th>
                                                         <th>Fecha último envío</th>
                                                     </tr>
                                                     </tfoot>

@@ -133,7 +133,7 @@
                                 </div>
                             </div>
                             {% if (role == 'teacher') %}
-                                <div class="col-md-3">
+                                <!--div class="col-md-3">
                                     <div class="form-group"  style="padding-bottom: 20px;">
                                         <label class="form-label">Ver datos de:</label>
                                         <select name="subject" id="select-subject" class="form-control custom-select">
@@ -146,7 +146,7 @@
                                             <option value="6">Tema 6</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div-->
                             {% endif %}
                         </div>
                     </div>
@@ -288,7 +288,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="problemsTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                        <table data-order='[[ 2, "desc" ]]' id="problemsTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
                                             <thead>
                                             <tr>
                                                 <th>Problema (ID)</th>

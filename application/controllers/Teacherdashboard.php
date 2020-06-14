@@ -40,7 +40,7 @@ class Teacherdashboard extends OL_Controller {
 
         $data['problemsAttempts'] = $this->Mproblems->getLastProblemsAttemptsByGroupId($groupId);
 
-        $data['problems'] = $this->Mproblems->getAllProblemsSubmittedByGroup($groupId, $problemsParams);
+        $data['problems'] = $this->Mproblems->getAllProblemsSubmittedByGroup($groupId);
         $data['totalProblemsSum'] = count($data['problems']);
 
         $data['usersRanking'] = $this->Musers->getUsersRankingByGroup($groupId);

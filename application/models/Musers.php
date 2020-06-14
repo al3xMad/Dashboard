@@ -299,7 +299,7 @@ class Musers extends CI_Model {
         AND gu.id_group = $groupId
         /*AND s.submissionDate  BETWEEN \"'. (date('Y') -1) . '-09-01\" and \"'. date('Y') . '-08-31\"*/
         GROUP BY udata.id
-        ORDER BY s.user_id ASC
+        ORDER BY totalAC DESC
         LIMIT $limit";
 
         return $this->db->query($sql)->result();
