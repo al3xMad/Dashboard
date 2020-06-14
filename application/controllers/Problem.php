@@ -6,17 +6,14 @@ class Problem extends OL_Controller {
     public function __construct () {
         parent::__construct();
 
-        $this->data['breadcrumb'] = [
-            [
-                'url' => base_url() . 'admindashboard',
-                'title' => 'Admin dashboard'
-            ]
-        ];
+        $data = $this->data;
+        $data['no_breadcrumb'] = true;
     }
 
     public function index() {
         // Retrieving vars
         $data = $this->data;
+        $data['no_breadcrumb'] = true;
 
         $data['pageTitle'] = 'Listado completo de problemas';
 
@@ -39,12 +36,7 @@ class Problem extends OL_Controller {
 
         $groupDetails = $this->Msubjects->getGroupById($groupId);
 
-        $data['breadcrumb'] = [
-            [
-                'url' => base_url() . 'teacherdashboard',
-                'title' => 'Teacher dashboard'
-            ]
-        ];
+        $data['no_breadcrumb'] = true;
 
         $data['pageTitle'] = 'Listado completo de problemas para el grupo: ' . $groupDetails->name;
         $data['silentResume'] = true;
@@ -76,19 +68,9 @@ class Problem extends OL_Controller {
         $data['pageTitle'] = 'Detalle del problema';
 
         if (isset($urlData['group'])) {
-            $data['breadcrumb'] = [
-                [
-                    'url' => base_url() . 'teacherdashboard',
-                    'title' => 'Teacher dashboard'
-                ]
-            ];
+            $data['no_breadcrumb'] = true;
         } else {
-            $data['breadcrumb'] = [
-                [
-                    'url' => base_url() . 'admindashboard',
-                    'title' => 'Admin dashboard'
-                ]
-            ];
+            $data['no_breadcrumb'] = true;
         }
 
         if (isset($urlData['group'])) {
@@ -103,6 +85,7 @@ class Problem extends OL_Controller {
             $data['acceptedByCountry'] = $this->Mproblems->getAcceptedByCountryByProblemIdAndGroupId($id, $urlData['group']);
             $totalSubmissionsByMonthAndProblemId = $this->Mproblems->getTotalSubmissionsByMonthAndProblemIdAndGroupId($id, $urlData['group']);
             $totalAcceptedByMonthAndProblemId = $this->Mproblems->getTotalAcceptedByMonthAndProblemIdAndGroupId($id, $urlData['group']);
+            $data['submissionMonths'] = array_column($totalSubmissionsByMonthAndProblemId, 'month');
         } else {
             $data['groupId'] = false;
             $data['problem'] = $this->Mproblems->getProblemById($id);
@@ -113,21 +96,21 @@ class Problem extends OL_Controller {
             $data['submissionErrorsTable'] = $this->Mproblems->getChartErrorsTableByProblemId($id);
             $problemAttemptsEvolution = $this->Mproblems->getProblemAttemptsEvolutionByProblemId($id);
             $data['acceptedByCountry'] = $this->Mproblems->getAcceptedByCountryByProblemId($id);
-            $totalSubmissionsByMonthAndProblemId = $this->Mproblems->getTotalSubmissionsByMonthAndProblemId($id);
-            $totalAcceptedByMonthAndProblemId = $this->Mproblems->getTotalAcceptedByMonthAndProblemId($id);
+            $totalSubmissionsByMonthAndProblemId = $this->Mproblems->getTotalSubmissionsInLastYearByProblemId($id);
+            $totalAcceptedByMonthAndProblemId = $this->Mproblems->getTotalAcceptedInLastYearByProblemId($id);
+            $data['submissionMonths'] = array_column($totalSubmissionsByMonthAndProblemId, 'month');
         }
 
-        $data['problemAttemptsEvolution'] = array_column($problemAttemptsEvolution, 'attempts');
-
         $data['totalSubmissionsByMonthAndProblemId'] = implode(', ', array_map(function ($month) {
-            return $month->total_submissions;
+            return $month['total_submissions'];
         }, $totalSubmissionsByMonthAndProblemId));
-
-        $data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndProblemId);
-
         $data['totalAcceptedByMonthAndProblemId'] = implode(', ', array_map(function ($month) {
             return $month->total_submissions;
         }, $totalAcceptedByMonthAndProblemId));
+
+        $data['problemAttemptsEvolution'] = array_column($problemAttemptsEvolution, 'attempts');
+
+        //$data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndProblemId);
 
         $this->load->view('template-problem-details', $data);
     }
@@ -137,16 +120,7 @@ class Problem extends OL_Controller {
         $data = $this->data;
         $data['problem'] = $this->Mproblems->getProblemById($id);
 
-        $data['breadcrumb'] = [
-            [
-                'url' => base_url() . 'admindashboard',
-                'title' => 'Admin dashboard'
-            ], [
-                'url' => base_url() . 'problem/id/' . $data['problem']->id,
-                'title' => 'problema ' . $data['problem']->name
-            ]
-
-        ];
+        $data['no_breadcrumb'] = true;
 
         if (empty($id)) {
             redirect(base_url());
@@ -176,16 +150,7 @@ class Problem extends OL_Controller {
         $data['userName'] = $this->_getUserName($data['userDetails']);
         $data['lastAttempts'] = $this->Mproblems->getLastProblemsAttemptsByUserId($userId, ['limit' => 9999999]);
 
-        $data['breadcrumb'] = [
-            [
-                'url' => base_url() . 'teacherdashboard',
-                'title' => 'Teacher dashboard'
-            ], [
-                'url' => base_url() . 'users/id/' . $userId,
-                'title' => 'Usuario ' . $data['userName']
-            ]
-
-        ];
+        $data['no_breadcrumb'] = true;
 
         if (empty($userId)) {
             redirect(base_url());
@@ -204,9 +169,9 @@ class Problem extends OL_Controller {
         return $user->first_name . ' ' . $user->last_name;
     }
 
-    private function notSubmissions($submissionChart){
+    /*private function notSubmissions($submissionChart){
         $data = array_column($submissionChart, 'total_submissions');
 
         return empty(array_filter($data));
-    }
+    }*/
 }

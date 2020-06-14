@@ -10,9 +10,9 @@ class Admindashboard extends OL_Controller {
 	}
 
 	public function index() {
-		// Retrieving vars
+	    // Retrieving vars
 		$data = $this->data;
-        $data['breadcrumb'] = [];
+        $data['no_breadcrumb'] = true;
 
         $data['pageTitle'] = 'Admin Dashboard';
 
@@ -48,11 +48,14 @@ class Admindashboard extends OL_Controller {
         $data['problemsRanking'] = $this->Mproblems->getProblemsRanking();
         $data['usersRanking'] = $this->Musers->getUsersRanking();
 
-        $totalSubmissionsByMonth = $this->Mproblems->getTotalSubmissionsByMonth();
-        $totalAcceptedByMonth = $this->Mproblems->getTotalAcceptedByMonth();
+        $totalSubmissionsByMonth = $this->Mproblems->getTotalSubmissionsInLastYear();
+        $totalAcceptedByMonth = $this->Mproblems->getTotalAcceptedInLastYear();
+        $data['submissionMonths'] = array_column($totalSubmissionsByMonth, 'month');
+
+        //$data['notSubmissions'] = []; //$this->notSubmissions($totalSubmissionsByMonth);
 
         $data['totalSubmissionsByMonth'] = implode(', ', array_map(function ($month) {
-            return $month->total_submissions;
+            return $month['total_submissions'];
         }, $totalSubmissionsByMonth));
 
         $data['totalAcceptedByMonth'] = implode(', ', array_map(function ($month) {
@@ -61,4 +64,10 @@ class Admindashboard extends OL_Controller {
 
 		$this->load->view('template-admin-dashboard', $data);
 	}
+
+    /*private function notSubmissions($submissionChart){
+        $data = array_column($submissionChart, 'total_submissions');
+
+        return empty(array_filter($data));
+    }*/
 }

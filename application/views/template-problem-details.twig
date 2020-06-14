@@ -7,286 +7,373 @@
 
 {% block content %}
     <main id="main" role="main" class="my-3 my-md-5">
-        <div class="container">
-            <div class="page-header">
-                <h1 class="page-title">{{ pageTitle }}: {{ problem.name }} ({{ problem.id }})</h1>
-            </div>
-
-            <div class="row row-cards">
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">Envíos totales</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ problem.totalSubs | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">AC totales</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ problem.totalAC | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">Fallidos totales</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ (
-                                problem.totalPE +
-                                problem.totalWA +
-                                problem.totalTL +
-                                problem.totalML +
-                                problem.totalOL +
-                                problem.totalRF +
-                                problem.totalRTE+
-                                problem.totalCE +
-                                problem.totalIR ) | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-                {% if (role == 'teacher') %}
-                <div class="col-sm-3">
-                    <div class="form-group"  style="padding-bottom: 20px;">
-                        <label class="form-label">Ver datos de:</label>
-                        <select name="subject" id="select-subject" class="form-control custom-select">
-                            <option value="all">Todo el curso</option>
-                            <option value="1">Tema 1</option>
-                            <option value="2">Tema 2</option>
-                            <option value="3">Tema 3</option>
-                            <option value="4">Tema 4</option>
-                            <option value="5">Tema 5</option>
-                            <option value="6">Tema 6</option>
-                        </select>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-
-            <div class="row row-cards row-deck">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Últimos envíos</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="lastAttemps" class="table card-table table-striped table-vcenter">
-                                    <thead>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th class="text-center">Resultado</th>
-                                        <th class="text-center">AC totales/Envíos totales</th>
-                                        <th>Fecha envío</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for attempt in lastAttempts %}
-                                    {% set face = attempt.id % 32 %}
-                                    <tr>
-                                        <td class="w-1">
-                                            <span class="avatar"
-                                                style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ face }}.jpg)"></span>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <a title="{{ attempt.first_name }}"
-                                                    href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
-                                                    {{ attempt.first_name }} {{ attempt.last_name }}
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <a title="{{ attempt.email }}"
-                                                   href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
-                                                    {{ attempt.email }}
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td class="text-nowrap text-center">
-                                            {% if attempt.lastAttempt == 'AC' %}
-                                                {% set color = 'green' %}
-                                            {%  elseif attempt.lastAttempt == 'WA' %}
-                                                {% set color = 'purple' %}
-                                            {%  elseif attempt.lastAttempt == 'RTE' %}
-                                                {% set color = 'indigo' %}
-                                            {%  elseif attempt.lastAttempt == 'TL' %}
-                                                {% set color = 'teal' %}
-                                            {%  elseif attempt.lastAttempt == 'CE' %}
-                                                {% set color = 'cyan' %}
-                                            {%  elseif attempt.lastAttempt == 'ML' %}
-                                                {% set color = 'gray' %}
-                                            {%  elseif attempt.lastAttempt == 'PE' %}
-                                                {% set color = 'azure' %}
-                                            {%  elseif attempt.lastAttempt == 'RF' %}
-                                                {% set color = 'pink' %}
-                                            {%  elseif attempt.lastAttempt == 'OL' %}
-                                                {% set color = 'lime' %}
-                                            {%  elseif attempt.lastAttempt == 'IR' %}
-                                                {% set color = 'primary' %}
-                                            {%  endif %}
-                                            <span class="badge badge-{{ color }}">{{ attempt.lastAttempt }}</span>
-                                        </td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                {% set percent = attempt.attempts == 0 ? 0 : ((attempt.accepted / attempt.attempts) * 100) %}
-                                                <div class="progress-bar bg-cyan-light"
-                                                        style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
-                                            </div>
-                                            <div class="small text-muted text-center">{{ attempt.accepted }}/{{ attempt.attempts }}</div>
-                                        </td>
-                                        <td class="text-nowrap">
-                                            {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th class="text-center">Resultado</th>
-                                        <th class="text-center">AC totales/Envíos totales</th>
-                                        <th>Fecha envío</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
+        <div class="container-fluid">
+            <div class="row" style="height: auto !important;">
+                <div id="column-left" class="col-lg-2 bg-white">
+                    <div class="position-fixed col-lg-2">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p><span><b>> IR A:</b></span></p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row row-cards row-deck">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Evolución de envíos</h4>
-                        </div>
-                        <div class="card-body">
-                            {% if notSubmissions %}
-                                <div style="color: #9aa0ac; text-align: center;"> No hay datos en el año actual</div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Totales"
+                                   href="#totales"
+                                   class="btn btn-secondary btn-block">Totales</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Últimos envíos"
+                                   href="#ultimosEnvios"
+                                   class="btn btn-secondary btn-block">Últimos envíos</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Evolución de envíos"
+                                   href="#evEnvios"
+                                   class="btn btn-secondary btn-block">Evolución de envíos</a>
+                            </div>
+                            {% if (role == 'teacher') %}
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Problemas intentados"
+                                   href="#probIntentados"
+                                   class="btn btn-secondary btn-block">Han intentado problemas</a>
+                            </div>
+                            <div class="col-lg-11">
+                                <a title="Ranking de alumnos"
+                                   href="#rankingUsuarios"
+                                   class="btn btn-secondary btn-block">Ranking de alumnos</a>
+                            </div>
                             {% else %}
-                                {% set charId = (role == 'teacher') ? 'chart-bar-attempsEv' : 'chart-bar-attempsEvYear' %}
-                                <div id="{{charId}}" style="height: 16rem; max-height: 256px; position: relative;" class="c3"></div>
+                                <div class="col-lg-11">
+                                    <a title="Ranking de usuarios"
+                                       href="#rankingUsuarios"
+                                       class="btn btn-secondary btn-block">Ranking de usuarios</a>
+                                </div>
+                            {% endif %}
+                            <div class="col-lg-12" style="padding-top: 10px;">
+                                <p><span><b> < VOLVER A:</b></span></p>
+                            </div>
+                            {% if (role == 'teacher') %}
+                                <div class="col-lg-11" style="padding-bottom: 5px;">
+                                    <a title="Dashboard profesor"
+                                       href="{{ twg_func('base_url') }}teacherdashboard"
+                                       class="btn btn-secondary btn-block">Dashboard profesor</a>
+                                </div>
+                                <div class="col-lg-11" style="padding-bottom: 5px;">
+                                    <a title="Listado alumnos"
+                                       href="{{ twg_func('base_url') }}users/group/3"
+                                       class="btn btn-secondary btn-block">Listado alumnos</a>
+                                </div>
+                                <div class="col-lg-11" style="padding-bottom: 5px;">
+                                    <a title="Listado problemas"
+                                       href="{{ twg_func('base_url') }}problem/group/3"
+                                       class="btn btn-secondary btn-block">Listado problemas</a>
+                                </div>
+                            {%  else %}
+                                <div class="col-lg-11" style="padding-bottom: 5px;">
+                                    <a title="Dashboard administrador"
+                                       href="{{ twg_func('base_url') }}admindashboard"
+                                       class="btn btn-secondary btn-block">Dashboard administrador</a>
+                                </div>
+                                <div class="col-lg-11" style="padding-bottom: 5px;">
+                                    <a title="Listado usuarios"
+                                       href="{{ twg_func('base_url') }}users"
+                                       class="btn btn-secondary btn-block">Listado usuarios</a>
+                                </div>
+                                <div class="col-lg-11">
+                                    <a title="Listado problemas"
+                                       href="{{ twg_func('base_url') }}problem"
+                                       class="btn btn-secondary btn-block">Listado problemas</a>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
+                <div id="column-right" class="col-lg-10">
+                    <div class="page-header">
+                        {% if (role == 'teacher') %}
+                        <h1 class="page-title">{{ pageTitle }}: {{ problem.name }} ({{ problem.problem_id }})</h1>
+                        {%  else %}
+                        <h1 class="page-title">{{ pageTitle }}: {{ problem.name }} ({{ problem.id }})</h1>
+                        {% endif %}
+                    </div>
 
-                {% if (role == 'teacher') %}
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Alumnos que lo han intentado</h4>
+                    <div id="totales" class="row row-cards">
+                        <div class="col-sm-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="h5">Envíos totales</div>
+                                    <div class="display-4 font-weight-bold mb-4">{{ problem.totalSubs | number_format(0, ',', '.') }}</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                {% for user in usersRanking %}
-                                    <a data-toggle="tooltip" data-placement="top" title="{{ user.first_name }} {{ user.last_name }}- {{ user.totalAC }} AC"
-                                            href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}"
-                                            class="mb-1 tag tag-{{ user.totalAC == '0' ? 'red' : 'green' }}">
-                                        {{ user.id }}
-                                    </a>
-                                {% endfor %}
+                        <div class="col-sm-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="h5">AC totales</div>
+                                    <div class="display-4 font-weight-bold mb-4">{{ problem.totalAC | number_format(0, ',', '.') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="h5">Fallidos totales</div>
+                                    <div class="display-4 font-weight-bold mb-4">{{ (
+                                        problem.totalPE +
+                                        problem.totalWA +
+                                        problem.totalTL +
+                                        problem.totalML +
+                                        problem.totalOL +
+                                        problem.totalRF +
+                                        problem.totalRTE+
+                                        problem.totalCE +
+                                        problem.totalIR ) | number_format(0, ',', '.') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if (role == 'teacher') %}
+                        <div class="col-sm-3">
+                            <div class="form-group"  style="padding-bottom: 20px;">
+                                <label class="form-label">Ver datos de:</label>
+                                <select name="subject" id="select-subject" class="form-control custom-select">
+                                    <option value="all">Todo el curso</option>
+                                    <option value="1">Tema 1</option>
+                                    <option value="2">Tema 2</option>
+                                    <option value="3">Tema 3</option>
+                                    <option value="4">Tema 4</option>
+                                    <option value="5">Tema 5</option>
+                                    <option value="6">Tema 6</option>
+                                </select>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div id="ultimosEnvios" class="row row-cards row-deck">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Últimos envíos</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="lastAttemps" class="table card-table table-striped table-vcenter">
+                                            <thead>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Usuario</th>
+                                                <th>Email</th>
+                                                <th class="text-center">Resultado</th>
+                                                <th class="text-center">AC totales/Envíos totales</th>
+                                                <th>Fecha envío</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for attempt in lastAttempts %}
+                                            {% set face = attempt.id % 32 %}
+                                            <tr>
+                                                <td class="w-1">
+                                                    <span class="avatar"
+                                                        style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ face }}.jpg)"></span>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <a title="{{ attempt.first_name }}"
+                                                            href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
+                                                            {{ attempt.first_name }} {{ attempt.last_name }}
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <a title="{{ attempt.email }}"
+                                                           href="{{ twg_func( 'base_url') }}users/id/{{ attempt.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
+                                                            {{ attempt.email }}
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td class="text-nowrap text-center">
+                                                    {% if attempt.lastAttempt == 'AC' %}
+                                                        {% set color = 'green' %}
+                                                    {%  elseif attempt.lastAttempt == 'WA' %}
+                                                        {% set color = 'purple' %}
+                                                    {%  elseif attempt.lastAttempt == 'RTE' %}
+                                                        {% set color = 'indigo' %}
+                                                    {%  elseif attempt.lastAttempt == 'TL' %}
+                                                        {% set color = 'teal' %}
+                                                    {%  elseif attempt.lastAttempt == 'CE' %}
+                                                        {% set color = 'cyan' %}
+                                                    {%  elseif attempt.lastAttempt == 'ML' %}
+                                                        {% set color = 'gray' %}
+                                                    {%  elseif attempt.lastAttempt == 'PE' %}
+                                                        {% set color = 'azure' %}
+                                                    {%  elseif attempt.lastAttempt == 'RF' %}
+                                                        {% set color = 'pink' %}
+                                                    {%  elseif attempt.lastAttempt == 'OL' %}
+                                                        {% set color = 'lime' %}
+                                                    {%  elseif attempt.lastAttempt == 'IR' %}
+                                                        {% set color = 'primary' %}
+                                                    {%  endif %}
+                                                    <span class="badge badge-{{ color }}">{{ attempt.lastAttempt }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="progress progress-sm">
+                                                        {% set percent = attempt.attempts == 0 ? 0 : ((attempt.accepted / attempt.attempts) * 100) %}
+                                                        <div class="progress-bar bg-cyan-light"
+                                                                style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
+                                                    </div>
+                                                    <div class="small text-muted text-center">{{ attempt.accepted }}/{{ attempt.attempts }}</div>
+                                                </td>
+                                                <td class="text-nowrap">
+                                                    {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Usuario</th>
+                                                <th>Email</th>
+                                                <th class="text-center">Resultado</th>
+                                                <th class="text-center">AC totales/Envíos totales</th>
+                                                <th>Fecha envío</th>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-cards row-deck">
+                        <div id="evEnvios" class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Evolución de envíos</h4>
+                                </div>
+                                <div class="card-body">
+                                    {% if notSubmissions %}
+                                        <div style="color: #9aa0ac; text-align: center;"> No hay datos en el año actual</div>
+                                    {% else %}
+                                        {% set charId = (role == 'teacher') ? 'chart-bar-attempsEv' : 'chart-bar-attempsEvYear' %}
+                                        <div id="{{charId}}" style="height: 16rem; max-height: 256px; position: relative;" class="c3"></div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if (role == 'teacher') %}
+                        <div id="probIntentados" class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Alumnos que lo han intentado</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        {% for user in usersRanking %}
+                                            <a data-toggle="tooltip" data-placement="top" title="{{ user.last_name }}, {{ user.first_name }} - {{ user.totalAC }} AC"
+                                                    href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}"
+                                                    class="mb-1 tag tag-{{ user.totalAC == '0' ? 'red' : 'green' }}">
+                                                {{ user.id }}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div id="rankingUsuarios" class="row row-cards row-deck">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Ranking usuarios</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="usersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                            <thead>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Usuario</th>
+                                                <th>Email</th>
+                                                <th class="text-center">AC totales/ Envíos totales</th>
+                                                <th class="text-center">Fallidos totales/ Envíos totales</th>
+                                                <th>Fecha último envío</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for user in usersRanking %}
+                                            {% set avatarId = user.id % 32 %}
+                                                <tr>
+                                                    <td class="w-1">
+                                                        <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <a title="{{ user.first_name }}"
+                                                               href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
+                                                                {{ user.last_name }}, {{ user.first_name }}
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <a title="{{ user.email }}"
+                                                               href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
+                                                                {{ user.email }}
+                                                            </a>
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="progress progress-sm">
+                                                            <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
+                                                                {{ ((user.totalAC / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
+                                                            </div>
+                                                        </div>
+                                                        <div class="small text-muted text-center">{{ user.totalAC }} / {{ user.totalSubs }}</div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="progress progress-sm">
+                                                            <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
+                                                                {{ (((user.totalSubs - user.totalAC) / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
+                                                            </div>
+                                                        </div>
+                                                        <div class="small text-muted text-center">{{ user.totalSubs - user.totalAC }} / {{ user.totalSubs }}</div>
+                                                    </td>
+
+                                                    <td class="text-nowrap">
+                                                        {{ user.last_submission | date("d/m/Y H:i:s") }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Usuario</th>
+                                                <th>Email</th>
+                                                <th class="text-center">AC totales/ Envíos totales</th>
+                                                <th class="text-center">Fallidos totales/ Envíos totales</th>
+                                                <th>Fecha último envío</th>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% endif %}
             </div>
-            <div class="row row-cards row-deck">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Ranking usuarios</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="usersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                    <thead>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th class="text-center">AC totales/ Envíos totales</th>
-                                        <th class="text-center">AC totales/ Fallidos totales</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for user in usersHaveTried %}
-                                    {% set avatarId = user.id % 32 %}
-                                        <tr>
-                                            <td class="w-1">
-                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ user.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
-                                                        {{ user.first_name }} {{ user.last_name }}
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ user.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}{{ groupId ? '/group/' ~ groupId : '' }}">
-                                                        {{ user.email }}
-                                                    </a>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
-                                                        {{ ((user.totalAC / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
-                                                    </div>
-                                                </div>
-                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ user.totalSubs }}</div>
-                                            </td>
-
-                                            <td>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
-                                                        {{ (((user.totalSubs - user.totalAC) / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
-                                                    </div>
-                                                </div>
-                                                <div class="small text-muted text-center">{{ user.totalSubs - user.totalAC }} / {{ user.totalSubs }}</div>
-                                            </td>
-
-                                            <td class="text-nowrap">
-                                                {{ user.last_submission | date("d/m/Y H:i:s") }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th class="text-center">AC totales/ Envíos totales</th>
-                                        <th class="text-center">AC totales/ Fallidos totales</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
     <script>
-        require(['c3', 'jquery', 'datatables'], function(c3, $) {
+
+
+      require(['c3', 'jquery', 'datatables'], function(c3, $) {
             $(document).ready(function(){
                 let programmingLanguages = {{ programmingLanguages | json_encode | raw }},
                     submissionErrors = {{ submissionErrors | json_encode | raw }},
@@ -294,6 +381,7 @@
                     dataLanguages = [],
                     dataErrors = [],
                     dataCountries = [];
+
 
                 $('#lastAttemps').DataTable();
                 $('#usersTable').DataTable();
@@ -354,7 +442,7 @@
                     axis: {
                         x: {
                             type: 'category',
-                            categories: ['Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago']
+                            categories: {{ submissionMonths|json_encode|raw }}
                         },
                     },
                     padding: {
@@ -384,7 +472,7 @@
                     axis: {
                         x: {
                             type: 'category',
-                            categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+                            categories: {{ submissionMonths|json_encode|raw }}
                         },
                     },
                     padding: {

@@ -1,4 +1,4 @@
-<?php
+git<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
@@ -78,13 +78,13 @@ $db['default'] = [
 	'hostname' => '5.56.60.120',
 	'username' => 'rootAperez',
 	'password' => 'm0m0m0m0',
-	'database' => 'tfg',
+	'database' => 'tfg_2020',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
-	'cachedir' => '',
+	'cachedir' => 'application/cache/db/',
 	'char_set' => 'utf8',
 	'dbcollat' => 'utf8_general_ci',
 	'swap_pre' => '',
@@ -92,5 +92,5 @@ $db['default'] = [
 	'compress' => FALSE,
 	'stricton' => FALSE,
 	'failover' => array(),
-	'save_queries' => TRUE
+	'save_queries' => FALSE
 ];

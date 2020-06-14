@@ -1,7 +1,7 @@
 <?php
 class Musers extends CI_Model {
 
-    const DEFAULT_LAST_ATTEMPTS_LIMIT = 100;
+    const DEFAULT_LAST_ATTEMPTS_LIMIT = 50;
 
     public function getAllUsers() {
         $this->db->select('u.id, data.*')
@@ -41,19 +41,19 @@ class Musers extends CI_Model {
         $limit = self::DEFAULT_LAST_ATTEMPTS_LIMIT;
 
         $sql = "
-            SELECT `udata`.*, `u`.`gender`, `u`.`registrationDate`, `u`.`country_id`, `u`.`institution_id`,
+            SELECT udata.*, u.gender, u.registrationDate, u.country_id, u.institution_id,
             (
                 SELECT count(*) from submission s where s.user_id = u.id
             ) as TotalSubmissions, (
-                SELECT count(*) from submission s where s.user_id = u.id and s.`status` = 'AC'
+                SELECT count(*) from submission s where s.user_id = u.id and s.status = 'AC'
             ) as TotalAC,
             (
                 SELECT s.submissionDate from submission s where s.user_id = u.id order by s.submissionDate DESC limit 1
             ) as LastSubmission
     
-            FROM `users` `u`
-            LEFT JOIN `userdata` `udata` ON `udata`.`id` = `u`.`id`
-            ORDER BY TotalSubmissions DESC, TotalAC DESC
+            FROM users u
+            LEFT JOIN userdata udata ON udata.id = u.id
+            /*ORDER BY udata.last_name ASC*/
             LIMIT $limit;";
 
         return $this->db->query($sql)->result();
@@ -65,21 +65,21 @@ class Musers extends CI_Model {
         }
 
         $sql = "
-          SELECT `udata`.*, `u`.`gender`, `u`.`registrationDate`, `u`.`country_id`, `u`.`institution_id`,(
+          SELECT udata.*, u.gender, u.registrationDate, u.country_id, u.institution_id,(
             SELECT count(*) from submission s where s.user_id = u.id
           ) as TotalSubmissions, (
-            SELECT count(*) from submission s where s.user_id = u.id and s.`status` = 'AC'
+            SELECT count(*) from submission s where s.user_id = u.id and s.status = 'AC'
           ) as TotalAC,
           (
 		    SELECT s.submissionDate from submission s where s.user_id = u.id order by s.submissionDate DESC limit 1
 	      ) as LastSubmission
 
-            FROM `users` `u`
-            LEFT JOIN `groupusers` `gr` ON `gr`.`id_user` = `u`.`id`
-            LEFT JOIN `userdata` `udata` ON `udata`.`id` = `u`.`id`
+            FROM users u
+            LEFT JOIN groupusers gr ON gr.id_user = u.id
+            LEFT JOIN userdata udata ON udata.id = u.id
 
-            WHERE `gr`.`id_group` = $groupId
-            ORDER BY TotalSubmissions DESC, TotalAC DESC";
+            WHERE gr.id_group = $groupId
+            /*ORDER BY udata.last_name ASC*/";
 
 
         return $this->db->query($sql)->result();
@@ -91,7 +91,7 @@ class Musers extends CI_Model {
         }
 
         $sql = "
-          SELECT `udata`.*, `u`.`gender`, `u`.`registrationDate`, `u`.`country_id`, `u`.`institution_id`,(
+          SELECT udata.*, u.gender, u.registrationDate, u.country_id, u.institution_id,(
             SELECT count(*) from submission s where s.user_id = u.id
           ) as TotalSubmissions, (
             SELECT count(*) from submission s where s.user_id = u.id and s.`status` = 'AC'
@@ -104,12 +104,11 @@ class Musers extends CI_Model {
 	        SELECT COUNT(DISTINCT(s.problem_id)) FROM submission s where s.user_id = u.id and s.`status` = 'AC'
 	      ) as problemResolved
 
-            FROM `users` `u`
-            LEFT JOIN `groupusers` `gr` ON `gr`.`id_user` = `u`.`id`
-            LEFT JOIN `userdata` `udata` ON `udata`.`id` = `u`.`id`
+            FROM users u
+            LEFT JOIN groupusers gr ON gr.id_user = u.id
+            LEFT JOIN userdata udata ON udata.id = u.id
 
-            WHERE `u`.`id` = $userId
-            ORDER BY TotalSubmissions DESC, TotalAC DESC";
+            WHERE u.id = $userId";
 
 
         return $this->db->query($sql)->row();
@@ -122,7 +121,7 @@ class Musers extends CI_Model {
         }
 
         $sql = "
-          SELECT `udata`.*, `u`.`gender`, `u`.`registrationDate`, `u`.`country_id`, `u`.`institution_id`,(
+          SELECT udata.*, u.gender, u.registrationDate, u.country_id, u.institution_id,(
             SELECT count(*) from submission s where s.user_id = u.id
           ) as TotalSubmissions, (
             SELECT count(*) from submission s where s.user_id = u.id and s.`status` = 'AC'
@@ -132,15 +131,17 @@ class Musers extends CI_Model {
 	      ) as LastSubmission, (
 	        SELECT COUNT(DISTINCT(s.problem_id)) FROM submission s where s.user_id = u.id 
 	      ) as problemAttempted, (
-	        SELECT COUNT(DISTINCT(s.problem_id)) FROM submission s where s.user_id = u.id and s.`status` = 'AC'
+	        SELECT COUNT(DISTINCT(s.problem_id)) FROM submission s where s.user_id = u.id and s.status = 'AC'
 	      ) as problemResolved
 
-            FROM `users` `u`
-            LEFT JOIN `groupusers` `gr` ON `gr`.`id_user` = `u`.`id`
-            LEFT JOIN `userdata` `udata` ON `udata`.`id` = `u`.`id`
+            FROM users u
+            LEFT JOIN groupusers gr ON gr.id_user = u.id
+            LEFT JOIN userdata udata ON udata.id = u.id
 
-            WHERE `u`.`id` = $userId AND gr.id_group = $groupId
-            ORDER BY TotalSubmissions DESC, TotalAC DESC";
+            WHERE u.id = $userId 
+            AND gr.id_group = $groupId
+            /*AND s.submissionDate  BETWEEN \"'. (date('Y') -1) . '-10-20\" and \"'. date('Y') . '-08-31\"
+            ORDER BY udata.last_name ASC*/";
 
 
         return $this->db->query($sql)->row();
@@ -151,17 +152,34 @@ class Musers extends CI_Model {
         $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
 
         $sql = "
-            SELECT `u`.*,(
-                SELECT group_concat(DISTINCT(s.language)) from submission s where s.user_id = u.id
-            ) as languages, (
-            SELECT COUNT(*) from submission s2 where s2.user_id = u.id
-               ) as totalSubs, (
-            SELECT COUNT(*) from submission s3 where s3.user_id = u.id and s3.`status` = 'AC'
-               ) as totalAC, (
-            SELECT count(DISTINCT(s4.problem_id)) from submission s4 where s4.user_id = u.id and s4.`status` = 'AC'
-               ) as unique_totalAC, (
-            SELECT s4.submissionDate from submission s4 where s4.user_id = u.id order by s4.submissionDate DESC limit 1
-            ) as last_submission from userdata u order by unique_totalAC DESC LIMIT $limit";
+            SELECT u.*,(
+                SELECT group_concat(DISTINCT(s.language)) 
+                from submission s 
+                where s.user_id = u.id
+                ) as languages, (
+                SELECT COUNT(*) 
+                from submission s2 
+                where s2.user_id = u.id
+                   ) as totalSubs, (
+                SELECT COUNT(*) 
+                from submission s3 
+                where s3.user_id = u.id 
+                and s3.status = 'AC'
+                   ) as totalAC, (
+                SELECT count(DISTINCT(s4.problem_id)) 
+                from submission s4 
+                where s4.user_id = u.id 
+                and s4.status = 'AC'
+                   ) as unique_totalAC, (
+                SELECT s4.submissionDate 
+                from submission s4 
+                where s4.user_id = u.id 
+                order by s4.submissionDate DESC 
+                limit 1
+            ) as last_submission 
+            from userdata u 
+            order by unique_totalAC DESC 
+            LIMIT $limit";
 
         return $this->db->query($sql)->result();
     }
@@ -279,8 +297,9 @@ class Musers extends CI_Model {
         LEFT JOIN groupusers gu ON gu.id_user = udata.id
         WHERE p.internalId = $id
         AND gu.id_group = $groupId
+        /*AND s.submissionDate  BETWEEN \"'. (date('Y') -1) . '-09-01\" and \"'. date('Y') . '-08-31\"*/
         GROUP BY udata.id
-        ORDER BY totalAC DESC
+        ORDER BY s.user_id ASC
         LIMIT $limit";
 
         return $this->db->query($sql)->result();

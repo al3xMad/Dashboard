@@ -19,7 +19,7 @@ class OL_Controller extends CI_Controller {
 
 		$this->data = [];
 		$this->data['brandImage'] = assets_url() . config_item('brand');
-		$this->data['projectTitle'] = '¡ACEPTA EL RETO!';
+		$this->data['projectTitle'] = 'DASHBOARD ¡ACEPTA EL RETO!';
 
         $this->loginAFakeUser();
 	}

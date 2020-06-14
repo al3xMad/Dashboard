@@ -12,7 +12,8 @@ class Teacherdashboard extends OL_Controller {
 	public function index() {
 		// Retrieving vars
 		$data = $this->data;
-        $data['breadcrumb'] = [];
+        $data['no_breadcrumb'] = true;
+
 
         $subjectId = 1;
         $groupId = 3;
@@ -26,12 +27,11 @@ class Teacherdashboard extends OL_Controller {
 
         $data['pageTitle'] = 'Teachers Dashboard';
 
-        $data['lastWeekProblems'] = $this->Mproblems->getLastWeekProblems();
+        $data['lastWeekProblems'] = $this->Mproblems->getLastWeekProblems()->lastWeeProblems;
 
         $data['totalUsers'] = count($usersInGroup);
 
         $data['submissionChartTable'] = $this->Mproblems->getChartSubmissionsByGroupId($groupId);
-
 
         $problemsParams = [
             'order' => 'internalId',
@@ -54,9 +54,10 @@ class Teacherdashboard extends OL_Controller {
 
         $totalSubmissionsByMonthAndGroupId = $this->Mproblems->getTotalSubmissionsByMonthAndGroupId($groupId);
         $totalAcceptedByMonthAndGroupId = $this->Mproblems->getTotalAcceptedByMonthAndGroupId($groupId);
+        $data['submissionMonths'] = array_column($totalSubmissionsByMonthAndGroupId, 'month');
 
         $data['totalSubmissionsByMonthAndGroupId'] = implode(', ', array_map(function ($month) {
-            return $month->total_submissions;
+            return $month['total_submissions'];
         }, $totalSubmissionsByMonthAndGroupId));
 
         $data['totalAcceptedByMonthAndGroupId'] = implode(', ', array_map(function ($month) {

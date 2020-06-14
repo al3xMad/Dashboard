@@ -6,12 +6,7 @@ class Users extends OL_Controller {
     public function __construct () {
         parent::__construct();
 
-        $this->data['breadcrumb'] = [
-            [
-                'url' => base_url() . 'admindashboard',
-                'title' => 'Admin dashboard'
-            ]
-        ];
+        $this->data['no_breadcrumb'] = true;
     }
 
     public function index() {
@@ -19,6 +14,7 @@ class Users extends OL_Controller {
 
         // Retrieving vars
         $data = $this->data;
+        $data['no_breadcrumb'] = true;
 
         $data['pageTitle'] = 'Listado completo de usuarios';
 
@@ -35,17 +31,12 @@ class Users extends OL_Controller {
             redirect(base_url() . 'teacherdashboard/', 'refresh');
         }
 
-        $data['breadcrumb'] = [
-            [
-                'url' => base_url() . 'teacherdashboard',
-                'title' => 'Teacher dashboard'
-            ]
-        ];
+        $data['no_breadcrumb'] = true;
 
         $groupDetails = $this->Msubjects->getGroupById($groupId);
         $data['pageTitle'] = 'Listado completo de alumnos en el ' . $groupDetails->name;
         $data['silentResume'] = true;
-
+        $data['groupId'] = $groupId;
         $data['users'] = $this->Musers->getAllUsersDataByGroupId($groupId);
 
         $this->load->view('template-all-users-table', $data);
@@ -57,64 +48,67 @@ class Users extends OL_Controller {
 
         // Retrieving vars
         $data = $this->data;
+        $data['no_breadcrumb'] = true;
 
         if (empty($userId)) {
             redirect(base_url() . 'teacherdashboard/', 'refresh');
         }
 
         if (isset($urlData['group'])) {
-            $data['breadcrumb'] = [
-                [
-                    'url' => base_url() . 'teacherdashboard',
-                    'title' => 'Teacher dashboard'
-                ]
-            ];
+            $data['no_breadcrumb'] = true;
         } else {
-            $data['breadcrumb'] = [
-                [
-                    'url' => base_url() . 'admindashboard',
-                    'title' => 'Admin dashboard'
-                ]
-            ];
+            $data['no_breadcrumb'] = true;
         }
 
         if (isset($urlData['group'])) {
             $data['groupId'] = $urlData['group'];
             $data['userDetails']= $this->Musers->getAllUserDataByIdAndGroupId($userId, $urlData['group']);
+
+            $data['lastAttempts'] = $this->Mproblems->getLastProblemsAttemptsByUserIdAndGroupId($userId, $urlData['group']);
+            $data['problemsRanking'] = $this->Mproblems->getProblemsRankingByUserIdAndGroupId($userId, $urlData['group']);
+            $data['problemsSubmitted'] = $this->Mproblems->getProblemsSubmittedByUserIdAndGroupId($userId, $urlData['group']);
+            //$data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByUserIdAndGroupId($userId, $urlData['group']);
+            $data['submissionErrors'] = $this->Mproblems->getChartErrorsByUserIdAndGroupId($userId, $urlData['group']);
+            $data['submissionChartTable'] = $this->Mproblems->getChartSubmissionsByUserIdAndGroupId($userId, $urlData['group']);
+            $totalSubmissionsByMonthAndUserId = $this->Mproblems->getTotalSubmissionsByMonthAndGroupId($userId, $urlData['group']);
+            $totalAcceptedByMonthAndUserId = $this->Mproblems->getTotalAcceptedByMonthAndGroupId($userId, $urlData['group']);
+            $data['submissionMonths'] = array_column($totalSubmissionsByMonthAndUserId, 'month');
         } else {
             $data['groupId'] = false;
             $data['userDetails']= $this->Musers->getAllUserDataById($userId);
+
+            $data['lastAttempts'] = $this->Mproblems->getLastProblemsAttemptsByUserId($userId);
+            $data['problemsRanking'] = $this->Mproblems->getProblemsRankingByUserId($userId);
+            $data['problemsSubmitted'] = $this->Mproblems->getProblemsSubmittedByUserId($userId);
+            $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByUserId($userId);
+            $data['submissionErrors'] = $this->Mproblems->getChartErrorsByUserId($userId);
+            $data['submissionChartTable'] = $this->Mproblems->getChartSubmissionsByUserId($userId);
+            $totalSubmissionsByMonthAndUserId = $this->Mproblems->getTotalSubmissionsInLastYearByUserId($userId);
+            $totalAcceptedByMonthAndUserId = $this->Mproblems->getTotalAcceptedInLastYearByUserId($userId);
+            $data['submissionMonths'] = array_column($totalSubmissionsByMonthAndUserId, 'month');
         }
 
         if (empty($data['userDetails'])) {
             redirect(base_url() . 'teacherdashboard/', 'refresh');
         }
 
-        $data['pageTitle'] = 'Detalle del usuario ';
+        if (isset($urlData['group'])) {
+            $data['pageTitle'] = 'Detalle del alumno ';
+        } else {
+            $data['pageTitle'] = 'Detalle del usuario ';
+        }
+
         $data['userName'] = $this->_getUserName($data['userDetails']);
 
-        $data['lastAttempts'] = $this->Mproblems->getLastProblemsAttemptsByUserId($userId);
-
-        $data['problemsRanking'] = $this->Mproblems->getProblemsRankingByUserId($userId);
-
-        $data['problemsSubmitted'] = $this->Mproblems->getProblemsSubmittedByUserId($userId);
-
-        $data['programmingLanguages'] = $this->Mproblems->getChartLanguagesByUserId($userId);
-        $data['submissionErrors'] = $this->Mproblems->getChartErrorsByUserId($userId);
-        $data['submissionChartTable'] = $this->Mproblems->getChartSubmissionsByUserId($userId);
-
-        $totalSubmissionsByMonthAndUserId = $this->Mproblems->getTotalSubmissionsByMonthAndUserId($userId);
-        $totalAcceptedByMonthAndUserId = $this->Mproblems->getTotalAcceptedByMonthAndUserId($userId);
-
         $data['totalSubmissionsByMonthAndUserId'] = implode(', ', array_map(function ($month) {
-            return $month->total_submissions;
+            return $month['total_submissions'];
         }, $totalSubmissionsByMonthAndUserId));
 
         $data['totalAcceptedByMonthAndUserId'] = implode(', ', array_map(function ($month) {
             return $month->total_submissions;
         }, $totalAcceptedByMonthAndUserId));
 
-        $data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndUserId);
+        //$data['notSubmissions'] = $this->notSubmissions($totalSubmissionsByMonthAndUserId);
 
         $this->load->view('template-user-details', $data);
     }
@@ -123,11 +117,11 @@ class Users extends OL_Controller {
         redirect(base_url() . 'teacherdashboard/', 'refresh');
     }
 
-    public function notSubmissions($submissionChart){
+    /*public function notSubmissions($submissionChart){
         $data = array_column($submissionChart, 'total_submissions');
 
         return empty(array_filter($data));
-    }
+    }*/
 
     private function _getUserName($user) {
         if (empty($user->first_name)) {

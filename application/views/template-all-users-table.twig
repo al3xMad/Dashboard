@@ -7,87 +7,130 @@
 
 {% block content %}
     <main id="main" role="main" class="my-3 my-md-5">
-        <div class="container">
-            <div class="page-header">
-                <h1 class="page-title">{{ pageTitle }}</h1>
-            </div>
-
-            <div class="row row-cards row-deck">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Listado de alumnos</h4>
+        <div class="container-fluid">
+            <div>
+                <div class="tabs__container">
+                    <div class="row tabs">
+                        <div class="col-md-12">
+                            <div class="flex">
+                                {% if not silentResume %}
+                                    <div class="tab">
+                                        <a title="Dashboard administrador"
+                                           href="{{ twg_func('base_url') }}admindashboard"
+                                           class="btn btn-secondary btn-block">Dashboard administrador</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a title="Listado usuarios"
+                                           href="{{ twg_func('base_url') }}users"
+                                           class="btn btn-secondary btn-block {{ pageTitle == 'Listado completo de usuarios' ? 'tab--current' : '' }}">Listado usuarios</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a title="Listado problemas"
+                                           href="{{ twg_func('base_url') }}problem"
+                                           class="btn btn-secondary btn-block">Listado problemas</a>
+                                    </div>
+                                {% elseif silentResume %}
+                                    <div class="tab">
+                                        <a title="Dashboard profesor"
+                                           href="{{ twg_func('base_url') }}teacherdashboard"
+                                           class="btn btn-secondary btn-block">Dashboard profesor</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a title="Listado alumnos"
+                                           href="{{ twg_func('base_url') }}users/group/3"
+                                           class="btn btn-secondary btn-block {{ pageTitle == 'Listado completo de alumnos en el Grupo C'? 'tab--current' : '' }}">Listado alumnos</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a title="Listado problemas"
+                                           href="{{ twg_func('base_url') }}problem/group/3"
+                                           class="btn btn-secondary btn-block">Listado problemas</a>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                            <table id="allUsersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                <thead>
-                                <tr>
-                                    <th>Avatar</th>
-                                    <th>Usuario</th>
-                                    <th>Email</th>
-                                    <th class="text-center">AC totales / Envíos totales</th>
-                                    <th class="text-center">Fallidos / Envíos totales</th>
-                                    <th class="text-center">Último envío</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for user in users %}
-                                {% set avatarId = user.id % 32 %}
-                                <tr>
-                                    <td class="w-1">
-                                        <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
-                                    </td>
-                                    <td>
-                                        <div><a title="{{ user.first_name }}"
-                                                    href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">{{ user.first_name }} {{ user.last_name }}</a></div>
-                                        <div class="small text-muted">
-                                            Registrado desde: {{ user.registrationDate != '0000-00-00 00:00:00' ? (user.registrationDate | date("d/m/Y")) : 'data desconocido' }}
-                                        </div>
-                                    </td>
-
-                                    <td>{{ user.email }}</td>
-
-                                    <td>
-                                        <div class="progress progress-sm">
-                                            {% set percent = user.TotalSubmissions == 0 ? 0 : ((user.TotalAC / user.TotalSubmissions) * 100) %}
-                                            <div class="progress-bar bg-cyan-light"
-                                                    style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
-                                        </div>
-                                        <div class="small text-muted text-center">{{ user.TotalAC }}/{{ user.TotalSubmissions }}</div>
-                                    </td>
-
-                                    <td>
-                                        <div class="progress progress-sm">
-                                            {% set percent = user.TotalSubmissions == 0 ? 0 : (((user.TotalSubmissions - user.TotalAC) / user.TotalSubmissions) * 100) %}
-                                            <div class="progress-bar bg-cyan-light"
-                                                 style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
-                                        </div>
-                                        <div class="small text-muted text-center">{{ user.TotalSubmissions - user.TotalAC }}/{{ user.TotalSubmissions }}</div>
-                                    </td>
-
-                                    <td class="text-center">{{ user.LastSubmission ? (user.LastSubmission | date("d/m/Y")) : 'Ningún envío' }}</td>
-
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>Avatar</th>
-                                    <th>Usuario</th>
-                                    <th>Email</th>
-                                    <th class="text-center">AC totales / Envíos totales</th>
-                                    <th class="text-center">Fallidos / Envíos totales</th>
-                                    <th class="text-center">Último envío</th>
-                                </tr>
-                                </tfoot>
-                            </table>
+                    </div>
+                    <div class="tab__content">
+                        <div class="page-header">
+                            <h1 class="page-title">{{ pageTitle }}</h1>
                         </div>
+                        <div class="row row-cards row-deck">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">{{ pageTitle }}</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                        <table id="allUsersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                            <thead>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Usuario</th>
+                                                <th>Email</th>
+                                                <th class="text-center">AC totales / Envíos totales</th>
+                                                <th class="text-center">Fallidos / Envíos totales</th>
+                                                <th class="text-center">Último envío</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for user in users %}
+                                            {% set avatarId = user.id % 32 %}
+                                            <tr>
+                                                <td class="w-1">
+                                                    <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
+                                                </td>
+                                                <td>
+                                                    <div><a title="{{ user.first_name }}"
+                                                                href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">{{ user.last_name }}, {{ user.first_name }}</a></div>
+                                                    <div class="small text-muted">
+                                                        Registrado desde: {{ user.registrationDate != '0000-00-00 00:00:00' ? (user.registrationDate | date("d/m/Y")) : 'data desconocido' }}
+                                                    </div>
+                                                </td>
+
+                                                <td>{{ user.email }}</td>
+
+                                                <td>
+                                                    <div class="progress progress-sm">
+                                                        {% set percent = user.TotalSubmissions == 0 ? 0 : ((user.TotalAC / user.TotalSubmissions) * 100) %}
+                                                        <div class="progress-bar bg-cyan-light"
+                                                                style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
+                                                    </div>
+                                                    <div class="small text-muted text-center">{{ user.TotalAC }}/{{ user.TotalSubmissions }}</div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="progress progress-sm">
+                                                        {% set percent = user.TotalSubmissions == 0 ? 0 : (((user.TotalSubmissions - user.TotalAC) / user.TotalSubmissions) * 100) %}
+                                                        <div class="progress-bar bg-cyan-light"
+                                                             style="width: {{ percent | number_format(0, ',', '.') }}%">{{ percent | number_format(2, ',', '.') }}%</div>
+                                                    </div>
+                                                    <div class="small text-muted text-center">{{ user.TotalSubmissions - user.TotalAC }}/{{ user.TotalSubmissions }}</div>
+                                                </td>
+
+                                                <td class="text-center">{{ user.LastSubmission ? (user.LastSubmission | date("d/m/Y H:i:s")) : 'Ningún envío' }}</td>
+
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Usuario</th>
+                                                <th>Email</th>
+                                                <th class="text-center">AC totales / Envíos totales</th>
+                                                <th class="text-center">Fallidos / Envíos totales</th>
+                                                <th class="text-center">Último envío</th>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
     <script>

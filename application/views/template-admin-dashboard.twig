@@ -7,524 +7,589 @@
 
 {% block content %}
     <div id="main" role="main" class="my-3 my-md-5">
-        <div class="container">
-            <div class="page-header">
-                <h1 class="page-title">{{ pageTitle }}</h1>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <a title="Listado usuarios"
-                               href="{{ twg_func('base_url') }}users"
-                               class="btn btn-secondary btn-block">Ver todos los usuarios</a>
-                        </div>
-                        <div class="col-md-4">
-                            <a title="Listado problemas"
-                               href="{{ twg_func('base_url') }}problem"
-                               class="btn btn-secondary btn-block">Ver todos los problemas</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row py-3">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="alert alert-warning">
-                                <i class="fe fe-bell mr-2" aria-hidden="true"></i>
-                                {{ lastWeekUsers | number_format(0, ',', '.') }}
-                                <span>nuevo(s) usuario(s) en la última semana</span>
+        <div class="container-fluid">
+            <div class="row" style="height: auto !important;">
+                <div id="column-left" class="col-lg-2 bg-white">
+                    <div class="position-fixed col-lg-2">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p><span><b>>IR A:</b></span></p>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Totales"
+                                   href="#totales"
+                                   class="btn btn-secondary btn-block">Totales</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Graficas"
+                                   href="#graficas"
+                                   class="btn btn-secondary btn-block">Gráficas</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Mapa"
+                                   href="#mapa"
+                                   class="btn btn-secondary btn-block">Mapa</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Últimos envíos"
+                                   href="#ultimosEnvios"
+                                   class="btn btn-secondary btn-block">Últimos envíos</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Evolución de envíos"
+                                   href="#evEnvios"
+                                   class="btn btn-secondary btn-block">Evolución de envíos</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Problemas intentados"
+                                   href="#probIntentados"
+                                   class="btn btn-secondary btn-block">Problemas intentados</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Ranking de problemas"
+                                   href="#rankingProblemas"
+                                   class="btn btn-secondary btn-block">Ranking de problemas</a>
+                            </div>
+                            <div class="col-lg-11">
+                                <a title="Ranking de usuarios"
+                                   href="#rankingUsuarios"
+                                   class="btn btn-secondary btn-block">Ranking de usuarios</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="alert alert-danger">
-                                <i class="fe fe-alert-triangle mr-2" aria-hidden="true"></i>
-                                {{ IELastWeek | number_format(0, ',', '.') }}
-                                <span>IE en la última semana</span>
+                <div id="column-right" class="col-lg-10">
+                    <div>
+                        <div class="tabs__container">
+                            <div class="row tabs">
+                                <div class="col-md-12">
+                                    <div class="flex">
+                                        <div class="tab">
+                                            <a title="Dashboard administrador"
+                                               href="{{ twg_func('base_url') }}admindashboard"
+                                               class="btn btn-secondary btn-block {{ pageTitle == 'Admin Dashboard' ? 'tab--current' : '' }}">Dashboard administrador</a>
+                                        </div>
+                                        <div class="tab">
+                                            <a title="Listado usuarios"
+                                               href="{{ twg_func('base_url') }}users"
+                                               class="btn btn-secondary btn-block">Listado usuarios</a>
+                                        </div>
+                                        <div class="tab">
+                                            <a title="Listado problemas"
+                                               href="{{ twg_func('base_url') }}problem"
+                                               class="btn btn-secondary btn-block">Listado problemas</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="alert alert-danger">
-                                <i class="fe fe-alert-triangle mr-2" aria-hidden="true"></i>
-                                {{ totalInternalErrors | number_format(0, ',', '.') }}
-                                <span>Internal Errors totales</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row row-cards">
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">Usuarios totales</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ totalUsers | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">Países participantes</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ totalCountries | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">Problemas totales</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ totalProblemsSum | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">Total intentados</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ totalProblemsAttempts | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row row-cards">
-                <div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Lenguajes de programación</h3>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-pie-languages" class="c3 text-center"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">AC totales/Fallidos totales</h3>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-pie-accepted" class="c3 text-center"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Tipos de Fallidos</h3>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-pie-errors" class="c3 text-center"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row row-cards row-deck">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Países participantes</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="map">
-                                <div class="map-content" id="map-world-svg"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row row-cards row-deck">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Últimos envíos</h4>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="table-responsive">
-                            <table id="lastAttemps" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                <thead>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th>Nombre del problema (ID)</th>
-                                        <th>Resultado</th>
-                                        <th>Lenguaje</th>
-                                        <th>AC totales/ Envíos totales</th>
-                                        <th>AC únicos / Usuarios únicos</th>
-                                        <th>Fecha envío</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for problem in problemsAttempts %}
-                                {% set avatarId = problem.id % 32 %}
-                                <tr>
-                                    <td class="w-1">
-                                        <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <a title="{{ problem.first_name }}"
-                                               href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}">
-                                                {{ problem.first_name }} {{ problem.last_name }}
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <a title="{{ problem.email }}"
-                                               href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}">
-                                                {{ problem.email }}
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <a title="{{ problem.name }}"
-                                                    href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                                {{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})
-                                            </a>
-                                        </div>
-                                        <div class="small text-muted">
-                                            Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
-                                        </div>
-                                    </td>
-                                    <td class="text-nowrap text-center">
-                                        {% if problem.status == 'AC' %}
-                                            {% set color = 'green' %}
-                                        {%  elseif problem.status == 'WA' %}
-                                            {% set color = 'purple' %}
-                                        {%  elseif problem.status == 'RTE' %}
-                                            {% set color = 'indigo' %}
-                                        {%  elseif problem.status == 'TL' %}
-                                            {% set color = 'teal' %}
-                                        {%  elseif problem.status == 'CE' %}
-                                            {% set color = 'cyan' %}
-                                        {%  elseif problem.status == 'ML' %}
-                                            {% set color = 'gray' %}
-                                        {%  elseif problem.status == 'PE' %}
-                                            {% set color = 'azure' %}
-                                        {%  elseif problem.status == 'RF' %}
-                                            {% set color = 'pink' %}
-                                        {%  elseif problem.status == 'OL' %}
-                                            {% set color = 'lime' %}
-                                        {%  elseif problem.status == 'IR' %}
-                                            {% set color = 'primary' %}
-                                        {%  endif %}
-                                        <span class="badge badge-{{ color }}">{{ problem.status }}</span>
-                                    </td>
-                                    <td class="text-nowrap">
-                                        {% if problem.language == 'JAV' %}
-                                                {% set color = 'blue' %}
-                                        {%  elseif problem.language == 'C++' %}
-                                                {% set color = 'orange' %}
-                                        {%  elseif problem.language == 'C' %}
-                                                {% set color = 'yellow' %}
-                                        {%  endif %}
-                                        <span class="badge badge-{{ color }}">{{ problem.language }}</span>
-                                    </td>
-                                    <td>
-                                        <a title="{{ problem.name }}"
-                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-cyan-light" style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">
-                                                    {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%
+                            <div class="tab__content">
+                                <div class="row py-3">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="alert alert-warning">
+                                                    <i class="fe fe-bell mr-2" aria-hidden="true"></i>
+                                                    {{ lastWeekUsers | number_format(0, ',', '.') }}
+                                                    <span>nuevo(s) usuario(s) en la última semana</span>
                                                 </div>
                                             </div>
-                                            <div class="small text-muted text-center">
-                                                {{ problem.totalAC }} / {{ problem.totalSubs }}
-                                            </div>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a title="{{ problem.name }}" href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-cyan-light" style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">
-                                                    {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="alert alert-danger">
+                                                    <i class="fe fe-alert-triangle mr-2" aria-hidden="true"></i>
+                                                    {{ IELastWeek | number_format(0, ',', '.') }}
+                                                    <span>IE en la última semana</span>
                                                 </div>
                                             </div>
-                                            <div class="small text-muted text-center">
-                                                {{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}
+                                            <div class="col-md-4">
+                                                <div class="alert alert-danger">
+                                                    <i class="fe fe-alert-triangle mr-2" aria-hidden="true"></i>
+                                                    {{ totalInternalErrors | number_format(0, ',', '.') }}
+                                                    <span>Internal Errors totales</span>
+                                                </div>
                                             </div>
-                                        </a>
-                                    </td>
-                                    <td class="text-nowrap">
-                                        {{ problem.submissionDate | date("d/m/Y H:i:s") }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>Avatar</th>
-                                    <th>Usuario</th>
-                                    <th>Email</th>
-                                    <th>Nombre del problema (ID)</th>
-                                    <th>Resultado</th>
-                                    <th>Lenguaje</th>
-                                    <th>AC totales/ Envíos totales</th>
-                                    <th>AC únicos / Usuarios únicos</th>
-                                    <th>Fecha envío</th>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <div class="row row-cards row-deck">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Evolución de envíos</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-bar-attempsEvolution"
-                                 style="height: 16rem; max-height: 256px; position: relative;" class="c3">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Problemas intentados</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                {% for problem in problems %}
-                                    <a data-toggle="tooltip" data-placement="top" title="{{ problem.name }} - {{ problem.totalAC }} AC"
-                                       href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}"
-                                       class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'azure' }}">
-                                        {{ problem.internalId }}
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                <div id="totales" class="row row-cards">
+                                    <div class="col-sm-3">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <div class="h5">Usuarios totales</div>
+                                                <div class="display-4 font-weight-bold mb-4">{{ totalUsers | number_format(0, ',', '.') }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <div class="h5">Países participantes</div>
+                                                <div class="display-4 font-weight-bold mb-4">{{ totalCountries | number_format(0, ',', '.') }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <div class="h5">Problemas totales</div>
+                                                <div class="display-4 font-weight-bold mb-4">{{ totalProblemsSum | number_format(0, ',', '.') }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <div class="h5">Total intentados</div>
+                                                <div class="display-4 font-weight-bold mb-4">{{ totalProblemsAttempts | number_format(0, ',', '.') }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <div class="row row-cards row-deck">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Ranking problemas</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="problemsTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                    <thead>
-                                    <tr>
-                                        <th>Problema (ID)</th>
-                                        <th>Último veredicto</th>
-                                        <th>Lenguaje/s</th>
-                                        <th class="text-center">AC totales/ Envíos totales</th>
-                                        <th class="text-center">AC únicos/ Usuarios únicos</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for problem in problemsRanking %}
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ problem.name }}"
-                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                                        {{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})
-                                                    </a>
+                                <div id="graficas" class="row row-cards">
+                                    <div class="col-sm-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Lenguajes de programación</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="chart-pie-languages" class="c3 text-center"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">AC totales/Fallidos totales</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="chart-pie-accepted" class="c3 text-center"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Tipos de Fallidos</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="chart-pie-errors" class="c3 text-center"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="mapa" class="row row-cards row-deck">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Países participantes</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="map">
+                                                    <div class="map-content" id="map-world-svg"></div>
                                                 </div>
-                                                <div class="small text-muted">
-                                                    Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="ultimosEnvios" class="row row-cards row-deck">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Últimos envíos</h4>
+                                            </div>
+
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                <table id="lastAttemps" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Avatar</th>
+                                                            <th>Usuario</th>
+                                                            <th>Email</th>
+                                                            <th>Nombre del problema (ID)</th>
+                                                            <th>Resultado</th>
+                                                            <th>Lenguaje</th>
+                                                            <th>AC totales/ Envíos totales</th>
+                                                            <th>AC únicos / Usuarios únicos</th>
+                                                            <th>Fecha envío</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for problem in problemsAttempts %}
+                                                    {% set avatarId = problem.id % 32 %}
+                                                    <tr>
+                                                        <td class="w-1">
+                                                            <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <a title="{{ problem.first_name }}"
+                                                                   href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}">
+                                                                    {{ problem.last_name }}, {{ problem.first_name }}
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <a title="{{ problem.email }}"
+                                                                   href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}">
+                                                                    {{ problem.email }}
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <a title="{{ problem.name }}"
+                                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                                    {{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})
+                                                                </a>
+                                                            </div>
+                                                            <div class="small text-muted">
+                                                                Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-nowrap text-center">
+                                                            {% if problem.status == 'AC' %}
+                                                                {% set color = 'green' %}
+                                                            {%  elseif problem.status == 'WA' %}
+                                                                {% set color = 'purple' %}
+                                                            {%  elseif problem.status == 'RTE' %}
+                                                                {% set color = 'indigo' %}
+                                                            {%  elseif problem.status == 'TL' %}
+                                                                {% set color = 'teal' %}
+                                                            {%  elseif problem.status == 'CE' %}
+                                                                {% set color = 'cyan' %}
+                                                            {%  elseif problem.status == 'ML' %}
+                                                                {% set color = 'gray' %}
+                                                            {%  elseif problem.status == 'PE' %}
+                                                                {% set color = 'azure' %}
+                                                            {%  elseif problem.status == 'RF' %}
+                                                                {% set color = 'pink' %}
+                                                            {%  elseif problem.status == 'OL' %}
+                                                                {% set color = 'lime' %}
+                                                            {%  elseif problem.status == 'IR' %}
+                                                                {% set color = 'primary' %}
+                                                            {%  endif %}
+                                                            <span class="badge badge-{{ color }}">{{ problem.status }}</span>
+                                                        </td>
+                                                        <td class="text-nowrap">
+                                                            {% if problem.language == 'JAV' %}
+                                                                    {% set color = 'blue' %}
+                                                            {%  elseif problem.language == 'C++' %}
+                                                                    {% set color = 'orange' %}
+                                                            {%  elseif problem.language == 'C' %}
+                                                                    {% set color = 'yellow' %}
+                                                            {%  endif %}
+                                                            <span class="badge badge-{{ color }}">{{ problem.language }}</span>
+                                                        </td>
+                                                        <td>
+                                                            <a title="{{ problem.name }}"
+                                                                    href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                                <div class="progress progress-sm">
+                                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">
+                                                                        {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%
+                                                                    </div>
+                                                                </div>
+                                                                <div class="small text-muted text-center">
+                                                                    {{ problem.totalAC }} / {{ problem.totalSubs }}
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <a title="{{ problem.name }}" href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                                <div class="progress progress-sm">
+                                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">
+                                                                        {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%
+                                                                    </div>
+                                                                </div>
+                                                                <div class="small text-muted text-center">
+                                                                    {{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-nowrap">
+                                                            {{ problem.submissionDate | date("d/m/Y H:i:s") }}
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th>Avatar</th>
+                                                        <th>Usuario</th>
+                                                        <th>Email</th>
+                                                        <th>Nombre del problema (ID)</th>
+                                                        <th>Resultado</th>
+                                                        <th>Lenguaje</th>
+                                                        <th>AC totales/ Envíos totales</th>
+                                                        <th>AC únicos / Usuarios únicos</th>
+                                                        <th>Fecha envío</th>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-cards row-deck">
+                                    <div id="evEnvios" class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Evolución de envíos</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="chart-bar-attempsEvolution"
+                                                     style="height: 16rem; max-height: 256px; position: relative;" class="c3">
                                                 </div>
-                                            </td>
-
-                                            <td class="text-nowrap text-center">
-                                                {% if problem.last_status == 'AC' %}
-                                                    {% set color = 'green' %}
-                                                {%  elseif problem.last_status == 'WA' %}
-                                                    {% set color = 'purple' %}
-                                                {%  elseif problem.last_status == 'RTE' %}
-                                                    {% set color = 'indigo' %}
-                                                {%  elseif problem.last_status == 'TL' %}
-                                                    {% set color = 'teal' %}
-                                                {%  elseif problem.last_status == 'CE' %}
-                                                    {% set color = 'cyan' %}
-                                                {%  elseif problem.last_status == 'ML' %}
-                                                    {% set color = 'gray' %}
-                                                {%  elseif problem.last_status == 'PE' %}
-                                                    {% set color = 'azure' %}
-                                                {%  elseif problem.last_status == 'RF' %}
-                                                    {% set color = 'pink' %}
-                                                {%  elseif problem.last_status == 'OL' %}
-                                                    {% set color = 'lime' %}
-                                                {%  elseif problem.last_status == 'IR' %}
-                                                    {% set color = 'primary' %}
-                                                {%  endif %}
-                                                <span class="badge badge-{{ color }}">{{ problem.last_status }}</span>
-                                            </td>
-
-                                            <td class="text-nowrap">
-                                                {% for language in problem.languages | split(',') %}
-                                                    {% if language == 'JAV' %}
-                                                        {% set color = 'blue' %}
-                                                    {%  elseif language == 'CPP' %}
-                                                        {% set color = 'orange' %}
-                                                    {%  elseif language == 'C' %}
-                                                        {% set color = 'yellow' %}
-                                                    {%  endif %}
-                                                    <span class="badge badge-{{ color }}">{{ language }}</span>
-                                                {% endfor %}
-                                            </td>
-
-                                            <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%
-                                                        </div>
-                                                    </div>
-                                                    <div class="small text-muted text-center">
-                                                        {{ problem.totalAC }} / {{ problem.totalSubs }}
-                                                    </div>
-                                                </a>
-                                            </td>
-
-                                            <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light" style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">
-                                                            {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%
-                                                        </div>
-                                                    </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
-                                                </a>
-                                            </td>
-
-                                            <td class="text-nowrap">
-                                                {{ problem.last_date_attempt | date("d/m/Y H:i:s") }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Problema (ID)</th>
-                                        <th>Último veredicto</th>
-                                        <th>Lenguaje/s</th>
-                                        <th class="text-center">AC totales/ Envíos totales</th>
-                                        <th class="text-center">AC únicos/ Usuarios únicos</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row row-cards row-deck">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Ranking usuarios</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="usersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                    <thead>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th>Lenguaje</th>
-                                        <th class="text-center">AC totales/ Envíos totales</th>
-                                        <th class="text-center">AC Únicos</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for user in usersRanking %}
-                                    {% set avatarId = user.id % 32 %}
-                                        <tr>
-                                            <td class="w-1">
-                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ user.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
-                                                        {{ user.first_name }} {{ user.last_name }}
-                                                    </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="probIntentados" class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Problemas intentados</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    {% for problem in problems %}
+                                                        <a data-toggle="tooltip" data-placement="top" title="{{ problem.name }} - {{ problem.totalAC }} AC"
+                                                           href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}"
+                                                           class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'azure' }}">
+                                                            {{ problem.internalId }}
+                                                        </a>
+                                                    {% endfor %}
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ user.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
-                                                        {{ user.email }}
-                                                    </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="rankingProblemas" class="row row-cards row-deck">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Ranking problemas</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table data-order='[[ 5, "desc" ]]' id="problemsTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Problema (ID)</th>
+                                                            <th>Último veredicto</th>
+                                                            <th>Lenguaje/s</th>
+                                                            <th class="text-center">AC totales/ Envíos totales</th>
+                                                            <th class="text-center">AC únicos/ Usuarios únicos</th>
+                                                            <th class="text-center">AC únicos</th>
+                                                            <th>Fecha último envío</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for problem in problemsRanking %}
+                                                            <tr>
+                                                                <td>
+                                                                    <div>
+                                                                        <a title="{{ problem.name }}"
+                                                                            href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                                            {{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="small text-muted">
+                                                                        Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
+                                                                    </div>
+                                                                </td>
+
+                                                                <td class="text-nowrap text-center">
+                                                                    {% if problem.last_status == 'AC' %}
+                                                                        {% set color = 'green' %}
+                                                                    {%  elseif problem.last_status == 'WA' %}
+                                                                        {% set color = 'purple' %}
+                                                                    {%  elseif problem.last_status == 'RTE' %}
+                                                                        {% set color = 'indigo' %}
+                                                                    {%  elseif problem.last_status == 'TL' %}
+                                                                        {% set color = 'teal' %}
+                                                                    {%  elseif problem.last_status == 'CE' %}
+                                                                        {% set color = 'cyan' %}
+                                                                    {%  elseif problem.last_status == 'ML' %}
+                                                                        {% set color = 'gray' %}
+                                                                    {%  elseif problem.last_status == 'PE' %}
+                                                                        {% set color = 'azure' %}
+                                                                    {%  elseif problem.last_status == 'RF' %}
+                                                                        {% set color = 'pink' %}
+                                                                    {%  elseif problem.last_status == 'OL' %}
+                                                                        {% set color = 'lime' %}
+                                                                    {%  elseif problem.last_status == 'IR' %}
+                                                                        {% set color = 'primary' %}
+                                                                    {%  endif %}
+                                                                    <span class="badge badge-{{ color }}">{{ problem.last_status }}</span>
+                                                                </td>
+
+                                                                <td class="text-nowrap">
+                                                                    {% for language in problem.languages | split(',') %}
+                                                                        {% if language == 'JAV' %}
+                                                                            {% set color = 'blue' %}
+                                                                        {%  elseif language == 'CPP' %}
+                                                                            {% set color = 'orange' %}
+                                                                        {%  elseif language == 'C' %}
+                                                                            {% set color = 'yellow' %}
+                                                                        {%  endif %}
+                                                                        <span class="badge badge-{{ color }}">{{ language }}</span>
+                                                                    {% endfor %}
+                                                                </td>
+
+                                                                <td>
+                                                                    <a title="{{ problem.name }}"
+                                                                       href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                                        <div class="progress progress-sm">
+                                                                            <div class="progress-bar bg-cyan-light"
+                                                                                 style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="small text-muted text-center">
+                                                                            {{ problem.totalAC }} / {{ problem.totalSubs }}
+                                                                        </div>
+                                                                    </a>
+                                                                </td>
+
+                                                                <td>
+                                                                    <a title="{{ problem.name }}"
+                                                                       href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                                        <div class="progress progress-sm">
+                                                                            <div class="progress-bar bg-cyan-light" style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">
+                                                                                {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
+                                                                    </a>
+                                                                </td>
+                                                                <td class="text-nowrap text-center">
+                                                                    {{ problem.totalDACU }}
+                                                                </td>
+                                                                <td class="text-nowrap">
+                                                                    {{ problem.last_date_attempt | date("d/m/Y H:i:s") }}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                        <tfoot>
+                                                        <tr>
+                                                            <th>Problema (ID)</th>
+                                                            <th>Último veredicto</th>
+                                                            <th>Lenguaje/s</th>
+                                                            <th class="text-center">AC totales/ Envíos totales</th>
+                                                            <th class="text-center">AC únicos/ Usuarios únicos</th>
+                                                            <th class="text-center">AC únicos</th>
+                                                            <th>Fecha último envío</th>
+                                                        </tr>
+                                                        </tfoot>
+                                                    </table>
                                                 </div>
-                                            </td>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="rankingUsuarios" class="row row-cards row-deck">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Ranking usuarios</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table id="usersTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Avatar</th>
+                                                            <th>Usuario</th>
+                                                            <th>Email</th>
+                                                            <th>Lenguaje</th>
+                                                            <th class="text-center">AC totales/ Envíos totales</th>
+                                                            <th class="text-center">AC Únicos</th>
+                                                            <th>Fecha último envío</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for user in usersRanking %}
+                                                        {% set avatarId = user.id % 32 %}
+                                                            <tr>
+                                                                <td class="w-1">
+                                                                    <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
+                                                                </td>
+                                                                <td>
+                                                                    <div>
+                                                                        <a title="{{ user.first_name }}"
+                                                                           href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                                           {{ user.last_name }}, {{ user.first_name }}
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div>
+                                                                        <a title="{{ user.email }}"
+                                                                           href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}">
+                                                                            {{ user.email }}
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
 
-                                            <td class="text-nowrap">
-                                                {% for language in user.languages | split(',') %}
-                                                    {% if language == 'JAV' %}
-                                                        {% set color = 'blue' %}
-                                                    {%  elseif language == 'CPP' %}
-                                                        {% set color = 'orange' %}
-                                                    {%  elseif language == 'C' %}
-                                                        {% set color = 'yellow' %}
-                                                    {%  endif %}
-                                                    <span class="badge badge-{{ color }}">{{ language }}</span>
-                                                {% endfor %}
-                                            </td>
+                                                                <td class="text-nowrap">
+                                                                    {% for language in user.languages | split(',') %}
+                                                                        {% if language == 'JAV' %}
+                                                                            {% set color = 'blue' %}
+                                                                        {%  elseif language == 'CPP' %}
+                                                                            {% set color = 'orange' %}
+                                                                        {%  elseif language == 'C' %}
+                                                                            {% set color = 'yellow' %}
+                                                                        {%  endif %}
+                                                                        <span class="badge badge-{{ color }}">{{ language }}</span>
+                                                                    {% endfor %}
+                                                                </td>
 
-                                            <td>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
-                                                        {{ ((user.totalAC / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
-                                                    </div>
+                                                                <td>
+                                                                    <div class="progress progress-sm">
+                                                                        <div class="progress-bar bg-cyan-light" style="width: {{ ((user.totalAC / user.totalSubs) * 100) | number_format(0, ',', '.') }}%">
+                                                                            {{ ((user.totalAC / user.totalSubs) * 100) | number_format(2, ',', '.') }}%
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="small text-muted text-center">{{ user.totalAC }} / {{ user.totalSubs }}</div>
+                                                                </td>
+
+                                                                <td class="text-nowrap text-center">
+                                                                    {{ user.unique_totalAC }}
+                                                                </td>
+
+                                                                <td class="text-nowrap">
+                                                                    {{ user.last_submission | date("d/m/Y H:i:s") }}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                        <tfoot>
+                                                        <tr>
+                                                            <th>Avatar</th>
+                                                            <th>Usuario</th>
+                                                            <th>Email</th>
+                                                            <th>Lenguaje</th>
+                                                            <th class="text-center">AC totales/ Envíos totales</th>
+                                                            <th class="text-center">AC Únicos</th>
+                                                            <th>Fecha último envío</th>
+                                                        </tr>
+                                                        </tfoot>
+                                                    </table>
                                                 </div>
-                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ user.totalSubs }}</div>
-                                            </td>
-
-                                            <td class="text-nowrap text-center">
-                                                {{ user.unique_totalAC }}
-                                            </td>
-
-                                            <td class="text-nowrap">
-                                                {{ user.last_submission | date("d/m/Y H:i:s") }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th>Lenguaje</th>
-                                        <th class="text-center">AC totales/ Envíos totales</th>
-                                        <th class="text-center">AC Únicos</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -697,8 +762,7 @@
                     axis: {
                         x: {
                             type: 'category',
-                            categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic', ]
-                        },
+                            categories: {{ submissionMonths|json_encode|raw }}},
                     },
                     padding: {
                         bottom: 0,

@@ -7,448 +7,503 @@
 
 {% block content %}
     <main id="main" role="main" class="my-3 my-md-5">
-        <div class="container">
-            <div class="page-header">
-                <h1 class="page-title">{{ pageTitle }}</h1>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <a title="Listado alumnos"
-                               href="{{ twg_func('base_url') }}users/group/{{ groupId }}"
-                               class="btn btn-secondary btn-block">Ver todos los alumnos</a>
-                        </div>
-                        <div class="col-md-4">
-                            <a title="Listado problemas"
-                               href="{{ twg_func('base_url') }}problem/group/{{ groupId }}"
-                               class="btn btn-secondary btn-block">Ver todos los problemas</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row py-3">
-                <div class="col-sm-7">
-                    <h2>{{ subjectDetails.name }}</h2>
-                    <h3>
-                        <span>{{ groupDetails.name }}</span>
-                    </h3>
-
-                    {% if lastWeekProblems > 0  %}
-                        <div class="alert alert-warning">
-                            <i class="fe fe-bell mr-2" aria-hidden="true"></i>
-                            {{ lastWeekProblems | number_format(0, ',', '.') }}
-                            <span>nuevo(s) problema(s) añadido(s) en la última semana</span>
-                        </div>
-                    {% endif %}
-
-                </div>
-                <div class="col-sm-5">
-                    <div class="form-group"  style="padding-bottom: 20px;">
-                        <label class="form-label">Ver datos de:</label>
-                        <select name="subject" id="select-subject" class="form-control custom-select">
-                            <option value="all">Todo el curso</option>
-                            <option value="1">Tema 1</option>
-                            <option value="2">Tema 2</option>
-                            <option value="3">Tema 3</option>
-                            <option value="4">Tema 4</option>
-                            <option value="5">Tema 5</option>
-                            <option value="6">Tema 6</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row row-cards">
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                                <div class="h5">Alumnos totales</div>
-                                <div class="display-4 font-weight-bold mb-4">{{ totalUsers | number_format(0, ',', '.') }}</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">Problemas del curso</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ totalProblemsSum | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">Envíos Totales</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ totalProblemsAttempts | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="h5">AC totales</div>
-                            <div class="display-4 font-weight-bold mb-4">{{ totalAccepted | number_format(0, ',', '.') }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row row-cards">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Aceptados/ Fallidos</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="col-sm-12">
-                                <div id="chart-bar-submissions" class="c3 text-center" style="max-height: 10px"></div>
+        <div class="container-fluid">
+            <div class="row" style="height: auto !important;">
+                <div id="column-left" class="col-lg-2 bg-white">
+                    <div class="position-fixed col-lg-2">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p><span><b>IR A:</b></span></p>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Totales"
+                                   href="#totales"
+                                   class="btn btn-secondary btn-block">Totales</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Aceptados/fallidos"
+                                   href="#aceptados"
+                                   class="btn btn-secondary btn-block">Aceptados/fallidos</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Últimos envíos"
+                                   href="#ultimosEnvios"
+                                   class="btn btn-secondary btn-block">Últimos envíos</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Evolución de envíos"
+                                   href="#evEnvios"
+                                   class="btn btn-secondary btn-block">Evolución de envíos</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Problemas intentados"
+                                   href="#probIntentados"
+                                   class="btn btn-secondary btn-block">Problemas intentados</a>
+                            </div>
+                            <div class="col-lg-11" style="padding-bottom: 5px;">
+                                <a title="Ranking de problemas"
+                                   href=#rankingProblemas""
+                                   class="btn btn-secondary btn-block">Ranking de problemas</a>
+                            </div>
+                            <div class="col-lg-11">
+                                <a title="Ranking de alumnos"
+                                   href="#rankingAlumnos"
+                                   class="btn btn-secondary btn-block">Ranking de alumnos</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div id="column-right" class="col-lg-10">
+                    <div>
+                        <div class="tabs__container">
+                            <div class="row tabs">
+                                <div class="col-md-12">
+                                    <div class="flex">
+                                        <div class="tab">
+                                            <a title="Dashboard profesor"
+                                               href="{{ twg_func('base_url') }}teacherdashboard"
+                                               class="btn btn-secondary btn-block {{ pageTitle == 'Teachers Dashboard' ? 'tab--current' : '' }}">Dashboard profesor</a>
+                                        </div>
+                                        <div class="tab">
+                                            <a title="Listado alumnos"
+                                               href="{{ twg_func('base_url') }}users/group/3"
+                                               class="btn btn-secondary btn-block">Listado alumnos</a>
+                                        </div>
+                                        <div class="tab">
+                                            <a title="Listado problemas"
+                                               href="{{ twg_func('base_url') }}problem/group/3"
+                                               class="btn btn-secondary btn-block">Listado problemas</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab__content">
+                            <div class="card-body">
+                                <div class="row py-3">
+                                    <div class="col-sm-7">
+                                        <h2>{{ subjectDetails.name }} <span>({{ groupDetails.name }})</span></h2>
 
-            <div class="row row-cards row-deck">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Últimos envíos</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="lastAttemps" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                    <thead>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th>Nombre del problema (ID)</th>
-                                        <th>Resultado</th>
-                                        <th class="text-center">AC totales/Envíos totales</th>
-                                        <th class="text-center">AC únicos/Usuarios únicos</th>
-                                        <th>Fecha envío</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for problem in problemsAttempts %}
-                                    {% set avatarId = problem.id % 32 %}
-                                        <tr>
-                                            <td class="w-1">
-                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ problem.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}/group/{{ groupId }}">
-                                                        {{ problem.first_name }} {{ problem.last_name }}
+                                        {% if lastWeekProblems > 0  %}
+                                            <div class="alert alert-warning">
+                                                <i class="fe fe-bell mr-2" aria-hidden="true"></i>
+                                                {{ lastWeekProblems | number_format(0, ',', '.') }}
+                                                <span>nuevo(s) problema(s) añadido(s) en la última semana</span>
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-sm-5" style="padding-top: 25px;">
+                                        <div class="form-group" style="padding-bottom: 20px;">
+                                            <label class="form-label">Ver datos de:</label>
+                                            <select name="subject" id="select-subject" class="form-control custom-select">
+                                                <option value="all">Todo el curso</option>
+                                                <option value="1">Tema 1</option>
+                                                <option value="2">Tema 2</option>
+                                                <option value="3">Tema 3</option>
+                                                <option value="4">Tema 4</option>
+                                                <option value="5">Tema 5</option>
+                                                <option value="6">Tema 6</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="totales" class="row row-cards">
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <div class="h5">Alumnos totales</div>
+                                            <div class="display-4 font-weight-bold mb-4">{{ totalUsers | number_format(0, ',', '.') }}</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <div class="h5">Problemas del curso</div>
+                                            <div class="display-4 font-weight-bold mb-4">{{ totalProblemsSum | number_format(0, ',', '.') }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <div class="h5">Envíos Totales</div>
+                                            <div class="display-4 font-weight-bold mb-4">{{ totalProblemsAttempts | number_format(0, ',', '.') }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <div class="h5">AC totales</div>
+                                            <div class="display-4 font-weight-bold mb-4">{{ totalAccepted | number_format(0, ',', '.') }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="aceptados" class="row row-cards">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Aceptados/ Fallidos</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="col-sm-12">
+                                                <div id="chart-bar-submissions" class="c3 text-center" style="max-height: 10px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="ultimosEnvios" class="row row-cards row-deck">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Últimos envíos</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table id="lastAttemps" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Avatar</th>
+                                                        <th>Usuario</th>
+                                                        <th>Email</th>
+                                                        <th>Nombre del problema (ID)</th>
+                                                        <th>Resultado</th>
+                                                        <th class="text-center">AC totales/Envíos totales</th>
+                                                        <th class="text-center">AC únicos/Usuarios únicos</th>
+                                                        <th>Fecha envío</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for problem in problemsAttempts %}
+                                                        {% set avatarId = problem.id % 32 %}
+                                                        <tr>
+                                                            <td class="w-1">
+                                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
+                                                            </td>
+                                                            <td>
+                                                                <div>
+                                                                    <a title="{{ problem.first_name }}"
+                                                                       href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}/group/{{ groupId }}">
+                                                                        {{ problem.last_name }}, {{ problem.first_name }}
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div>
+                                                                    <a title="{{ problem.email }}"
+                                                                       href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}/group/{{ groupId }}">
+                                                                        {{ problem.email }}
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div><a title="{{ problem.name }}"
+                                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
+                                                                <div class="small text-muted">
+                                                                    Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
+                                                                </div>
+                                                            </td>
+
+                                                            <td class="text-nowrap text-center">
+                                                                {% if problem.status == 'AC' %}
+                                                                    {% set color = 'green' %}
+                                                                {%  elseif problem.status == 'WA' %}
+                                                                    {% set color = 'purple' %}
+                                                                {%  elseif problem.status == 'RTE' %}
+                                                                    {% set color = 'indigo' %}
+                                                                {%  elseif problem.status == 'TL' %}
+                                                                    {% set color = 'teal' %}
+                                                                {%  elseif problem.status == 'CE' %}
+                                                                    {% set color = 'cyan' %}
+                                                                {%  elseif problem.status == 'ML' %}
+                                                                    {% set color = 'gray' %}
+                                                                {%  elseif problem.status == 'PE' %}
+                                                                    {% set color = 'azure' %}
+                                                                {%  elseif problem.status == 'RF' %}
+                                                                    {% set color = 'pink' %}
+                                                                {%  elseif problem.status == 'OL' %}
+                                                                    {% set color = 'lime' %}
+                                                                {%  elseif problem.status == 'IR' %}
+                                                                    {% set color = 'primary' %}
+                                                                {%  endif %}
+                                                                <span class="badge badge-{{ color }}">{{ problem.status }}</span>
+                                                            </td>
+
+                                                            <td>
+                                                                <a title="{{ problem.name }}"
+                                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
+                                                                    <div class="progress progress-sm">
+                                                                        <div class="progress-bar bg-cyan-light"
+                                                                             style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                                                    </div>
+                                                                    <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalSubs }}</div>
+                                                                </a>
+                                                            </td>
+
+                                                            <td>
+                                                                <a title="{{ problem.name }}"
+                                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
+                                                                    <div class="progress progress-sm">
+                                                                        <div class="progress-bar bg-cyan-light"
+                                                                             style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
+                                                                    </div>
+                                                                    <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
+                                                                </a>
+                                                            </td>
+
+                                                            <td class="text-nowrap">
+                                                                {{ problem.submissionDate | date("d/m/Y H:i:s") }}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th>Avatar</th>
+                                                        <th>Usuario</th>
+                                                        <th>Email</th>
+                                                        <th>Nombre del problema (ID)</th>
+                                                        <th>Resultado</th>
+                                                        <th class="text-center">AC totales/Envíos totales</th>
+                                                        <th class="text-center">AC únicos/Usuarios únicos</th>
+                                                        <th>Fecha envío</th>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row row-cards row-deck">
+                                <div id="evEnvios" class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Evolución de envíos</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="chart-bar-attempsEv"
+                                                 style="height: 16rem; max-height: 256px; position: relative;" class="c3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="probIntentados" class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Problemas intentados</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                {% for problem in problems %}
+                                                    <a data-toggle="tooltip" data-placement="top" title="{{ problem.name }} - {{ problem.totalAC }} AC"
+                                                       href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}"
+                                                       class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'azure' }}">
+                                                        {{ problem.internalId }}
                                                     </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ problem.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ problem.id }}/group/{{ groupId }}">
-                                                        {{ problem.email }}
-                                                    </a>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div><a title="{{ problem.name }}"
-                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
-                                                <div class="small text-muted">
-                                                    Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
-                                                </div>
-                                            </td>
-
-                                            <td class="text-nowrap text-center">
-                                                {% if problem.status == 'AC' %}
-                                                    {% set color = 'green' %}
-                                                {%  elseif problem.status == 'WA' %}
-                                                    {% set color = 'purple' %}
-                                                {%  elseif problem.status == 'RTE' %}
-                                                    {% set color = 'indigo' %}
-                                                {%  elseif problem.status == 'TL' %}
-                                                    {% set color = 'teal' %}
-                                                {%  elseif problem.status == 'CE' %}
-                                                    {% set color = 'cyan' %}
-                                                {%  elseif problem.status == 'ML' %}
-                                                    {% set color = 'gray' %}
-                                                {%  elseif problem.status == 'PE' %}
-                                                    {% set color = 'azure' %}
-                                                {%  elseif problem.status == 'RF' %}
-                                                    {% set color = 'pink' %}
-                                                {%  elseif problem.status == 'OL' %}
-                                                    {% set color = 'lime' %}
-                                                {%  elseif problem.status == 'IR' %}
-                                                    {% set color = 'primary' %}
-                                                {%  endif %}
-                                                <span class="badge badge-{{ color }}">{{ problem.status }}</span>
-                                            </td>
-
-                                            <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
-                                                    </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalSubs }}</div>
-                                                </a>
-                                            </td>
-
-                                            <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
-                                                    </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
-                                                </a>
-                                            </td>
-
-                                            <td class="text-nowrap">
-                                                {{ problem.submissionDate | date("d/m/Y H:i:s") }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th>Nombre del problema (ID)</th>
-                                        <th>Resultado</th>
-                                        <th class="text-center">AC totales/Envíos totales</th>
-                                        <th class="text-center">AC únicos/Usuarios únicos</th>
-                                        <th>Fecha envío</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row row-cards row-deck">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Evolución de envíos</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-bar-attempsEv"
-                                 style="height: 16rem; max-height: 256px; position: relative;" class="c3">
+                            <div id="rankingProblemas" class="row row-cards row-deck">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Ranking problemas</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table id="problemsRanking" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Problema (ID)</th>
+                                                        <th>Último resultado</th>
+                                                        <th class="text-center">AC totales/ Envíos totales</th>
+                                                        <th class="text-center">AC únicos/ Usuarios únicos</th>
+                                                        <th>Fecha último envío</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for problem in problems %}
+                                                        <tr>
+                                                            <td>
+                                                                <div><a title="{{ problem.name }}"
+                                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
+                                                                <div class="small text-muted">
+                                                                    Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
+                                                                </div>
+                                                            </td>
+
+                                                            <td class="text-nowrap text-center">
+                                                                {% if problem.status == 'AC' %}
+                                                                    {% set color = 'green' %}
+                                                                {%  elseif problem.status == 'WA' %}
+                                                                    {% set color = 'purple' %}
+                                                                {%  elseif problem.status == 'RTE' %}
+                                                                    {% set color = 'indigo' %}
+                                                                {%  elseif problem.status == 'TL' %}
+                                                                    {% set color = 'teal' %}
+                                                                {%  elseif problem.status == 'CE' %}
+                                                                    {% set color = 'cyan' %}
+                                                                {%  elseif problem.status == 'ML' %}
+                                                                    {% set color = 'gray' %}
+                                                                {%  elseif problem.status == 'PE' %}
+                                                                    {% set color = 'azure' %}
+                                                                {%  elseif problem.status == 'RF' %}
+                                                                    {% set color = 'pink' %}
+                                                                {%  elseif problem.status == 'OL' %}
+                                                                    {% set color = 'lime' %}
+                                                                {%  elseif problem.status == 'IR' %}
+                                                                    {% set color = 'primary' %}
+                                                                {%  endif %}
+                                                                <span class="badge badge-{{ color }}">{{ problem.status }}</span>
+                                                            </td>
+
+                                                            <td>
+                                                                <a title="{{ problem.name }}"
+                                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
+                                                                    <div class="progress progress-sm">
+                                                                        <div class="progress-bar bg-cyan-light"
+                                                                             style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                                                    </div>
+                                                                    <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalSubs }}</div>
+                                                                </a>
+                                                            </td>
+
+                                                            <td>
+                                                                <a title="{{ problem.name }}"
+                                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
+                                                                    <div class="progress progress-sm">
+                                                                        <div class="progress-bar bg-cyan-light"
+                                                                             style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
+                                                                    </div>
+                                                                    <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
+                                                                </a>
+                                                            </td>
+
+                                                            <td class="text-nowrap">
+                                                                {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th>Problema (ID)</th>
+                                                        <th>Último resultado</th>
+                                                        <th class="text-center">AC totales/ Envíos totales</th>
+                                                        <th class="text-center">AC únicos/ Usuarios únicos</th>
+                                                        <th>Fecha último envío</th>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Problemas intentados</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                {% for problem in problems %}
-                                    <a data-toggle="tooltip" data-placement="top" title="{{ problem.name }} - {{ problem.totalAC }} AC"
-                                       href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}"
-                                       class="mb-1 tag tag-{{ problem.totalSubs == '0' ? 'grey' : 'azure' }}">
-                                        {{ problem.internalId }}
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row row-cards row-deck">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Ranking problemas</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="problemsRanking" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                    <thead>
-                                    <tr>
-                                        <th>Problema (ID)</th>
-                                        <th>Último resultado</th>
-                                        <th class="text-center">AC totales/ Envíos totales</th>
-                                        <th class="text-center">AC únicos/ Usuarios únicos</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for problem in problems %}
-                                        <tr>
-                                            <td>
-                                                <div><a title="{{ problem.name }}"
-                                                        href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">{{ problem.name ?: 'Problema desconocido' }} ({{ problem.internalId }})</a></div>
-                                                <div class="small text-muted">
-                                                    Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
-                                                </div>
-                                            </td>
+                            <div id="rankingAlumnos" class="row row-cards row-deck">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Ranking usuarios</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table id="usersRanking" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Avatar</th>
+                                                        <th>Usuario</th>
+                                                        <th>Email</th>
+                                                        <th class="text-center">AC totales/Envíos totales</th>
+                                                        <th class="text-center">AC totales/Fallidos totales</th>
+                                                        <th>Fecha último envío</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for user in usersRanking %}
+                                                        {% set avatarId = user.id % 32 %}
+                                                        <tr>
+                                                            <td class="w-1">
+                                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
+                                                            </td>
+                                                            <td>
+                                                                <div>
+                                                                    <a title="{{ user.first_name }}"
+                                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">
+                                                                        {{ user.last_name }}, {{ user.first_name }}
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div>
+                                                                    <a title="{{ user.email }}"
+                                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">
+                                                                        {{ user.email }}
+                                                                    </a>
+                                                                </div>
+                                                            </td>
 
-                                            <td class="text-nowrap text-center">
-                                                {% if problem.status == 'AC' %}
-                                                    {% set color = 'green' %}
-                                                {%  elseif problem.status == 'WA' %}
-                                                    {% set color = 'purple' %}
-                                                {%  elseif problem.status == 'RTE' %}
-                                                    {% set color = 'indigo' %}
-                                                {%  elseif problem.status == 'TL' %}
-                                                    {% set color = 'teal' %}
-                                                {%  elseif problem.status == 'CE' %}
-                                                    {% set color = 'cyan' %}
-                                                {%  elseif problem.status == 'ML' %}
-                                                    {% set color = 'gray' %}
-                                                {%  elseif problem.status == 'PE' %}
-                                                    {% set color = 'azure' %}
-                                                {%  elseif problem.status == 'RF' %}
-                                                    {% set color = 'pink' %}
-                                                {%  elseif problem.status == 'OL' %}
-                                                    {% set color = 'lime' %}
-                                                {%  elseif problem.status == 'IR' %}
-                                                    {% set color = 'primary' %}
-                                                {%  endif %}
-                                                <span class="badge badge-{{ color }}">{{ problem.status }}</span>
-                                            </td>
+                                                            <td>
+                                                                <div class="progress progress-sm">
+                                                                    {%
+                                                                        set total1 = (user.totalSubs > 0 ?
+                                                                        ((user.totalAC / user.totalSubs) * 100) : 0) | number_format(2, ',', '.')
+                                                                    %}
+                                                                    <div class="progress-bar bg-cyan-light" style="width: {{total1}}%">{{ total1 }}</div>
+                                                                </div>
+                                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ user.totalSubs }}</div>
+                                                            </td>
 
-                                            <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
-                                                    </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalAC }} / {{ problem.totalSubs }}</div>
-                                                </a>
-                                            </td>
+                                                            <td>
+                                                                <div class="progress progress-sm">
+                                                                    {%
+                                                                        set total2 = (user.totalSubs > 0 ?
+                                                                        ((user.totalAC / user.totalSubs) * 100) : 0) | number_format(0, ',', '.')
+                                                                    %}
+                                                                    <div class="progress-bar bg-cyan-light" style="width: {{ total2 }}%">
+                                                                        {{ total2 }}%
+                                                                    </div>
+                                                                </div>
+                                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ (user.totalSubs - user.totalAC) }}</div>
+                                                            </td>
 
-                                            <td>
-                                                <a title="{{ problem.name }}"
-                                                   href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}/group/{{ groupId }}">
-                                                    <div class="progress progress-sm">
-                                                        <div class="progress-bar bg-cyan-light"
-                                                             style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
-                                                    </div>
-                                                    <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
-                                                </a>
-                                            </td>
-
-                                            <td class="text-nowrap">
-                                                {{ attempt.last_date_attempt | date("d/m/Y H:i:s") }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Problema (ID)</th>
-                                        <th>Último resultado</th>
-                                        <th class="text-center">AC totales/ Envíos totales</th>
-                                        <th class="text-center">AC únicos/ Usuarios únicos</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row row-cards row-deck">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Ranking usuarios</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="usersRanking" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                    <thead>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th class="text-center">AC totales/Envíos totales</th>
-                                        <th class="text-center">AC totales/Fallidos totales</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for user in usersRanking %}
-                                    {% set avatarId = user.id % 32 %}
-                                        <tr>
-                                            <td class="w-1">
-                                                <span class="avatar" style="background-image: url({{ twg_func( 'base_url' ) }}assets/images/demo/faces/{{ avatarId }}.jpg)"></span>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ user.first_name }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">
-                                                        {{ user.first_name }} {{ user.last_name }}
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <a title="{{ user.email }}"
-                                                       href="{{ twg_func( 'base_url') }}users/id/{{ user.id }}/group/{{ groupId }}">
-                                                        {{ user.email }}
-                                                    </a>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="progress progress-sm">
-                                                    {%
-                                                        set total1 = (user.totalSubs > 0 ?
-                                                            ((user.totalAC / user.totalSubs) * 100) : 0) | number_format(2, ',', '.')
-                                                    %}
-                                                    <div class="progress-bar bg-cyan-light" style="width: {{total1}}%">{{ total1 }}</div>
-                                                </div>
-                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ user.totalSubs }}</div>
-                                            </td>
-
-                                            <td>
-                                                <div class="progress progress-sm">
-                                                    {%
-                                                        set total2 = (user.totalSubs > 0 ?
-                                                        ((user.totalAC / user.totalSubs) * 100) : 0) | number_format(0, ',', '.')
-                                                    %}
-                                                    <div class="progress-bar bg-cyan-light" style="width: {{ total2 }}%">
-                                                        {{ total2 }}%
-                                                    </div>
-                                                </div>
-                                                <div class="small text-muted text-center">{{ user.totalAC }} / {{ (user.totalSubs - user.totalAC) }}</div>
-                                            </td>
-
-                                            <td class="text-nowrap">
-                                                {{ user.last_submission | date("d/m/Y H:i:s") }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th class="text-center">AC totales/Envíos totales</th>
-                                        <th class="text-center">AC totales/Fallidos totales</th>
-                                        <th>Fecha último envío</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
+                                                            <td class="text-nowrap">
+                                                                {{ user.last_submission | date("d/m/Y H:i:s") }}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th>Avatar</th>
+                                                        <th>Usuario</th>
+                                                        <th>Email</th>
+                                                        <th class="text-center">AC totales/Envíos totales</th>
+                                                        <th class="text-center">AC totales/Fallidos totales</th>
+                                                        <th>Fecha último envío</th>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -593,7 +648,7 @@
                     axis: {
                         x: {
                             type: 'category',
-                            categories: ['Sept', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago']
+                            categories: {{ submissionMonths|json_encode|raw }}
                         },
                     },
                     padding: {

@@ -7,162 +7,200 @@
 
 {% block content %}
     <main id="main" role="main" class="my-3 my-md-5">
-        <div class="container">
-            <div class="page-header">
-                <h1 class="page-title">{{ pageTitle }}</h1>
-            </div>
-
-            <div class="row row-cards row-deck">
-                {% if not silentResume %}
-                    <div class="col-sm-6 col-lg-6">
-                        <div class="card p-3">
-                            <div class="d-flex align-items-center">
-                                <span class="stamp stamp-md bg-green mr-3">
-                                  <i class="fe fe-thumbs-up"></i>
-                                </span>
-                                <div>
-                                    <h4 class="m-0"><a href="javascript:void(0)">{{ problems[0].totalAC }} <small>Aceptados</small></a></h4>
-                                    <small class="text-muted">
-                                        <span style="color: #495057;">Problema: </span>
-                                        <a title="{{ problem.name }}"
-                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problems[0].internalId }}/group/{{ groupId }}"> {{ problems[0].name }} ({{ problems[0].internalId }})</a></small>
-                                </div>
+        <div class="container-fluid">
+            <div>
+                <div class="tabs__container">
+                    <div class="row tabs">
+                        <div class="col-md-12">
+                            <div class="flex">
+                                {% if not silentResume %}
+                                    <div class="tab">
+                                        <a title="Dashboard administrador"
+                                           href="{{ twg_func('base_url') }}admindashboard"
+                                           class="btn btn-secondary btn-block">Dashboard administrador</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a title="Listado usuarios"
+                                           href="{{ twg_func('base_url') }}users"
+                                           class="btn btn-secondary btn-block">Listado usuarios</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a title="Listado problemas"
+                                           href="{{ twg_func('base_url') }}problem"
+                                           class="btn btn-secondary btn-block {{ pageTitle == 'Listado completo de problemas' ? 'tab--current' : '' }}">Listado problemas</a>
+                                    </div>
+                                {% elseif silentResume %}
+                                    <div class="tab">
+                                        <a title="Dashboard profesor"
+                                           href="{{ twg_func('base_url') }}teacherdashboard"
+                                           class="btn btn-secondary btn-block">Dashboard profesor</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a title="Listado alumnos"
+                                           href="{{ twg_func('base_url') }}users/group/3"
+                                           class="btn btn-secondary btn-block">Listado alumnos</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a title="Listado problemas"
+                                           href="{{ twg_func('base_url') }}problem/group/3"
+                                           class="btn btn-secondary btn-block {{ pageTitle == 'Listado completo de problemas para el grupo: Grupo C'? 'tab--current' : '' }}">Listado problemas</a>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
+                    <div class="tab__content">
+                        <div class="page-header">
+                            <h1 class="page-title">{{ pageTitle }}</h1>
+                        </div>
 
-                    <div class="col-sm-6 col-lg-6">
-                        <div class="card p-3">
-                            <div class="d-flex align-items-center">
-                                <span class="stamp stamp-md bg-red mr-3">
-                                  <i class="fe fe-thumbs-down"></i>
-                                </span>
-                                <div>
-                                    <h4 class="m-0"><a href="javascript:void(0)">{{ worseProblem.totalAC }} <small>Aceptados</small></a></h4>
-                                    <small class="text-muted">
-                                        <span style="color: #495057;">Problema: </span>
-                                        <a title="{{ worseProblem.name }}"
-                                                href="{{ twg_func( 'base_url') }}problem/id/{{ worseProblem.internalId }}">{{ worseProblem.name }} ({{ worseProblem.internalId }})</a></small>
+                        <div class="row row-cards row-deck">
+                            {% if not silentResume %}
+                                <div class="col-sm-6 col-lg-6">
+                                    <div class="card p-3">
+                                        <div class="d-flex align-items-center">
+                                            <span class="stamp stamp-md bg-green mr-3">
+                                              <i class="fe fe-thumbs-up"></i>
+                                            </span>
+                                            <div>
+                                                <h4 class="m-0"><a href="javascript:void(0)">{{ problems[0].totalAC }} <small>Aceptados</small></a></h4>
+                                                <small class="text-muted">
+                                                    <span style="color: #495057;">Problema: </span>
+                                                    <a title="{{ problem.name }}"
+                                                            href="{{ twg_func( 'base_url') }}problem/id/{{ problems[0].internalId }}/group/{{ groupId }}"> {{ problems[0].name }} ({{ problems[0].internalId }})</a></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-6">
+                                    <div class="card p-3">
+                                        <div class="d-flex align-items-center">
+                                            <span class="stamp stamp-md bg-red mr-3">
+                                              <i class="fe fe-thumbs-down"></i>
+                                            </span>
+                                            <div>
+                                                <h4 class="m-0"><a href="javascript:void(0)">{{ worseProblem.totalAC }} <small>Aceptados</small></a></h4>
+                                                <small class="text-muted">
+                                                    <span style="color: #495057;">Problema: </span>
+                                                    <a title="{{ worseProblem.name }}"
+                                                            href="{{ twg_func( 'base_url') }}problem/id/{{ worseProblem.internalId }}">{{ worseProblem.name }} ({{ worseProblem.internalId }})</a></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elseif silentResume %}
+                                <div class="col-sm-6">
+                                    <div class="form-group"  style="padding-bottom: 20px;">
+                                        <label class="form-label">Ver datos de:</label>
+                                        <select name="subject" id="select-subject" class="form-control custom-select">
+                                            <option value="all">Todo el curso</option>
+                                            <option value="1">Tema 1</option>
+                                            <option value="2">Tema 2</option>
+                                            <option value="3">Tema 3</option>
+                                            <option value="4">Tema 4</option>
+                                            <option value="5">Tema 5</option>
+                                            <option value="6">Tema 6</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Listado de problemas</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                        <table id="allProblemsTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                                            <thead>
+                                            <tr>
+                                                <th>Problema(ID)</th>
+                                                <th>Envíos/ Usuarios únicos</th>
+                                                <th>AC únicos/ Envíos</th>
+                                                <th>Fallidos/ Envíos</th>
+                                                <th>AC únicos/ Usuarios únicos</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for problem in problems %}
+                                                {% set problemUrl = twg_func( 'base_url') ~ 'problem/id/' ~ problem.internalId %}
+                                                {% if (groupId) %}
+                                                    {% set problemUrl = problemUrl ~ '/group/' ~ groupId %}
+                                                {% endif %}
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <a title="{{ problem.name }}"
+                                                           href="{{ problemUrl }}">{{ problem.name ?: 'Problema desconocido' }}({{ problem.internalId }})</a></div>
+                                                    <div class="small text-muted">
+                                                        Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="progress progress-sm">
+                                                        <div class="progress-bar bg-cyan-light" style="width: {{ problem.AC2 }}%">
+                                                            {{ ((problem.totalSubs / problem.totalDistinctUsers)) | number_format(2, ',', '.') }}%
+                                                        </div>
+                                                    </div>
+                                                    <div class="small text-muted text-center">{{ problem.totalSubs }} / {{ problem.totalDistinctUsers }}</div>
+                                                </td>
+
+                                                <td>
+                                                    <a title="{{ problem.name }}"
+                                                            href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                        <div class="progress progress-sm">
+                                                            <div class="progress-bar bg-cyan-light"
+                                                                    style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                                        </div>
+                                                        <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalSubs }}</div>
+                                                    </a>
+                                                </td>
+
+                                                <td>
+                                                    <a title="{{ problem.name }}"
+                                                       href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                        <div class="progress progress-sm">
+                                                            <div class="progress-bar bg-cyan-light"
+                                                                 style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ (((problem.totalSubs - problem.totalAC) / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
+                                                        </div>
+                                                        <div class="small text-muted text-center">{{ problem.totalSubs - problem.totalAC }} / {{ problem.totalSubs }}</div>
+                                                    </a>
+                                                </td>
+
+                                                <td>
+                                                    <a title="{{ problem.name }}"
+                                                            href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
+                                                        <div class="progress progress-sm">
+                                                            <div class="progress-bar bg-cyan-light"
+                                                                    style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
+                                                        </div>
+                                                        <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Problema(ID)</th>
+                                                <th>Envíos/ Usuarios únicos</th>
+                                                <th>AC únicos/ Envíos</th>
+                                                <th>Fallidos/ Envíos</th>
+                                                <th>AC únicos/ Usuarios únicos</th>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                {% elseif silentResume %}
-                    <div class="col-sm-6">
-                        <div class="form-group"  style="padding-bottom: 20px;">
-                            <label class="form-label">Ver datos de:</label>
-                            <select name="subject" id="select-subject" class="form-control custom-select">
-                                <option value="all">Todo el curso</option>
-                                <option value="1">Tema 1</option>
-                                <option value="2">Tema 2</option>
-                                <option value="3">Tema 3</option>
-                                <option value="4">Tema 4</option>
-                                <option value="5">Tema 5</option>
-                                <option value="6">Tema 6</option>
-                            </select>
-                        </div>
-
-                        <span class="link-view-all-problems">
-                            <a href="{{ twg_func('base_url') }}problem/group/{{ groupId }}">
-                            Ver todos los problemas del curso
-                            </a>
-                        </span>
-                    </div>
-                {% endif %}
-
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Listado de problemas</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                            <table id="allProblemsTable" class="table table-hover table-outline table-vcenter text-nowrap card-table">
-                                <thead>
-                                <tr>
-                                    <th>Problema(ID)</th>
-                                    <th>Envíos/ Usuarios únicos</th>
-                                    <th>AC únicos/ Envíos</th>
-                                    <th>Fallidos/ Envíos</th>
-                                    <th>AC únicos/ Usuarios únicos</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for problem in problems %}
-                                    {% set problemUrl = twg_func( 'base_url') ~ 'problem/id/' ~ problem.internalId %}
-                                    {% if (groupId) %}
-                                        {% set problemUrl = problemUrl ~ '/group/' ~ groupId %}
-                                    {% endif %}
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <a title="{{ problem.name }}"
-                                               href="{{ problemUrl }}">{{ problem.name ?: 'Problema desconocido' }}({{ problem.internalId }})</a></div>
-                                        <div class="small text-muted">
-                                            Propuesto desde: {{ problem.publicationDate | date("d/m/Y") }}
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-cyan-light" style="width: {{ problem.AC2 }}%">
-                                                {{ ((problem.totalSubs / problem.totalDistinctUsers)) | number_format(2, ',', '.') }}%
-                                            </div>
-                                        </div>
-                                        <div class="small text-muted text-center">{{ problem.totalSubs }} / {{ problem.totalDistinctUsers }}</div>
-                                    </td>
-
-                                    <td>
-                                        <a title="{{ problem.name }}"
-                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-cyan-light"
-                                                        style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
-                                            </div>
-                                            <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalSubs }}</div>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <a title="{{ problem.name }}"
-                                           href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-cyan-light"
-                                                     style="width: {{ ((problem.totalAC / problem.totalSubs) * 100) | number_format(0, ',', '.') }}%">{{ (((problem.totalSubs - problem.totalAC) / problem.totalSubs) * 100) | number_format(2, ',', '.') }}%</div>
-                                            </div>
-                                            <div class="small text-muted text-center">{{ problem.totalSubs - problem.totalAC }} / {{ problem.totalSubs }}</div>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <a title="{{ problem.name }}"
-                                                href="{{ twg_func( 'base_url') }}problem/id/{{ problem.internalId }}">
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-cyan-light"
-                                                        style="width: {{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(0, ',', '.') }}%">{{ ((problem.totalDACU / problem.totalDistinctUsers) * 100) | number_format(2, ',', '.') }}%</div>
-                                            </div>
-                                            <div class="small text-muted text-center">{{ problem.totalDACU }} / {{ problem.totalDistinctUsers }}</div>
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>Problema(ID)</th>
-                                    <th>Envíos/ Usuarios únicos</th>
-                                    <th>AC únicos/ Envíos</th>
-                                    <th>Fallidos/ Envíos</th>
-                                    <th>AC únicos/ Usuarios únicos</th>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
     <script>

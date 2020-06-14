@@ -8,10 +8,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 |
 */
-$root  = "https://onlinejudgedashboard.azurewebsites.net/";
+$root  = "http://onlinejudgedashboard.es/";
 $root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 
-$config['base_url']    = $root . "/";
+$config['base_url']    = $root;
 $config['brand'] = '/images/brand/tabler.svg';
 
 /*
@@ -364,7 +364,7 @@ $config['encryption_key'] = '';
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = "/home/site/wwwroot/tmp/";
+$config['sess_save_path'] = "/var/www/vhosts/onlinejudgedashboard.es/tmp/";
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
@@ -513,7 +513,7 @@ $config['proxy_ips'] = '';
 |
 */
 $config[ 'twig_extension' ]                     = '.twig';
-$config[ 'twig_cache_enabled' ]                 = true;
+$config[ 'twig_cache_enabled' ]                 = false;
 $config[ 'twig_cache_dir' ]                     = 'application/cache/twig/';
 $config[ 'twig_template_dir' ]                  = APPPATH . 'views';
 $config[ 'twig_debug_mode' ]                    = true;
