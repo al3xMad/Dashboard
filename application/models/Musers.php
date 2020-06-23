@@ -1,7 +1,7 @@
 <?php
 class Musers extends CI_Model {
 
-    const DEFAULT_LAST_ATTEMPTS_LIMIT = 50;
+    const DEFAULT_LAST_ATTEMPTS_LIMIT = 75;
 
     public function getAllUsers() {
         $this->db->select('u.id, data.*')
@@ -234,7 +234,7 @@ class Musers extends CI_Model {
         $limit = isset($params['limit']) ? $params['limit'] : self::DEFAULT_LAST_ATTEMPTS_LIMIT;
 
         $sql = "
-            SELECT 
+            SELECT DISTINCT
             `u`.*,(
             SELECT COUNT(*) 
             from submission s2 

@@ -81,7 +81,7 @@ class Mproblems extends CI_Model {
             ->from('submission s')
             ->join('groupusers gr', 'gr.id_user = s.user_id', 'left')
             ->where('gr.id_group', $groupId)
-            ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-10-20" and "'. date('Y') . '-08-31"');
+            ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-09-01" and "'. date('Y') . '-08-31"');
 
         $query = $this->db->get();
 
@@ -185,7 +185,7 @@ class Mproblems extends CI_Model {
             INNER JOIN problem p ON s.problem_id = p.internalId
             INNER JOIN problem_details pr ON s.problem_id = pr.id
             WHERE gu.id_group = $groupId
-            AND s.submissionDate  BETWEEN '" . (date('Y') -1) . "-10-20' and '" . date('Y') . "-08-31'
+            AND s.submissionDate  BETWEEN '" . (date('Y') -1) . "-09-01' and '" . date('Y') . "-08-31'
             ORDER BY s.submissionDate DESC
             LIMIT $limit;
         ";
@@ -704,7 +704,7 @@ class Mproblems extends CI_Model {
             ->where('s.status <>', 'AC')
             ->join('groupusers gr', 'gr.id_user = s.user_id', 'left')
             ->where('gr.id_group', $groupId)
-            ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-10-20" and "'. date('Y') . '-08-31"')
+            ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-09-01" and "'. date('Y') . '-08-31"')
             ->group_by('s.status')
             ->order_by('totals', 'DESC');
 
@@ -859,7 +859,7 @@ class Mproblems extends CI_Model {
             FROM submission s
             INNER JOIN groupusers gu ON s.user_id = gu.id_user
             WHERE gu.id_group = $groupId
-            AND s.submissionDate  BETWEEN '". (date('Y') -1) . "-10-20' and '" . date('Y') . "-08-31';";
+            AND s.submissionDate  BETWEEN '". (date('Y') -1) . "-09-01' and '" . date('Y') . "-08-31';";
 
         return $this->db->query($sql)->result();
     }
@@ -907,7 +907,7 @@ class Mproblems extends CI_Model {
             ->join('groupusers gr', 'gr.id_user = s.user_id', 'left')
             ->where('gr.id_group', $groupId)
             ->where('s.status', 'AC')
-            ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-10-20" and "'. date('Y') . '-08-31"')
+            ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-09-01" and "'. date('Y') . '-08-31"')
             ->group_by('s.id');
 
         $query = $this->db->get();
@@ -965,7 +965,7 @@ class Mproblems extends CI_Model {
             ->join('submission s', 's.problem_id = p.internalId', 'left')
             ->join('groupusers gr', 'gr.id_user = s.user_id', 'left')
             ->where('gr.id_group', $groupId)
-            ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-10-20" and "'. date('Y') . '-08-31"')
+            ->where('s.submissionDate  BETWEEN "'. (date('Y') -1) . '-09-01" and "'. date('Y') . '-08-31"')
             //->where('det.name IS NOT NULL')
             ->group_by('p.internalId')
             ->order_by('p.totalDACU', 'DESC');
@@ -1083,7 +1083,7 @@ class Mproblems extends CI_Model {
           LEFT JOIN groupusers gr
               ON gr.id_user = s.user_id
         WHERE  gr.id_group = $groupId        
-        AND s.submissionDate  BETWEEN '" . (date('Y') -1) . "-10-20' and '" . date('Y') . "-08-31'
+        AND s.submissionDate  BETWEEN '" . (date('Y') -1) . "-09-01' and '" . date('Y') . "-08-31'
         AND
           (y=YEAR(CURDATE()) AND m<=MONTH(CURDATE()))
           OR
@@ -1117,7 +1117,7 @@ class Mproblems extends CI_Model {
           LEFT JOIN groupusers gr
               ON gr.id_user = s.user_id
         WHERE  gr.id_group = \' . $groupId . \'
-        AND s.submissionDate  BETWEEN "'. (date('Y') -1) . '-10-20" and "'. date('Y') . '-08-31"
+        AND s.submissionDate  BETWEEN "'. (date('Y') -1) . '-09-01" and "'. date('Y') . '-08-31"
         AND
           (y=YEAR(CURDATE()) AND m<=MONTH(CURDATE()))
           OR

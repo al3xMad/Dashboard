@@ -44,20 +44,14 @@ class Users extends OL_Controller {
 
     public function id($userId) {
         $urlData = $this->uri->uri_to_assoc(2);
-        $data['role'] = $this->session->userdata('role');
 
         // Retrieving vars
         $data = $this->data;
         $data['no_breadcrumb'] = true;
+        $data['role'] = $this->session->userdata('role');
 
         if (empty($userId)) {
             redirect(base_url() . 'teacherdashboard/', 'refresh');
-        }
-
-        if (isset($urlData['group'])) {
-            $data['no_breadcrumb'] = true;
-        } else {
-            $data['no_breadcrumb'] = true;
         }
 
         if (isset($urlData['group'])) {
@@ -75,6 +69,7 @@ class Users extends OL_Controller {
             $data['submissionMonths'] = array_column($totalSubmissionsByMonthAndUserId, 'month');
         } else {
             $data['groupId'] = false;
+            $this->session->set_userdata('role', 'admin');
             $data['userDetails']= $this->Musers->getAllUserDataById($userId);
 
             $data['lastAttempts'] = $this->Mproblems->getLastProblemsAttemptsByUserId($userId);
